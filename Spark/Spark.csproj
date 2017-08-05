@@ -67,7 +67,10 @@
     <Compile Include="Core\IPlatformInitializer.cs" />
     <Compile Include="Core\IReadOnlyDataBuffer.cs" />
     <Compile Include="Core\IUpdatableEngineService.cs" />
+    <Compile Include="Core\PlatformInitializer.cs" />
+    <Compile Include="Core\Platforms.cs" />
     <Compile Include="Core\ServiceChangeEventType.cs" />
+    <Compile Include="Core\ServiceDescriptor.cs" />
     <Compile Include="Core\SparkException.cs" />
     <Compile Include="Core\MappedDataBuffer.cs" />
     <Compile Include="Graphics\ClearOptions.cs" />
