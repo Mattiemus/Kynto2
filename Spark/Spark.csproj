@@ -73,6 +73,7 @@
     <Compile Include="Graphics\ClearOptions.cs" />
     <Compile Include="Graphics\GraphicsResource.cs" />
     <Compile Include="Graphics\Implementation\GraphicsResourceImplementation.cs" />
+    <Compile Include="Graphics\Implementation\GraphicsResourceImplementationFactory.cs" />
     <Compile Include="Graphics\Implementation\IGraphicsResourceImplementation.cs" />
     <Compile Include="Graphics\Implementation\IGraphicsResourceImplementationFactory.cs" />
     <Compile Include="Graphics\Implementation\ImplementationFactoryCollection.cs" />

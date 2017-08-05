@@ -22,9 +22,10 @@
         /// Initializes a new instance of the <see cref="VertexBuffer"/> class.
         /// </summary>
         /// <param name="vertexLayout">Vertex layout that defines the vertex data of this buffer</param>
-        public VertexBuffer(VertexLayout vertexLayout)
+        /// <param name="vertexCount">Number of vertices the buffer will contain</param>
+        public VertexBuffer(VertexLayout vertexLayout, int vertexCount)
         {
-            CreateImplementation(GetRenderSystem(), vertexLayout);
+            CreateImplementation(GetRenderSystem(), vertexLayout, vertexCount);
         }
 
         /// <summary>
@@ -32,15 +33,21 @@
         /// </summary>
         /// <param name="renderSystem">Render system used to create the underlying implementation.</param>
         /// <param name="vertexLayout">Vertex layout that defines the vertex data of this buffer</param>
-        public VertexBuffer(IRenderSystem renderSystem, VertexLayout vertexLayout)
+        /// <param name="vertexCount">Number of vertices the buffer will contain</param>
+        public VertexBuffer(IRenderSystem renderSystem, VertexLayout vertexLayout, int vertexCount)
         {
-            CreateImplementation(renderSystem, vertexLayout);
+            CreateImplementation(renderSystem, vertexLayout, vertexCount);
         }
 
         /// <summary>
         /// Gets the vertex layout that describes the structure of vertex data contained in the buffer.
         /// </summary>
         public VertexLayout VertexLayout => VertexBufferImplementation.VertexLayout;
+
+        /// <summary>
+        /// Gets the number of vertices contained in the buffer.
+        /// </summary>
+        public int VertexCount => VertexBufferImplementation.VertexCount;
 
         /// <summary>
         /// Gets the vertex buffer implementation
@@ -64,7 +71,7 @@
         /// <param name="data">Data buffer to hold contents copied from the vertex buffer.</param>
         public void GetData<T>(IDataBuffer<T> data) where T : struct
         {
-            CheckDisposed();
+            ThrowIfDisposed();
 
             try
             {
@@ -85,7 +92,7 @@
         /// <param name="elementCount">Number of elements to read.</param>
         public void GetData<T>(IDataBuffer<T> data, int startIndex, int elementCount) where T : struct
         {
-            CheckDisposed();
+            ThrowIfDisposed();
 
             try
             {
@@ -108,7 +115,7 @@
         /// <param name="vertexStride">Size of an element in bytes</param>
         public void GetData<T>(IDataBuffer<T> data, int startIndex, int elementCount, int offsetInBytes, int vertexStride) where T : struct
         {
-            CheckDisposed();
+            ThrowIfDisposed();
 
             try
             {
@@ -127,7 +134,7 @@
         /// <param name="data">Data buffer that holds the contents that are to be copied to the vertex buffer.</param>
         public void SetData<T>(IReadOnlyDataBuffer<T> data) where T : struct
         {
-            CheckDisposed();
+            ThrowIfDisposed();
 
             try
             {
@@ -148,7 +155,7 @@
         /// <param name="elementCount">Number of elements to write.</param>
         public void SetData<T>(IReadOnlyDataBuffer<T> data, int startIndex, int elementCount) where T : struct
         {
-            CheckDisposed();
+            ThrowIfDisposed();
 
             try
             {
@@ -171,7 +178,7 @@
         /// <param name="vertexStride">Size of an element in bytes.</param>
         public void SetData<T>(IReadOnlyDataBuffer<T> data, int startIndex, int elementCount, int offsetInBytes, int vertexStride) where T : struct
         {
-            CheckDisposed();
+            ThrowIfDisposed();
 
             try
             {
@@ -188,7 +195,8 @@
         /// </summary>
         /// <param name="renderSystem">Render system to use when creating the implementation</param>
         /// <param name="vertexLayout">Vertex layout</param>
-        private void CreateImplementation(IRenderSystem renderSystem, VertexLayout vertexLayout)
+        /// <param name="vertexLayout">Vertex layout that defines the vertex data of this buffer</param>
+        private void CreateImplementation(IRenderSystem renderSystem, VertexLayout vertexLayout, int vertexCount)
         {
             if (renderSystem == null)
             {
@@ -208,7 +216,7 @@
 
             try
             {
-                VertexBufferImplementation = factory.CreateImplementation(vertexLayout);
+                VertexBufferImplementation = factory.CreateImplementation(vertexLayout, vertexCount);
             }
             catch (Exception e)
             {

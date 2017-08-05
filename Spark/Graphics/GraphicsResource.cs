@@ -159,7 +159,7 @@
         /// <summary>
         /// Checks if the resource was disposed and if so, throws an ObjectDisposedException.
         /// </summary>
-        protected void CheckDisposed()
+        protected void ThrowIfDisposed()
         {
             if (IsDisposed)
             {

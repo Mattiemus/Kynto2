@@ -1,6 +1,5 @@
-﻿namespace Spark.Graphics.Renderer
+﻿namespace Spark.Graphics
 {
-    using System;
     using System.Collections;
     using System.Collections.Generic;
 
@@ -26,10 +25,12 @@
         {
             _implementationFactories = new ImplementationFactoryCollection();
 
-            State = new OpenGLState();
+            OpenGLState = new OpenGLState();
 
             _vao = new VertexArrayObject();
             OGL.GL.BindVertexArray(_vao.ResourceId);
+
+            InitializeFactories();
         }
 
         /// <summary>
@@ -41,11 +42,11 @@
         /// Gets the name of the service.
         /// </summary>
         public string Name => "OpenGL Render System";
-
+        
         /// <summary>
         /// Gets the state manager instance
         /// </summary>
-        public OpenGLState State { get; }
+        public OpenGLState OpenGLState { get; }
 
         /// <summary>
         /// Initializes the service. This is called by the engine when a service is newly registered.
@@ -54,6 +55,16 @@
         public void Initialize(Engine engine)
         {
             // No-op
+        }
+
+        public bool AddImplementationFactory<T>(T implFactory) where T : IGraphicsResourceImplementationFactory
+        {
+            return _implementationFactories.AddImplementationFactory(implFactory);
+        }
+
+        public bool RemoveImplementationFactory<T>(T implFactory) where T : IGraphicsResourceImplementationFactory
+        {
+            return _implementationFactories.RemoveImplementationFactory(implFactory);
         }
 
         /// <summary>
@@ -74,7 +85,7 @@
         /// <returns>True if the factory was registered and found, false otherwise.</returns>
         public bool TryGetImplementationFactory<T>(out T implementationFactory) where T : IGraphicsResourceImplementationFactory
         {
-            return _implementationFactories.TryGetImplementationFactory<T>(out implementationFactory);
+            return _implementationFactories.TryGetImplementationFactory(out implementationFactory);
         }
 
         /// <summary>
@@ -144,9 +155,9 @@
         /// <param name="stencil">Stencil value to clear to</param>
         public void Clear(ClearOptions options, LinearColor color, float depth, int stencil)
         {
-            State.ColorBuffer.ClearValue = color;
-            State.DepthBuffer.ClearValue = depth;
-            State.StencilBuffer.ClearValue = stencil;
+            OpenGLState.ColorBuffer.ClearValue = color;
+            OpenGLState.DepthBuffer.ClearValue = depth;
+            OpenGLState.StencilBuffer.ClearValue = stencil;
             OGL.GL.Clear(GraphicsHelpers.ToNative(options));
         }
 
@@ -173,6 +184,15 @@
         /// <param name="isDisposing">True if called from dispose, false if called from the finalizer</param>
         protected override void DisposeInternal(bool isDisposing)
         {
+            // No-op
+        }
+
+        /// <summary>
+        /// Initializes the various graphics resource creation factories
+        /// </summary>
+        private void InitializeFactories()
+        {
+            new OpenGLVertexBufferImplementationFactory(this).Initialize();
         }
     }
 }

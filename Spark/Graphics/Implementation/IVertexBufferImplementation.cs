@@ -13,6 +13,11 @@
         VertexLayout VertexLayout { get; }
 
         /// <summary>
+        /// Gets the number of vertices contained in the buffer.
+        /// </summary>
+        int VertexCount { get; }
+
+        /// <summary>
         /// Reads data from the vertex buffer into the specified data buffer.
         /// </summary>
         /// <typeparam name="T">Type of data to read from the vertex buffer.</typeparam>

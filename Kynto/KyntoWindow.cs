@@ -5,7 +5,6 @@
     using Spark.Core;
     using Spark.Graphics;
     using Spark.Graphics.Implementation;
-    using Spark.Graphics.Renderer;
     using Spark.Math;
 
     using OTK = OpenTK;
@@ -18,7 +17,7 @@
     {
         private OpenGLRenderSystem renderer;
         private OpenGLShaderProgram program;
-        private OpenGLVertexBuffer vertexBuffer;
+        private VertexBuffer vertexBuffer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="KyntoWindow"/> class.
@@ -60,14 +59,10 @@
                     ")
             });
 
-            VertexBuffer vb = new VertexBuffer(new VertexLayout(new VertexElement[] {
+            vertexBuffer = new VertexBuffer(new VertexLayout(new VertexElement[] {
                 new VertexElement(VertexFormat.Float3, 0)
-            }));
-            
-            vertexBuffer = new OpenGLVertexBuffer(new VertexLayout(new VertexElement[] {
-                new VertexElement(VertexFormat.Float3, 0)
-            }));
-            
+            }), 3);
+                        
             vertexBuffer.SetData(new DataBuffer<float>(new[]
             {
                 -1.0f, -1.0f, 0.0f,
@@ -90,7 +85,7 @@
             
             OGL.GL.EnableVertexAttribArray(0);
 
-            OGL.GL.BindBuffer(vertexBuffer.BufferType, vertexBuffer.ResourceId);
+            OGL.GL.BindBuffer(OGL.BufferTarget.ArrayBuffer, vertexBuffer.ResourceId);
 
             OGL.GL.VertexAttribPointer(0, 3, OGL.VertexAttribPointerType.Float, false, 0, 0);
 

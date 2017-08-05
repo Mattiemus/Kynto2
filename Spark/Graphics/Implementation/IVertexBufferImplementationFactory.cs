@@ -9,6 +9,7 @@
         /// Creates a new implementation object instance.
         /// </summary>
         /// <param name="vertexLayout">The vertex layout that describes the data.</param>
-        IVertexBufferImplementation CreateImplementation(VertexLayout vertexLayout);
+        /// <param name="vertexCount">Number of vertices the buffer will contain</param>
+        IVertexBufferImplementation CreateImplementation(VertexLayout vertexLayout, int vertexCount);
     }
 }
