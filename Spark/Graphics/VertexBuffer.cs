@@ -9,12 +9,12 @@
     /// Represents a buffer of vertices that exists on the GPU. A vertex is made up of individual attributes such as a position
     /// and other properties like colors, texture coordinates, or normals.
     /// </summary>
-    public class VertexBuffer : GraphicsResource
+    public sealed class VertexBuffer : GraphicsResource
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="VertexBuffer"/> class.
         /// </summary>
-        protected VertexBuffer()
+        private VertexBuffer()
         {
         }
 
@@ -29,6 +29,16 @@
         }
 
         /// <summary>
+        /// Constructs a new instance of the <see cref="VertexBuffer"/> class.
+        /// </summary>
+        /// <param name="vertexLayout">Vertex layout that defines the vertex data of this buffer</param>
+        /// <param name="data">The interleaved vertex data to initialize the vertex buffer with.</param>
+        public VertexBuffer(VertexLayout vertexLayout, IReadOnlyDataBuffer data)
+        {
+            CreateImplementation(GetRenderSystem(), vertexLayout, data);
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="VertexBuffer"/> class.
         /// </summary>
         /// <param name="renderSystem">Render system used to create the underlying implementation.</param>
@@ -37,6 +47,17 @@
         public VertexBuffer(IRenderSystem renderSystem, VertexLayout vertexLayout, int vertexCount)
         {
             CreateImplementation(renderSystem, vertexLayout, vertexCount);
+        }
+
+        /// <summary>
+        /// Constructs a new instance of the <see cref="VertexBuffer"/> class.
+        /// </summary>
+        /// <param name="renderSystem">Render system used to create the underlying implementation.</param>
+        /// <param name="vertexLayout">Vertex layout that defines the vertex data of this buffer</param>
+        /// <param name="data">The interleaved vertex data to initialize the vertex buffer with.</param>
+        public VertexBuffer(IRenderSystem renderSystem, VertexLayout vertexLayout, IReadOnlyDataBuffer data)
+        {
+            CreateImplementation(renderSystem, vertexLayout, data);
         }
 
         /// <summary>
@@ -191,6 +212,53 @@
         }
 
         /// <summary>
+        /// Validates creation parameters.
+        /// </summary>
+        /// <param name="vertexLayout">The vertex layout that describes the data.</param>
+        /// <param name="vertexCount">The number of vertices the buffer will contain.</param>
+        private void ValidateCreationParameters(VertexLayout vertexLayout, int vertexCount)
+        {
+            if (vertexLayout == null)
+            {
+                throw new ArgumentNullException(nameof(vertexLayout), "Vertex layout cannot be null");
+            }
+
+            if (vertexCount <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(vertexCount), "Resource size must be greater than zero");
+            }
+        }
+
+        /// <summary>
+        /// Validates creation parameters.
+        /// </summary>
+        /// <param name="vertexLayout">The vertex layout that describes the data.</param>
+        /// <param name="data">The interleaved vertex data to initialize the vertex buffer with.</param>
+        private void ValidateCreationParameters(VertexLayout vertexLayout, IReadOnlyDataBuffer data)
+        {
+            if (vertexLayout == null)
+            {
+                throw new ArgumentNullException(nameof(vertexLayout), "Vertex layout cannot be null");
+            }
+
+            if (data == null || data.Length == 0)
+            {
+                throw new ArgumentNullException(nameof(data), "Data buffer cannot be null");
+            }
+
+            // Get the vertex count
+            data.Position = 0;
+            int totalSize = data.SizeInBytes;
+            int vertexStride = vertexLayout.VertexStride;
+
+            // Vertex stride should divide evenly into the total buffer size
+            if (totalSize % vertexStride != 0)
+            {
+                throw new ArgumentOutOfRangeException("data", "Vertex layout stride does not match the side of the data buffer");
+            }
+        }
+
+        /// <summary>
         /// Creates the vertex buffer implementation
         /// </summary>
         /// <param name="renderSystem">Render system to use when creating the implementation</param>
@@ -203,10 +271,7 @@
                 throw new ArgumentNullException(nameof(renderSystem), "Render system cannot be null");
             }
 
-            if (vertexLayout == null)
-            {
-                throw new ArgumentNullException(nameof(vertexLayout), "Vertex layout cannot be null");
-            }
+            ValidateCreationParameters(vertexLayout, vertexCount);
 
             IVertexBufferImplementationFactory factory;
             if (!renderSystem.TryGetImplementationFactory(out factory))
@@ -217,6 +282,37 @@
             try
             {
                 VertexBufferImplementation = factory.CreateImplementation(vertexLayout, vertexCount);
+            }
+            catch (Exception e)
+            {
+                throw new SparkGraphicsException("Error while creating implementation", e);
+            }
+        }
+
+        /// <summary>
+        /// Creates the vertex buffer implementation
+        /// </summary>
+        /// <param name="renderSystem">Render system to use when creating the implementation</param>
+        /// <param name="vertexLayout">Vertex layout</param>
+        /// <param name="data">The interleaved vertex data to initialize the vertex buffer with.</param>
+        private void CreateImplementation(IRenderSystem renderSystem, VertexLayout vertexLayout, IReadOnlyDataBuffer data)
+        {
+            if (renderSystem == null)
+            {
+                throw new ArgumentNullException(nameof(renderSystem), "Render system cannot be null");
+            }
+
+            ValidateCreationParameters(vertexLayout, data);
+
+            IVertexBufferImplementationFactory factory;
+            if (!renderSystem.TryGetImplementationFactory(out factory))
+            {
+                throw new SparkGraphicsException("Feature is not supported");
+            }
+
+            try
+            {
+                VertexBufferImplementation = factory.CreateImplementation(vertexLayout, data);
             }
             catch (Exception e)
             {

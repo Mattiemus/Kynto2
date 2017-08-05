@@ -135,7 +135,17 @@
 
 
 
+        /// <summary>
+        /// Binds the specified vertex buffer to the first slot and the remaining slots are set to null. A value of null will unbind all currently bound buffers.
+        /// </summary>
+        /// <param name="vertexBuffer">Vertex buffer to bind.</param>
+        public void SetVertexBuffer(VertexBufferBinding vertexBuffer)
+        {            
+            OGL.GL.BindBuffer(OGL.BufferTarget.ArrayBuffer, vertexBuffer.VertexBuffer.ResourceId);
 
+            OGL.GL.EnableVertexAttribArray(0);
+            OGL.GL.VertexAttribPointer(0, 3, OGL.VertexAttribPointerType.Float, false, 0, 0);
+        }
 
         /// <summary>
         /// Clears all bounded render targets to the specified color

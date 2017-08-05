@@ -18,11 +18,30 @@
         public OpenGLVertexBufferImplementation(OpenGLRenderSystem renderSystem, VertexLayout vertexLayout, int vertexCount)
             : base(renderSystem, OGL.GL.GenBuffer())
         {
-            OGL.GL.BindBuffer(OGL.BufferTarget.ArrayBuffer, ResourceId);
-            OGL.GL.BufferData(OGL.BufferTarget.ArrayBuffer, vertexCount * vertexLayout.VertexStride, IntPtr.Zero, OGL.BufferUsageHint.StaticDraw);
-
             VertexLayout = vertexLayout;
             VertexCount = vertexCount;
+
+            OGL.GL.BindBuffer(OGL.BufferTarget.ArrayBuffer, ResourceId);
+            OGL.GL.NamedBufferData(ResourceId, vertexCount * vertexLayout.VertexStride, IntPtr.Zero, OGL.BufferUsageHint.StaticDraw);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OpenGLVertexBufferImplementation"/> class
+        /// </summary>
+        /// <param name="renderSystem">Render system used to create the underlying implementation.</param>
+        /// <param name="vertexLayout">Vertex layout that defines the vertex data of this buffer</param>
+        /// <param name="data">The interleaved vertex data to initialize the vertex buffer with.</param>
+        public OpenGLVertexBufferImplementation(OpenGLRenderSystem renderSystem, VertexLayout vertexLayout, IReadOnlyDataBuffer data)
+            : base(renderSystem, OGL.GL.GenBuffer())
+        {
+            VertexLayout = vertexLayout;
+            VertexCount = data.SizeInBytes / vertexLayout.VertexStride;
+
+            OGL.GL.BindBuffer(OGL.BufferTarget.ArrayBuffer, ResourceId);
+            using (MappedDataBuffer mappedData = data.Map())
+            {
+                OGL.GL.NamedBufferData(ResourceId, data.SizeInBytes, mappedData.Pointer, OGL.BufferUsageHint.StaticDraw);
+            }
         }
 
         /// <summary>

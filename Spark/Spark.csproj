@@ -83,6 +83,7 @@
     <Compile Include="Graphics\SparkGraphicsException.cs" />
     <Compile Include="Graphics\PrimitiveType.cs" />
     <Compile Include="Graphics\VertexBuffer.cs" />
+    <Compile Include="Graphics\VertexBufferBinding.cs" />
     <Compile Include="Graphics\VertexElement.cs" />
     <Compile Include="Graphics\VertexFormat.cs" />
     <Compile Include="Graphics\VertexLayout.cs" />

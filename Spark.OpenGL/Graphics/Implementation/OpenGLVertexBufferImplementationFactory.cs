@@ -1,5 +1,7 @@
 ﻿namespace Spark.Graphics.Implementation
 {
+    using Core;
+
     /// <summary>
     /// Factory for creating <see cref="OpenGLVertexBufferImplementation"/> instances
     /// </summary>
@@ -22,6 +24,16 @@
         public IVertexBufferImplementation CreateImplementation(VertexLayout vertexLayout, int vertexCount)
         {
             return new OpenGLVertexBufferImplementation(OpenGLRenderSystem, vertexLayout, vertexCount);
+        }
+
+        /// <summary>
+        /// Creates a new implementation object instance.
+        /// </summary>
+        /// <param name="vertexLayout">The vertex layout that describes the data.</param>
+        /// <param name="data">The interleaved vertex data to initialize the vertex buffer with.</param>
+        public IVertexBufferImplementation CreateImplementation(VertexLayout vertexLayout, IReadOnlyDataBuffer data)
+        {
+            return new OpenGLVertexBufferImplementation(OpenGLRenderSystem, vertexLayout, data);
         }
 
         /// <summary>

@@ -37,7 +37,6 @@
         /// <param name="e">Event arguments</param>
         protected override void OnLoad(EventArgs e)
         {
-
             program = new OpenGLShaderProgram(new [] 
             {
                 new OpenGLShader(OGL.ShaderType.VertexShader,
@@ -59,16 +58,16 @@
                     ")
             });
 
-            vertexBuffer = new VertexBuffer(new VertexLayout(new VertexElement[] {
-                new VertexElement(VertexFormat.Float3, 0)
-            }), 3);
-                        
-            vertexBuffer.SetData(new DataBuffer<float>(new[]
-            {
-                -1.0f, -1.0f, 0.0f,
-                1.0f, -1.0f, 0.0f,
-                -1.0f,  1.0f, 0.0f
-            }));
+            vertexBuffer = new VertexBuffer(
+                new VertexLayout(new VertexElement[] {
+                    new VertexElement(VertexFormat.Float3, 0)
+                }), 
+                new DataBuffer<float>(new[]
+                {
+                    -1.0f, -1.0f, 0.0f,
+                    1.0f, -1.0f, 0.0f,
+                    -1.0f,  1.0f, 0.0f
+                }));
 
             base.OnLoad(e);
         }
@@ -82,17 +81,10 @@
             renderer.Clear(LinearColor.Blue);
 
             OGL.GL.UseProgram(program.ResourceId);
-            
-            OGL.GL.EnableVertexAttribArray(0);
 
-            OGL.GL.BindBuffer(OGL.BufferTarget.ArrayBuffer, vertexBuffer.ResourceId);
-
-            OGL.GL.VertexAttribPointer(0, 3, OGL.VertexAttribPointerType.Float, false, 0, 0);
-
+            renderer.SetVertexBuffer(vertexBuffer);
             renderer.Draw(PrimitiveType.Triangles, 0, 3);
                         
-            OGL.GL.DisableVertexAttribArray(0);
-
             SwapBuffers();
 
             base.OnRenderFrame(e);
