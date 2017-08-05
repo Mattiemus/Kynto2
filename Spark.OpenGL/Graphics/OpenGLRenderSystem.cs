@@ -36,7 +36,7 @@
         /// <summary>
         /// Gets the identifier that describes the render system platform.
         /// </summary>
-        public string Platform => "OpenGL 3.2";
+        public string Platform => "OpenGL 4.5";
 
         /// <summary>
         /// Gets the name of the service.
