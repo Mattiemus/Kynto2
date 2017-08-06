@@ -152,35 +152,37 @@
         /// Writes data to the vertex buffer from the specified data buffer.
         /// </summary>
         /// <typeparam name="T">Type of data to write to the vertex buffer.</typeparam>
+        /// <param name="renderContext">The current render context.</param>
         /// <param name="data">Data buffer that holds the contents that are to be copied to the vertex buffer.</param>
-        public void SetData<T>(IReadOnlyDataBuffer<T> data) where T : struct
+        public void SetData<T>(IRenderContext renderContext, IReadOnlyDataBuffer<T> data) where T : struct
         {
             ThrowIfDisposed();
 
             try
             {
-                VertexBufferImplementation.SetData(data, 0, (data != null) ? data.Length : 0, 0, 0);
+                VertexBufferImplementation.SetData(renderContext, data, 0, (data != null) ? data.Length : 0, 0, 0);
             }
             catch (Exception e)
             {
                 throw new SparkGraphicsException("Error writing to resource", e);
             }
         }
-        
+
         /// <summary>
         /// Writes data to the vertex buffer from the specified data buffer.
         /// </summary>
         /// <typeparam name="T">Type of data to write to the vertex buffer.</typeparam>
+        /// <param name="renderContext">The current render context.</param>
         /// <param name="data">Data buffer that holds the contents that are to be copied to the vertex buffer.</param>
         /// <param name="startIndex">Starting index in the data buffer to start reading from.</param>
         /// <param name="elementCount">Number of elements to write.</param>
-        public void SetData<T>(IReadOnlyDataBuffer<T> data, int startIndex, int elementCount) where T : struct
+        public void SetData<T>(IRenderContext renderContext, IReadOnlyDataBuffer<T> data, int startIndex, int elementCount) where T : struct
         {
             ThrowIfDisposed();
 
             try
             {
-                VertexBufferImplementation.SetData(data, startIndex, elementCount, 0, 0);
+                VertexBufferImplementation.SetData(renderContext, data, startIndex, elementCount, 0, 0);
             }
             catch (Exception e)
             {
@@ -192,18 +194,19 @@
         /// Writes data to the vertex buffer from the specified data buffer.
         /// </summary>
         /// <typeparam name="T">Type of data to write to the vertex buffer.</typeparam>
+        /// <param name="renderContext">The current render context.</param>
         /// <param name="data">Data buffer that holds the contents that are to be copied to the vertex buffer.</param>
         /// <param name="startIndex">Starting index in the data buffer to start reading from.</param>
         /// <param name="elementCount">Number of elements to write.</param>
         /// <param name="offsetInBytes">Offset in bytes from the beginning of the vertex buffer to the data.</param>
         /// <param name="vertexStride">Size of an element in bytes.</param>
-        public void SetData<T>(IReadOnlyDataBuffer<T> data, int startIndex, int elementCount, int offsetInBytes, int vertexStride) where T : struct
+        public void SetData<T>(IRenderContext renderContext, IReadOnlyDataBuffer<T> data, int startIndex, int elementCount, int offsetInBytes, int vertexStride) where T : struct
         {
             ThrowIfDisposed();
 
             try
             {
-                VertexBufferImplementation.SetData<T>(data, startIndex, elementCount, offsetInBytes, vertexStride);
+                VertexBufferImplementation.SetData(renderContext, data, startIndex, elementCount, offsetInBytes, vertexStride);
             }
             catch (Exception e)
             {
@@ -290,7 +293,7 @@
         }
 
         /// <summary>
-        /// Creates the vertex buffer implementation
+        /// Creates the vertex buffer implementation 
         /// </summary>
         /// <param name="renderSystem">Render system to use when creating the implementation</param>
         /// <param name="vertexLayout">Vertex layout</param>

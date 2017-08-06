@@ -77,12 +77,14 @@
         /// <param name="e">Event arguments</param>
         protected override void OnRenderFrame(OTK.FrameEventArgs e)
         {
-            renderer.Clear(LinearColor.Blue);
+            IRenderContext context = renderer.ImmediateContext;
+
+            context.Clear(LinearColor.Blue);
 
             OGL.GL.UseProgram(program.ResourceId);
 
-            renderer.SetVertexBuffer(vertexBuffer);
-            renderer.Draw(PrimitiveType.Triangles, 0, 3);
+            context.SetVertexBuffer(vertexBuffer);
+            context.Draw(PrimitiveType.Triangles, 0, 3);
                         
             SwapBuffers();
 

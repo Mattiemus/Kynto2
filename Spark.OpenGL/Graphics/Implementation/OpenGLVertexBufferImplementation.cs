@@ -72,12 +72,13 @@
         /// Writes data to the vertex buffer from the specified data buffer.
         /// </summary>
         /// <typeparam name="T">Type of data to write to the vertex buffer.</typeparam>
+        /// <param name="renderContext">The current render context.</param>
         /// <param name="data">Data buffer that holds the contents that are to be copied to the vertex buffer.</param>
         /// <param name="startIndex">Starting index in the data buffer to start reading from.</param>
         /// <param name="elementCount">Number of elements to write.</param>
         /// <param name="offsetInBytes">Offset in bytes from the beginning of the vertex buffer to the data.</param>
         /// <param name="vertexStride">Size of an element in bytes.</param>
-        public void SetData<T>(IReadOnlyDataBuffer<T> data, int startIndex, int elementCount, int offsetInBytes, int vertexStride) where T : struct
+        public void SetData<T>(IRenderContext renderContext, IReadOnlyDataBuffer<T> data, int startIndex, int elementCount, int offsetInBytes, int vertexStride) where T : struct
         {
             ThrowIfDisposed();
 

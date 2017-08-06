@@ -51,6 +51,7 @@
     <Compile Include="Graphics\Implementation\_OLD\OpenGLShaderAttribute.cs" />
     <Compile Include="Graphics\Implementation\_OLD\OpenGLShaderProgram.cs" />
     <Compile Include="Graphics\Implementation\_OLD\OpenGLShaderUniform.cs" />
+    <Compile Include="Graphics\OpenGLRenderContext.cs" />
     <Compile Include="Graphics\OpenGLState.cs" />
     <Compile Include="Graphics\Implementation\_OLD\VertexArrayObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
