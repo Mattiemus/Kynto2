@@ -57,11 +57,23 @@
             // No-op
         }
 
+        /// <summary>
+        /// Adds an implementation factory of the specified type
+        /// </summary>
+        /// <typeparam name="T">Implementation factory type</typeparam>
+        /// <param name="implFactory">Implementation factory to add</param>
+        /// <returns>True if the factory was added, false if it was not</returns>
         public bool AddImplementationFactory<T>(T implFactory) where T : IGraphicsResourceImplementationFactory
         {
             return _implementationFactories.AddImplementationFactory(implFactory);
         }
 
+        /// <summary>
+        /// Removes an implementation factory of the specified type
+        /// </summary>
+        /// <typeparam name="T">Implementation factory type</typeparam>
+        /// <param name="implFactory">Implementation factory to remove</param>
+        /// <returns>True if the factory was removed, false if it was not</returns>
         public bool RemoveImplementationFactory<T>(T implFactory) where T : IGraphicsResourceImplementationFactory
         {
             return _implementationFactories.RemoveImplementationFactory(implFactory);

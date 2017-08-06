@@ -6,9 +6,9 @@
     public static class Platforms
     {
         /// <summary>
-        /// Gets the platform which uses OpenGL under windows
+        /// Gets the platform which uses OpenTK to provide cross platform support
         /// </summary>
-        public static IPlatformInitializer WindowsOpenGLPlatform
+        public static IPlatformInitializer GeneralCrossPlatformInitializer
         {
             get
             {

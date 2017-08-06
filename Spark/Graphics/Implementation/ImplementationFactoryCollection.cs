@@ -18,6 +18,12 @@
             _factoryTypeToFactory = new Dictionary<Type, IGraphicsResourceImplementationFactory>();
         }
 
+        /// <summary>
+        /// Adds an implementation factory of the specified type
+        /// </summary>
+        /// <typeparam name="T">Implementation factory type</typeparam>
+        /// <param name="implFactory">Implementation factory to add</param>
+        /// <returns>True if the factory was added, false if it was not</returns>
         public bool AddImplementationFactory<T>(T implFactory) where T : IGraphicsResourceImplementationFactory
         {
             if (implFactory == null || _graphicResourceTypeToFactory.ContainsKey(implFactory.GraphicsResourceType))
@@ -31,6 +37,12 @@
             return true;
         }
 
+        /// <summary>
+        /// Removes an implementation factory of the specified type
+        /// </summary>
+        /// <typeparam name="T">Implementation factory type</typeparam>
+        /// <param name="implFactory">Implementation factory to remove</param>
+        /// <returns>True if the factory was removed, false if it was not</returns>
         public bool RemoveImplementationFactory<T>(T implFactory) where T : IGraphicsResourceImplementationFactory
         {
             if (implFactory == null || !_graphicResourceTypeToFactory.ContainsKey(implFactory.GraphicsResourceType))
@@ -87,11 +99,19 @@
             return _graphicResourceTypeToFactory.ContainsKey(typeof(T));
         }
 
+        /// <summary>
+        /// Returns an enumerator that iterates through the collection.
+        /// </summary>
+        /// <returns>A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.</returns>
         public IEnumerator<IGraphicsResourceImplementationFactory> GetEnumerator()
         {
             return _factoryTypeToFactory.Values.GetEnumerator();
         }
 
+        /// <summary>
+        /// Returns an enumerator that iterates through a collection.
+        /// </summary>
+        /// <returns>An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.</returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return _factoryTypeToFactory.Values.GetEnumerator();

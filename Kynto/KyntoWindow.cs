@@ -15,7 +15,7 @@
     /// </summary>
     public sealed class KyntoWindow : OTK.GameWindow
     {
-        private IRenderSystem renderer;
+        private readonly IRenderSystem renderer;
         private OpenGLShaderProgram program;
         private VertexBuffer vertexBuffer;
 
@@ -25,7 +25,7 @@
         public KyntoWindow()
             : base(1024, 768, OTK.Graphics.GraphicsMode.Default, "Kynto", OTK.GameWindowFlags.Default, OTK.DisplayDevice.Default, 4, 5, OTK.Graphics.GraphicsContextFlags.ForwardCompatible)
         {
-            Engine.Initialize(Platforms.WindowsOpenGLPlatform);
+            Engine.Initialize(Platforms.GeneralCrossPlatformInitializer);
             
             renderer = Engine.Instance.Services.GetService<IRenderSystem>();
         }
