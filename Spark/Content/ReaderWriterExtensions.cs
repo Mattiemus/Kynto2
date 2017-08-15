@@ -34,8 +34,11 @@
                 values = new DataBuffer<T>(count);
             }
 
-            reader.ReadArrayData<T>(values);
-            values.Position = 0;
+            reader.ReadArrayData(values);
+            if (values != null)
+            {
+                values.Position = 0;
+            }
 
             return values;
         }

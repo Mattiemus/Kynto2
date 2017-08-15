@@ -166,27 +166,7 @@
                 throw new ObjectDisposedException(GetType().FullName);
             }
         }
-
-        /// <summary>
-        /// Gets the current render system from the engine
-        /// </summary>
-        /// <returns>Current render system</returns>
-        protected IRenderSystem GetRenderSystem()
-        {
-            if (!Engine.IsInitialized)
-            {
-                throw new SparkGraphicsException("Engine is not initialized");
-            }
-
-            IRenderSystem renderSystem = Engine.Instance.Services.GetService<IRenderSystem>();
-            if (renderSystem == null)
-            {
-                throw new SparkGraphicsException("No render system has been registered with the engine");
-            }
-
-            return renderSystem;
-        }
-
+        
         /// <summary>
         /// Called right before the implementation is disposed.
         /// </summary>

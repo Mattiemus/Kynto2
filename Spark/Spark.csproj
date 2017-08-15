@@ -42,6 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application\SparkApplicationException.cs" />
+    <Compile Include="Content\Binary\BinaryConstants.cs" />
+    <Compile Include="Content\Binary\BinaryPrimitiveWriter.cs" />
     <Compile Include="Content\IPrimitiveReader.cs" />
     <Compile Include="Content\IPrimitiveValue.cs" />
     <Compile Include="Content\IPrimitiveWriter.cs" />
@@ -50,6 +52,10 @@
     <Compile Include="Content\ISavableWriter.cs" />
     <Compile Include="Content\SparkContentException.cs" />
     <Compile Include="Content\ReaderWriterExtensions.cs" />
+    <Compile Include="Content\Xml\XmlPrimitiveReader.cs" />
+    <Compile Include="Content\Xml\XmlPrimitiveWriter.cs" />
+    <Compile Include="Core\Collections\INamedList.cs" />
+    <Compile Include="Core\Collections\ReadOnlyNamedListFast.cs" />
     <Compile Include="Core\DataBuffer.cs" />
     <Compile Include="Core\Engine.cs" />
     <Compile Include="Core\EngineServiceEventArgs.cs" />
@@ -79,9 +85,16 @@
     <Compile Include="Core\SparkException.cs" />
     <Compile Include="Core\MappedDataBuffer.cs" />
     <Compile Include="Graphics\ClearOptions.cs" />
+    <Compile Include="Graphics\Effect.cs" />
+    <Compile Include="Graphics\EffectParameterCollection.cs" />
+    <Compile Include="Graphics\GraphicsHelpers.cs" />
     <Compile Include="Graphics\GraphicsResource.cs" />
+    <Compile Include="Graphics\IEffectParameter.cs" />
+    <Compile Include="Graphics\IEffectPart.cs" />
     <Compile Include="Graphics\Implementation\GraphicsResourceImplementation.cs" />
     <Compile Include="Graphics\Implementation\GraphicsResourceImplementationFactory.cs" />
+    <Compile Include="Graphics\Implementation\IEffectImplementation.cs" />
+    <Compile Include="Graphics\Implementation\IEffectImplementationFactory.cs" />
     <Compile Include="Graphics\Implementation\IGraphicsResourceImplementation.cs" />
     <Compile Include="Graphics\Implementation\IGraphicsResourceImplementationFactory.cs" />
     <Compile Include="Graphics\Implementation\ImplementationFactoryCollection.cs" />
@@ -89,6 +102,7 @@
     <Compile Include="Graphics\Implementation\IVertexBufferImplementationFactory.cs" />
     <Compile Include="Graphics\IRenderContext.cs" />
     <Compile Include="Graphics\IRenderSystem.cs" />
+    <Compile Include="Graphics\ShaderStage.cs" />
     <Compile Include="Graphics\SparkGraphicsException.cs" />
     <Compile Include="Graphics\PrimitiveType.cs" />
     <Compile Include="Graphics\VertexBuffer.cs" />

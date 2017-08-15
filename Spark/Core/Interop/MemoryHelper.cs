@@ -205,6 +205,17 @@
         }
 
         /// <summary>
+        /// Writes a single element to the memory location.
+        /// </summary>
+        /// <typeparam name="T">Struct type</typeparam>
+        /// <param name="pDest">Pointer to memory location</param>
+        /// <param name="data">The value to write</param>
+        public static void Write<T>(IntPtr pDest, ref T data) where T : struct
+        {
+            Marshal.StructureToPtr<T>(data, pDest, false);
+        }
+
+        /// <summary>
         /// Writes data from the array to the memory location.
         /// </summary>
         /// <typeparam name="T">Struct type</typeparam>

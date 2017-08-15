@@ -25,7 +25,7 @@
         /// <param name="vertexCount">Number of vertices the buffer will contain</param>
         public VertexBuffer(VertexLayout vertexLayout, int vertexCount)
         {
-            CreateImplementation(GetRenderSystem(), vertexLayout, vertexCount);
+            CreateImplementation(GraphicsHelpers.GetRenderSystem(), vertexLayout, vertexCount);
         }
 
         /// <summary>
@@ -35,7 +35,7 @@
         /// <param name="data">The interleaved vertex data to initialize the vertex buffer with.</param>
         public VertexBuffer(VertexLayout vertexLayout, IReadOnlyDataBuffer data)
         {
-            CreateImplementation(GetRenderSystem(), vertexLayout, data);
+            CreateImplementation(GraphicsHelpers.GetRenderSystem(), vertexLayout, data);
         }
 
         /// <summary>

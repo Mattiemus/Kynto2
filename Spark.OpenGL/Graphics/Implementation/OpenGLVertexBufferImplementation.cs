@@ -7,6 +7,9 @@
     using OTK = OpenTK.Graphics;
     using OGL = OpenTK.Graphics.OpenGL;
 
+    /// <summary>
+    /// Vertex buffer underlying implementation
+    /// </summary>
     public sealed class OpenGLVertexBufferImplementation : GraphicsResourceImplementation, IVertexBufferImplementation
     {
         /// <summary>
