@@ -53,21 +53,23 @@ void main() {
     color = vec3(1, 0, 0);
 }";
 
-
+            
             using (MemoryStream stream = new MemoryStream())
             {
-                using (BinaryPrimitiveWriter writer = new BinaryPrimitiveWriter(stream))
+                using (BinaryPrimitiveWriter writer = new BinaryPrimitiveWriter(stream, true))
                 {
                     writer.Write("VertexShader", vs);
                     writer.Write("PixelShader", ps);
                 }
+                
+                stream.Seek(0, SeekOrigin.Begin);
 
-                byte[] test = stream.ToArray();
+                using (BinaryPrimitiveReader reader = new BinaryPrimitiveReader(stream))
+                {
+                    string vsp = reader.ReadString();
+                    string psp = reader.ReadString();
+                }
             }
-            
-
-
-
 
             Effect fx = new Effect(new byte[] { 1, 2, 3 });
 

@@ -6,6 +6,17 @@
     public interface ISavableWriter : IPrimitiveWriter
     {
         /// <summary>
+        /// Gets the external handler that controls how savables are to be written externally from the output. If no handler is set,
+        /// then external savables are always handled as shared references.
+        /// </summary>
+        IExternalReferenceHandler ExternalHandler { get; }
+
+        /// <summary>
+        /// Gets the write flags that specify certain behaviors during serialization.
+        /// </summary>
+        SavableWriteFlags WriteFlags { get; }
+
+        /// <summary>
         /// Writes a savable object to the output.
         /// </summary>
         /// <typeparam name="T">Type of object to write</typeparam>

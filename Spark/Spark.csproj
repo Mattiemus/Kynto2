@@ -43,13 +43,21 @@
   <ItemGroup>
     <Compile Include="Application\SparkApplicationException.cs" />
     <Compile Include="Content\Binary\BinaryConstants.cs" />
+    <Compile Include="Content\Binary\BinaryPrimitiveReader.cs" />
     <Compile Include="Content\Binary\BinaryPrimitiveWriter.cs" />
+    <Compile Include="Content\IContentCastable.cs" />
     <Compile Include="Content\IPrimitiveReader.cs" />
     <Compile Include="Content\IPrimitiveValue.cs" />
     <Compile Include="Content\IPrimitiveWriter.cs" />
+    <Compile Include="Content\IResourceFile.cs" />
+    <Compile Include="Content\IResourceRepository.cs" />
     <Compile Include="Content\ISavable.cs" />
     <Compile Include="Content\ISavableReader.cs" />
     <Compile Include="Content\ISavableWriter.cs" />
+    <Compile Include="Content\ResourceFileAccess.cs" />
+    <Compile Include="Content\ResourceFileMode.cs" />
+    <Compile Include="Content\ResourceFileShare.cs" />
+    <Compile Include="Content\SavableWriteFlags.cs" />
     <Compile Include="Content\SparkContentException.cs" />
     <Compile Include="Content\ReaderWriterExtensions.cs" />
     <Compile Include="Content\Xml\XmlPrimitiveReader.cs" />
@@ -117,6 +125,9 @@
     <Compile Include="Math\Vector4.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\BaseDisposable.cs" />
+    <Compile Include="Utilities\CyclicReferenceDetector.cs" />
+    <Compile Include="Utilities\ReferenceEqualityComparer.cs" />
+    <Compile Include="Utilities\SmartActivator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Application\Implementation\" />

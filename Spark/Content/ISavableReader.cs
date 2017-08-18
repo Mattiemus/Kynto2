@@ -1,10 +1,22 @@
 ﻿namespace Spark.Content
 {
+    using System;
+
     /// <summary>
     /// Interface that defines a reader that can read objects that implement the <see cref="ISavable"/> interface from an input.
     /// </summary>
     public interface ISavableReader : IPrimitiveReader
     {
+        /// <summary>
+        /// Gets the service provider, used to locate any services that may be needed during content loading.
+        /// </summary>
+        IServiceProvider ServiceProvider { get; }
+
+        /// <summary>
+        /// Gets the external reference resolver of the reader.
+        /// </summary>
+        IExternalReferenceResolver ExternalResolver { get; }
+
         /// <summary>
         /// Reads a savable object from the input.
         /// </summary>
