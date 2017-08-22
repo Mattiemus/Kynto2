@@ -16,7 +16,7 @@
         private byte[] _chunkBuffer;
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="BinaryPrimitiveWriter"/> class. Default character encoding is
+        /// Initializes a new instance of the <see cref="BinaryPrimitiveWriter"/> class. Default character encoding is
         /// UTF8 and the underlying stream will be disposed/closed when the writer is.
         /// </summary>
         /// <param name="output">Output stream to write to.</param>
@@ -26,7 +26,7 @@
         }
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="BinaryPrimitiveWriter"/> class. The underlying stream will be disposed/closed when
+        /// Initializes a new instance of the <see cref="BinaryPrimitiveWriter"/> class. The underlying stream will be disposed/closed when
         /// the writer is disposed/closed.
         /// </summary>
         /// <param name="output">Output stream to write to.</param>
@@ -37,7 +37,7 @@
         }
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="BinaryPrimitiveWriter"/> class. Default character encoding is
+        /// Initializes a new instance of the <see cref="BinaryPrimitiveWriter"/> class. Default character encoding is
         /// UTF8.
         /// </summary>
         /// <param name="output">Output stream to write to.</param>
@@ -48,7 +48,7 @@
         }
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="BinaryPrimitiveWriter"/> class.
+        /// Initializes a new instance of the <see cref="BinaryPrimitiveWriter"/> class.
         /// </summary>
         /// <param name="output">Output stream to write to.</param>
         /// <param name="encoding">Character encoding.</param>
@@ -78,14 +78,8 @@
         /// </summary>
         protected Stream OutStream
         {
-            get
-            {
-                return _binaryWriter.BaseStream;
-            }
-            set
-            {
-                _binaryWriter.SetOutStream(value);
-            }
+            get => _binaryWriter.BaseStream;
+            set => _binaryWriter.SetOutStream(value);
         }
 
         /// <summary>

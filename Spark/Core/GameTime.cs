@@ -11,7 +11,7 @@
         private TimeSpan _elapsedGameTime;
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="GameTime"/> class.
+        /// Initializes a new instance of the <see cref="GameTime"/> class.
         /// </summary>
         public GameTime() 
             : this(TimeSpan.Zero, TimeSpan.Zero, false)
@@ -19,7 +19,7 @@
         }
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="GameTime"/> class.
+        /// Initializes a new instance of the <see cref="GameTime"/> class.
         /// </summary>
         /// <param name="elapsedGameTime">The elapsed game time.</param>
         /// <param name="totalGameTime">The total game time.</param>
@@ -29,7 +29,7 @@
         }
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="GameTime"/> class.
+        /// Initializes a new instance of the <see cref="GameTime"/> class.
         /// </summary>
         /// <param name="elapsedGameTime">The elapsed game time.</param>
         /// <param name="totalGameTime">The total game time.</param>

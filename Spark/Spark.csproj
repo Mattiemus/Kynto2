@@ -45,6 +45,7 @@
     <Compile Include="Content\Binary\BinaryConstants.cs" />
     <Compile Include="Content\Binary\BinaryPrimitiveReader.cs" />
     <Compile Include="Content\Binary\BinaryPrimitiveWriter.cs" />
+    <Compile Include="Content\FileResourceFile.cs" />
     <Compile Include="Content\IContentCastable.cs" />
     <Compile Include="Content\IPrimitiveReader.cs" />
     <Compile Include="Content\IPrimitiveValue.cs" />

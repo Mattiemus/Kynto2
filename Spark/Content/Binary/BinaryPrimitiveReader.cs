@@ -15,7 +15,7 @@
         private byte[] _chunkBuffer;
         
         /// <summary>
-        /// Constructs a new instance of the <see cref="BinaryPrimitiveReader"/> class. Default character encoding
+        /// Initializes a new instance of the <see cref="BinaryPrimitiveReader"/> class. Default character encoding
         /// is UTF8 and the underlying stream will be disposed/closed when the reader is.
         /// </summary>
         /// <param name="input">Input stream to read from</param>
@@ -25,7 +25,7 @@
         }
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="BinaryPrimitiveReader"/> class. The underlying stream will be
+        /// Initializes a new instance of the <see cref="BinaryPrimitiveReader"/> class. The underlying stream will be
         /// disposed/closed when the reader is.
         /// </summary>
         /// <param name="input">Input stream to read from</param>
@@ -37,7 +37,7 @@
         }
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="BinaryPrimitiveReader"/> class. Default character encoding is
+        /// Initializes a new instance of the <see cref="BinaryPrimitiveReader"/> class. Default character encoding is
         /// UTF8.
         /// </summary>
         /// <param name="input">Input stream to read from</param>
@@ -48,7 +48,7 @@
         }
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="BinaryPrimitiveReader"/> class.
+        /// Initializes a new instance of the <see cref="BinaryPrimitiveReader"/> class.
         /// </summary>
         /// <param name="input">Input stream to read from</param>
         /// <param name="encoding">Character encoding.</param>
@@ -603,10 +603,7 @@
         /// Checks if the next signed byte is a NULL_OBJECT or not.
         /// </summary>
         /// <returns></returns>
-        protected bool IsNullObject()
-        {
-            return UnderlyingBinaryReader.ReadSByte() == BinaryConstants.NULL_OBJECT;
-        }
+        protected bool IsNullObject() => UnderlyingBinaryReader.ReadSByte() == BinaryConstants.NULL_OBJECT;
 
         /// <summary>
         /// Gets and initializes (if necessary) a temporary buffer for reading from the stream.

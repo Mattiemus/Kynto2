@@ -14,7 +14,7 @@
         private readonly Dictionary<string, int> _fastLookUpIndices;
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="ReadOnlyNamedListFast{T}"/> class.
+        /// Initializes a new instance of the <see cref="ReadOnlyNamedListFast{T}"/> class.
         /// </summary>
         /// <param name="elements">Elements to copy</param>
         public ReadOnlyNamedListFast(IEnumerable<T> elements)
@@ -31,7 +31,7 @@
         }
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="ReadOnlyNamedListFast{T}"/> class.
+        /// Initializes a new instance of the <see cref="ReadOnlyNamedListFast{T}"/> class.
         /// </summary>
         /// <param name="elements">Elements to copy</param>
         public ReadOnlyNamedListFast(params T[] elements)
@@ -48,7 +48,7 @@
         }
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="ReadOnlyNamedListFast{T}"/> class.
+        /// Initializes a new instance of the <see cref="ReadOnlyNamedListFast{T}"/> class.
         /// </summary>
         protected ReadOnlyNamedListFast() 
             : this(0)
@@ -56,7 +56,7 @@
         }
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="ReadOnlyNamedListFast{T}"/> class.
+        /// Initializes a new instance of the <see cref="ReadOnlyNamedListFast{T}"/> class.
         /// </summary>
         protected ReadOnlyNamedListFast(int initialCapacity)
         {

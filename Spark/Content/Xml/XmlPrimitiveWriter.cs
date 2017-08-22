@@ -56,7 +56,7 @@
         }
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="XmlPrimitiveWriter"/> class.
+        /// Initializes a new instance of the <see cref="XmlPrimitiveWriter"/> class.
         /// </summary>
         /// <param name="output">Output to write to.</param>
         /// <param name="conformanceLevel">Conformance level of the underlying XML document</param>
@@ -71,7 +71,7 @@
         }
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="XmlPrimitiveWriter"/> class.
+        /// Initializes a new instance of the <see cref="XmlPrimitiveWriter"/> class.
         /// </summary>
         /// <param name="output">Output to write to.</param>
         /// <param name="settings">Optional settings for the underlying XML writer. If null, default settings are created.</param>
