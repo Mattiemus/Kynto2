@@ -14,7 +14,7 @@
         private readonly Dictionary<object, bool> _detector;
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="CyclicReferenceDetector"/> class.
+        /// Initializes a new instance of the <see cref="CyclicReferenceDetector"/> class.
         /// </summary>
         public CyclicReferenceDetector()
         {

@@ -12,7 +12,7 @@
         private string _name;
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="GraphicsResourceImplementation"/> class.
+        /// Initializes a new instance of the <see cref="GraphicsResourceImplementation"/> class.
         /// </summary>
         /// <param name="renderSystem">The render system that manages this graphics implementation</param>
         /// <param name="resourceID">ID of the resource, supplied by the render system</param>

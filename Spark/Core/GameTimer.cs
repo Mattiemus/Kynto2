@@ -17,7 +17,7 @@
         private long _timePaused;
         
         /// <summary>
-        /// Constructs a new instance of the <see cref="GameTimer"/> class.
+        /// Initializes a new instance of the <see cref="GameTimer"/> class.
         /// </summary>
         public GameTimer()
         {
@@ -28,13 +28,7 @@
         /// <summary>
         /// Gets the game time snapshot.
         /// </summary>
-        public IGameTime GameTime
-        {
-            get
-            {
-                return _gameTime;
-            }
-        }
+        public IGameTime GameTime => _gameTime;
 
         /// <summary>
         /// Gets the resolution of the timer (inverse of frequency).

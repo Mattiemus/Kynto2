@@ -31,7 +31,7 @@
         }
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="VertexLayout"/> class.
+        /// Initializes a new instance of the <see cref="VertexLayout"/> class.
         /// </summary>
         /// <param name="vertexStride">Vertex stride of the vertex layout.</param>
         /// <param name="elements">Vertex elements that define the vertex layout.</param>

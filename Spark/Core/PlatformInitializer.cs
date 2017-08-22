@@ -15,7 +15,7 @@
         private readonly ServiceDescriptor[] _descriptors;
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="PlatformInitializer"/> class.
+        /// Initializes a new instance of the <see cref="PlatformInitializer"/> class.
         /// </summary>
         /// <param name="servicesToLoad">The services to dynamically load and register.</param>
         public PlatformInitializer(IEnumerable<ServiceDescriptor> servicesToLoad)

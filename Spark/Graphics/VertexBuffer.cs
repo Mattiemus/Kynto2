@@ -29,7 +29,7 @@
         }
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="VertexBuffer"/> class.
+        /// Initializes a new instance of the <see cref="VertexBuffer"/> class.
         /// </summary>
         /// <param name="vertexLayout">Vertex layout that defines the vertex data of this buffer</param>
         /// <param name="data">The interleaved vertex data to initialize the vertex buffer with.</param>
@@ -50,7 +50,7 @@
         }
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="VertexBuffer"/> class.
+        /// Initializes a new instance of the <see cref="VertexBuffer"/> class.
         /// </summary>
         /// <param name="renderSystem">Render system used to create the underlying implementation.</param>
         /// <param name="vertexLayout">Vertex layout that defines the vertex data of this buffer</param>

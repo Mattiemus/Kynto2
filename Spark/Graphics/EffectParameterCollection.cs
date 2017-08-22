@@ -22,7 +22,7 @@
         }
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="EffectParameterCollection"/> class.
+        /// Initializes a new instance of the <see cref="EffectParameterCollection"/> class.
         /// </summary>
         /// <param name="parameters">Effect parameters.</param>
         public EffectParameterCollection(params IEffectParameter[] parameters)
@@ -31,7 +31,7 @@
         }
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="EffectParameterCollection"/> class.
+        /// Initializes a new instance of the <see cref="EffectParameterCollection"/> class.
         /// </summary>
         /// <param name="parameters">Effect parameters.</param>
         public EffectParameterCollection(IEnumerable<IEffectParameter> parameters) 

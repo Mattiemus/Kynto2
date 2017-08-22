@@ -9,7 +9,7 @@
     public struct VertexBufferBinding : IEquatable<VertexBufferBinding>
     {
         /// <summary>
-        /// Constructs a new instance of the <see cref="VertexBufferBinding"/> struct.
+        /// Initializes a new instance of the <see cref="VertexBufferBinding"/> struct.
         /// </summary>
         /// <param name="buffer">The vertex buffer to bind.</param>
         public VertexBufferBinding(VertexBuffer buffer)
@@ -20,7 +20,7 @@
         }
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="VertexBufferBinding"/> struct.
+        /// Initializes a new instance of the <see cref="VertexBufferBinding"/> struct.
         /// </summary>
         /// <param name="buffer">The vertex buffer to bind.</param>
         /// <param name="vertexOffset">The vertex offset from the start of the buffer to the first vertex that will be used.</param>
@@ -32,7 +32,7 @@
         }
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="VertexBufferBinding"/> struct.
+        /// Initializes a new instance of the <see cref="VertexBufferBinding"/> struct.
         /// </summary>
         /// <param name="buffer">The vertex buffer to bind.</param>
         /// <param name="vertexOffset">The vertex offset from the start of the buffer to the first vertex that will be used.</param>
