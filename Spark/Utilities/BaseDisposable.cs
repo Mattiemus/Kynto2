@@ -36,7 +36,7 @@
         /// Disposes the graphics resource
         /// </summary>
         /// <param name="isDisposing">True if called from dispose, false if called from the finalizer</param>
-        protected virtual void Dispose(bool isDisposing)
+        protected void Dispose(bool isDisposing)
         {
             if (IsDisposed)
             {

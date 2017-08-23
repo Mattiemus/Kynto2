@@ -55,9 +55,8 @@
         /// <returns>True if <paramref name="obj" /> and this instance are the same type and represent the same value; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
-            if (obj is MultiKey<TMajorKey, TMinorKey>)
+            if (obj is MultiKey<TMajorKey, TMinorKey> other)
             {
-                MultiKey<TMajorKey, TMinorKey> other = (MultiKey<TMajorKey, TMinorKey>)obj;
                 return Equals(Major, other.Major) && Equals(Minor, other.Minor);
             }
 

@@ -898,7 +898,7 @@
             /// <summary>
             /// Not used.
             /// </summary>
-            void IDisposable.Dispose()
+            public void Dispose()
             {
                 // No-op
             }
@@ -998,7 +998,7 @@
             /// <summary>
             /// Not used.
             /// </summary>
-            void IDisposable.Dispose()
+            public void Dispose()
             {
                 // No-op
             }

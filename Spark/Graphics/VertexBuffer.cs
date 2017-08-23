@@ -21,26 +21,6 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="VertexBuffer"/> class.
         /// </summary>
-        /// <param name="vertexLayout">Vertex layout that defines the vertex data of this buffer</param>
-        /// <param name="vertexCount">Number of vertices the buffer will contain</param>
-        public VertexBuffer(VertexLayout vertexLayout, int vertexCount)
-        {
-            CreateImplementation(GraphicsHelpers.GetRenderSystem(), vertexLayout, vertexCount);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="VertexBuffer"/> class.
-        /// </summary>
-        /// <param name="vertexLayout">Vertex layout that defines the vertex data of this buffer</param>
-        /// <param name="data">The interleaved vertex data to initialize the vertex buffer with.</param>
-        public VertexBuffer(VertexLayout vertexLayout, IReadOnlyDataBuffer data)
-        {
-            CreateImplementation(GraphicsHelpers.GetRenderSystem(), vertexLayout, data);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="VertexBuffer"/> class.
-        /// </summary>
         /// <param name="renderSystem">Render system used to create the underlying implementation.</param>
         /// <param name="vertexLayout">Vertex layout that defines the vertex data of this buffer</param>
         /// <param name="vertexCount">Number of vertices the buffer will contain</param>
@@ -275,9 +255,8 @@
             }
 
             ValidateCreationParameters(vertexLayout, vertexCount);
-
-            IVertexBufferImplementationFactory factory;
-            if (!renderSystem.TryGetImplementationFactory(out factory))
+            
+            if (!renderSystem.TryGetImplementationFactory(out IVertexBufferImplementationFactory factory))
             {
                 throw new SparkGraphicsException("Feature is not supported");
             }
@@ -306,9 +285,8 @@
             }
 
             ValidateCreationParameters(vertexLayout, data);
-
-            IVertexBufferImplementationFactory factory;
-            if (!renderSystem.TryGetImplementationFactory(out factory))
+            
+            if (!renderSystem.TryGetImplementationFactory(out IVertexBufferImplementationFactory factory))
             {
                 throw new SparkGraphicsException("Feature is not supported");
             }

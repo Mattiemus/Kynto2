@@ -22,15 +22,6 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="Effect"/> class.
         /// </summary>
-        /// <param name="effectByteCode">Compiled effect code that represents this effect.</param>
-        public Effect(byte[] effectByteCode)
-        {
-            CreateImplementation(GraphicsHelpers.GetRenderSystem(), effectByteCode);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Effect"/> class.
-        /// </summary>
         /// <param name="renderSystem">Render system used to create the underlying implementation.</param>
         /// <param name="effectByteCode">Compiled effect code that represents this effect.</param>
         public Effect(IRenderSystem renderSystem, byte[] effectByteCode)
@@ -123,9 +114,8 @@
             {
                 throw new ArgumentNullException(nameof(effectByteCode));
             }
-
-            IEffectImplementationFactory factory;
-            if (!renderSystem.TryGetImplementationFactory(out factory))
+            
+            if (!renderSystem.TryGetImplementationFactory(out IEffectImplementationFactory factory))
             {
                 throw new SparkGraphicsException("Feature is not supported");
             }

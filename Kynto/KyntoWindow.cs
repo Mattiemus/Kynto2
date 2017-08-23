@@ -71,7 +71,7 @@ void main() {
                 }
             }
 
-            Effect fx = new Effect(new byte[] { 1, 2, 3 });
+            Effect fx = new Effect(renderer, new byte[] { 1, 2, 3 });
 
             program = new OpenGLShaderProgram(new [] 
             {
@@ -80,6 +80,7 @@ void main() {
             });
 
             vertexBuffer = new VertexBuffer(
+                renderer,
                 new VertexLayout(new VertexElement[] {
                     new VertexElement(VertexFormat.Float3, 0)
                 }), 
