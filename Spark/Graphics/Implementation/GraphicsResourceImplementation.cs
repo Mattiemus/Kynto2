@@ -84,7 +84,7 @@
         /// be used as a debug name.
         /// </summary>
         /// <param name="name">New name of the resource</param>
-        protected virtual void OnNameChange(String name)
+        protected virtual void OnNameChange(string name)
         {
         }
     }

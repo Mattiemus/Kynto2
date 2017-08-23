@@ -72,14 +72,20 @@
         /// Opens a resource stream to be read-only.
         /// </summary>
         /// <returns>Resource stream</returns>
-        public Stream Open() => Open(ResourceFileMode.Open, ResourceFileAccess.Read, ResourceFileShare.Read);
+        public Stream Open()
+        {
+            return Open(ResourceFileMode.Open, ResourceFileAccess.Read, ResourceFileShare.Read);
+        }
 
         /// <summary>
         /// Opens a resource stream.
         /// </summary>
         /// <param name="fileMode">Specifies the mode in which to open the file.</param>
         /// <returns>Resource stream</returns>
-        public Stream Open(ResourceFileMode fileMode) => Open(fileMode, ResourceFileAccess.Read, ResourceFileShare.Read);
+        public Stream Open(ResourceFileMode fileMode)
+        {
+            return Open(fileMode, ResourceFileAccess.Read, ResourceFileShare.Read);
+        }
 
         /// <summary>
         /// Opens a resource stream.
@@ -87,7 +93,10 @@
         /// <param name="fileMode">Specifies the mode in which to open the file.</param>
         /// <param name="accessMode">Specifies the read or write access of the file.</param>
         /// <returns>Resource stream</returns>
-        public Stream Open(ResourceFileMode fileMode, ResourceFileAccess accessMode) => Open(fileMode, accessMode, ResourceFileShare.Read);
+        public Stream Open(ResourceFileMode fileMode, ResourceFileAccess accessMode)
+        {
+            return Open(fileMode, accessMode, ResourceFileShare.Read);
+        }
 
         /// <summary>
         /// Opens a resource steam.
@@ -118,13 +127,19 @@
         /// Opens a resource stream for writing. If the resource file does not exist, it will be created.
         /// </summary>
         /// <returns>Resource stream</returns>
-        public Stream OpenWrite() => Open(ResourceFileMode.Create, ResourceFileAccess.Write, ResourceFileShare.None);
+        public Stream OpenWrite()
+        {
+            return Open(ResourceFileMode.Create, ResourceFileAccess.Write, ResourceFileShare.None);
+        }
 
         /// <summary>
         /// Opens a resource stream for reading.
         /// </summary>
         /// <returns>Resource stream</returns>
-        public Stream OpenRead() => Open(ResourceFileMode.Open, ResourceFileAccess.Read, ResourceFileShare.Read);
+        public Stream OpenRead()
+        {
+            return Open(ResourceFileMode.Open, ResourceFileAccess.Read, ResourceFileShare.Read);
+        }
 
         /// <summary>
         /// Creates a new file with the resource name and returns a writable stream.

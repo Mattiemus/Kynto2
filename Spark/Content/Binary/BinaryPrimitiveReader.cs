@@ -603,7 +603,10 @@
         /// Checks if the next signed byte is a NULL_OBJECT or not.
         /// </summary>
         /// <returns></returns>
-        protected bool IsNullObject() => UnderlyingBinaryReader.ReadSByte() == BinaryConstants.NULL_OBJECT;
+        protected bool IsNullObject()
+        {
+            return UnderlyingBinaryReader.ReadSByte() == BinaryConstants.NULL_OBJECT;
+        }
 
         /// <summary>
         /// Gets and initializes (if necessary) a temporary buffer for reading from the stream.
