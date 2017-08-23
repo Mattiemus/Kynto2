@@ -52,8 +52,7 @@
                 return null;
             }
 
-            IEngineService service;
-            if (_services.TryGetValue(serviceType, out service))
+            if (_services.TryGetValue(serviceType, out IEngineService service))
             {
                 return service;
             }
@@ -118,8 +117,7 @@
         {
             Type type = typeof(T);
 
-            IEngineService service;
-            if (_services.TryGetValue(type, out service))
+            if (_services.TryGetValue(type, out IEngineService service))
             {
                 return service as T;
             }
@@ -166,8 +164,7 @@
                 throw new ArgumentException("Service is not assignable to the given type", nameof(service));
             }
 
-            IEngineService oldService;
-            if (!_services.TryGetValue(type, out oldService))
+            if (!_services.TryGetValue(type, out IEngineService oldService))
             {
                 _services.Add(type, service);
 
@@ -182,7 +179,7 @@
             else
             {
                 _services[type] = service;
-                
+
                 bool oldServiceUpdateable = oldService is IUpdatableEngineService;
                 bool newServiceUpdateable = service is IUpdatableEngineService;
                 if (oldServiceUpdateable && newServiceUpdateable)
@@ -231,8 +228,7 @@
                 throw new ArgumentNullException(nameof(type));
             }
 
-            IEngineService oldService;
-            if (_services.TryGetValue(type, out oldService))
+            if (_services.TryGetValue(type, out IEngineService oldService))
             {
                 _services.Remove(type);
 

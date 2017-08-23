@@ -145,18 +145,24 @@
             ThrowIfDisposed();
             return String.Format(CultureInfo.CurrentCulture, "IsValid: {0}, Pointer: {1}, SizeInBytes: {2}", IsValid.ToString(), Pointer.ToString(), SizeInBytes.ToString());
         }
-
+        
         /// <summary>
-        /// Performs the dispose action
+        /// Disposes the object instance
         /// </summary>
         /// <param name="isDisposing">True if called from dispose, false if called from the finalizer</param>
-        protected override void DisposeInternal(bool isDisposing)
+        protected override void Dispose(bool isDisposing)
         {
-            ThrowIfDisposed();
+            if (IsDisposed)
+            {
+                return;
+            }
+
             if (IsValid)
             {
                 DataBuffer.Unmap();
             }
+
+            base.Dispose(isDisposing);
         }
     }
 }

@@ -14,7 +14,7 @@
         private OGL.FrontFaceDirection _frontFace;
         private OGL.CullFaceMode? _cullFace;
         private OpenGLShaderProgram _currentProgram;
-        private bool[] _enabledAttributes;
+        private readonly bool[] _enabledAttributes;
         private readonly Dictionary<OGL.EnableCap, bool> _capabilities = new Dictionary<OGL.EnableCap, bool>();
 
         /// <summary>

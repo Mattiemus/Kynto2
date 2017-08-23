@@ -52,17 +52,22 @@
         public IReadOnlyDictionary<string, OpenGLShaderAttribute> Attributes => _attribtes;
 
         /// <summary>
-        /// Performs the dispose action
+        /// Disposes the object instance
         /// </summary>
         /// <param name="isDisposing">True if called from dispose, false if called from the finalizer</param>
-        protected override void DisposeInternal(bool isDisposing)
+        protected override void Dispose(bool isDisposing)
         {
-            if (OTK.GraphicsContext.CurrentContext == null || OTK.GraphicsContext.CurrentContext.IsDisposed)
+            if (IsDisposed)
             {
                 return;
             }
 
-            OGL.GL.DeleteProgram(ResourceId);
+            if (OTK.GraphicsContext.CurrentContext != null && !OTK.GraphicsContext.CurrentContext.IsDisposed)
+            {
+                OGL.GL.DeleteProgram(ResourceId);
+            }
+
+            base.Dispose(isDisposing);
         }
 
         /// <summary>

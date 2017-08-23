@@ -20,21 +20,26 @@
             ResourceId = OGL.GL.CreateShader(shaderType);
             Compile(source);
         }
-
+        
         /// <summary>
-        /// Performs the dispose action
+        /// Disposes the object instance
         /// </summary>
         /// <param name="isDisposing">True if called from dispose, false if called from the finalizer</param>
-        protected override void DisposeInternal(bool isDisposing)
+        protected override void Dispose(bool isDisposing)
         {
-            if (OTK.GraphicsContext.CurrentContext == null || OTK.GraphicsContext.CurrentContext.IsDisposed)
+            if (IsDisposed)
             {
                 return;
             }
 
-            OGL.GL.DeleteShader(ResourceId);
+            if (OTK.GraphicsContext.CurrentContext != null && !OTK.GraphicsContext.CurrentContext.IsDisposed)
+            {
+                OGL.GL.DeleteShader(ResourceId);
+            }
+
+            base.Dispose(isDisposing);
         }
-        
+
         /// <summary>
         /// Compiles the shader
         /// </summary>

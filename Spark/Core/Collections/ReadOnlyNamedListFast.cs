@@ -96,8 +96,7 @@
                     return default(T);
                 }
 
-                int index;
-                if (_fastLookUpIndices.TryGetValue(name, out index))
+                if (_fastLookUpIndices.TryGetValue(name, out int index))
                 {
                     return _list[index];
                 }
@@ -141,8 +140,7 @@
                 return false;
             }
 
-            int index;
-            if (_fastLookUpIndices.TryGetValue(name, out index))
+            if (_fastLookUpIndices.TryGetValue(name, out int index))
             {
                 value = _list[index];
                 return true;
@@ -163,8 +161,7 @@
                 return -1;
             }
 
-            int index;
-            if (_fastLookUpIndices.TryGetValue(name, out index))
+            if (_fastLookUpIndices.TryGetValue(name, out int index))
             {
                 return index;
             }

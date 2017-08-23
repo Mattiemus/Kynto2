@@ -185,8 +185,7 @@
                 throw new ArgumentNullException(nameof(type));
             }
 
-            CreatorInfo creatorInfo;
-            if (_typeToCreators.TryGetValue(type, out creatorInfo))
+            if (_typeToCreators.TryGetValue(type, out CreatorInfo creatorInfo))
             {
                 // Handles classes + structs
                 if (creatorInfo.HasPublicCtor)

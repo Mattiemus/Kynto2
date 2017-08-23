@@ -83,8 +83,7 @@
         /// <returns>True if the parameters are valid.</returns>
         public bool Validate()
         {
-            string reason;
-            return Validate(out reason);
+            return Validate(out string reason);
         }
 
         /// <summary>

@@ -21,8 +21,7 @@
         {
             lock (_pinnedObjects)
             {
-                GCHandle handle;
-                if (!_pinnedObjects.TryGetValue(obj, out handle))
+                if (!_pinnedObjects.TryGetValue(obj, out GCHandle handle))
                 {
                     handle = GCHandle.Alloc(obj, GCHandleType.Pinned);
                     _pinnedObjects.Add(obj, handle);
@@ -40,8 +39,7 @@
         {
             lock (_pinnedObjects)
             {
-                GCHandle handle;
-                if (!_pinnedObjects.TryGetValue(obj, out handle))
+                if (!_pinnedObjects.TryGetValue(obj, out GCHandle handle))
                 {
                     handle.Free();
                     _pinnedObjects.Remove(obj);

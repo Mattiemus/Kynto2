@@ -60,8 +60,7 @@
         /// <returns>The registered implementation factory, if it exists. Otherwise, null is returned.</returns>
         public T GetImplementationFactory<T>() where T : IGraphicsResourceImplementationFactory
         {
-            IGraphicsResourceImplementationFactory factory;
-            if (_factoryTypeToFactory.TryGetValue(typeof(T), out factory) && factory is T)
+            if (_factoryTypeToFactory.TryGetValue(typeof(T), out IGraphicsResourceImplementationFactory factory) && factory is T)
             {
                 return (T)factory;
             }
@@ -79,8 +78,7 @@
         {
             implementationFactory = default(T);
 
-            IGraphicsResourceImplementationFactory factory;
-            if (_factoryTypeToFactory.TryGetValue(typeof(T), out factory) && factory is T)
+            if (_factoryTypeToFactory.TryGetValue(typeof(T), out IGraphicsResourceImplementationFactory factory) && factory is T)
             {
                 implementationFactory = (T)factory;
                 return true;

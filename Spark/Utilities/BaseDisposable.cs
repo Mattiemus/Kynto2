@@ -9,7 +9,7 @@
         /// </summary>
         ~BaseDisposable()
         {
-            Dispose(false);
+            Dispose(false);            
         }
 
         /// <summary>
@@ -27,24 +27,11 @@
         }
 
         /// <summary>
-        /// Performs the dispose action
+        /// Disposes the object instance
         /// </summary>
         /// <param name="isDisposing">True if called from dispose, false if called from the finalizer</param>
-        protected abstract void DisposeInternal(bool isDisposing);
-
-        /// <summary>
-        /// Disposes the graphics resource
-        /// </summary>
-        /// <param name="isDisposing">True if called from dispose, false if called from the finalizer</param>
-        protected void Dispose(bool isDisposing)
+        protected virtual void Dispose(bool isDisposing)
         {
-            if (IsDisposed)
-            {
-                return;
-            }
-
-            DisposeInternal(isDisposing);
-
             IsDisposed = true;
         }
 

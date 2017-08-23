@@ -399,10 +399,9 @@
             ThrowIfDisposed();
             ReadToStartOfNextElement();
 
-            int count;
             string[] values = null;
 
-            if (!UnderlyingXmlReader.IsEmptyElement && ReadCountAttribute(out count))
+            if (!UnderlyingXmlReader.IsEmptyElement && ReadCountAttribute(out int count))
             {
                 values = new string[count];
 
@@ -432,11 +431,9 @@
             ThrowIfDisposed();
             ReadToStartOfNextElement();
 
-            int count;
-            if (ReadCountAttribute(out count))
+            if (ReadCountAttribute(out int count))
             {
-                int elemSize;
-                if (ReadElementSizeAttribute(out elemSize))
+                if (ReadElementSizeAttribute(out int elemSize))
                 {
                     count = count / elemSize;
                 }
@@ -466,13 +463,11 @@
 
             ReadToStartOfNextElement();
 
-            int count = 0;
-            int elemSize = 0;
             int destElemSize = values.ElementSizeInBytes;
             int remainingLength = values.RemainingLength;
 
-            bool hasCount = ReadCountAttribute(out count);
-            bool hasElemSize = ReadElementSizeAttribute(out elemSize);
+            bool hasCount = ReadCountAttribute(out int count);
+            bool hasElemSize = ReadElementSizeAttribute(out int elemSize);
 
             bool isBinary = hasCount && hasElemSize;
             bool hasData = hasCount && !UnderlyingXmlReader.IsEmptyElement;
@@ -623,10 +618,9 @@
             ThrowIfDisposed();
             ReadToStartOfNextElement();
 
-            int count;
             T[] values = null;
 
-            if (!UnderlyingXmlReader.IsEmptyElement && ReadCountAttribute(out count))
+            if (!UnderlyingXmlReader.IsEmptyElement && ReadCountAttribute(out int count))
             {
                 values = new T[count];
 
@@ -634,9 +628,7 @@
 
                 for (int i = 0; i < count; i++)
                 {
-                    T value;
-                    Read<T>(out value);
-
+                    Read(out T value);
                     values[i] = value;
                 }
 
@@ -701,22 +693,28 @@
 
             string str = UnderlyingXmlReader.ReadElementContentAsString();
 
-            T enumValue;
-            Enum.TryParse(str, true, out enumValue);
+            Enum.TryParse(str, true, out T enumValue);
 
             return enumValue;
         }
-        
+
         /// <summary>
-        /// Performs the dispose action
+        /// Disposes the object instance
         /// </summary>
         /// <param name="isDisposing">True if called from dispose, false if called from the finalizer</param>
-        protected override void DisposeInternal(bool isDisposing)
+        protected override void Dispose(bool isDisposing)
         {
+            if (IsDisposed)
+            {
+                return;
+            }
+
             if (isDisposing)
             {
                 UnderlyingXmlReader.Dispose();
             }
+
+            base.Dispose(isDisposing);
         }
 
         /// <summary>
@@ -726,8 +724,7 @@
         /// <returns>Convert handler, or null if not found.</returns>
         protected Action<string, IntPtr> GetPrimitiveConvert<T>() where T : struct
         {
-            Action<string, IntPtr> convertFunc;
-            if (PrimitiveConversions.TryGetValue(typeof(T), out convertFunc))
+            if (PrimitiveConversions.TryGetValue(typeof(T), out Action<string, IntPtr> convertFunc))
             {
                 return convertFunc;
             }
@@ -781,8 +778,7 @@
         /// <returns>True if the attribute exists, false otherwise.</returns>
         protected bool ReadCountAttribute(out int count)
         {
-            string countString;
-            if (TryGetAttribute("Count", out countString))
+            if (TryGetAttribute("Count", out string countString))
             {
                 count = XmlConvert.ToInt32(countString);
                 return count > 0;
@@ -799,8 +795,7 @@
         /// <returns>True if the attribute exists, false otherwise.</returns>
         protected bool ReadElementSizeAttribute(out int elemSize)
         {
-            string countString;
-            if (TryGetAttribute("ElementSize", out countString))
+            if (TryGetAttribute("ElementSize", out string countString))
             {
                 elemSize = XmlConvert.ToInt32(countString);
                 return elemSize > 0;
@@ -867,10 +862,9 @@
         {
             ReadToStartOfNextElement();
 
-            int count;
             T[] array = null;
 
-            if (!UnderlyingXmlReader.IsEmptyElement && ReadCountAttribute(out count))
+            if (!UnderlyingXmlReader.IsEmptyElement && ReadCountAttribute(out int count))
             {
                 array = new T[count];
                 StringBuilder temp = GetTempStringBuilder();
@@ -974,85 +968,113 @@
         /// </summary>
         private static void InitializePrimitiveConversions()
         {
-            PrimitiveConversions = new Dictionary<Type, Action<string, IntPtr>>();
-
-            PrimitiveConversions.Add(typeof(byte), (string data, IntPtr ptr) =>
+            PrimitiveConversions = new Dictionary<Type, Action<string, IntPtr>>
             {
-                byte value = XmlConvert.ToByte(data);
-                MemoryHelper.Write(ptr, ref value);
-            });
-
-            PrimitiveConversions.Add(typeof(sbyte), (string data, IntPtr ptr) =>
-            {
-                sbyte value = XmlConvert.ToSByte(data);
-                MemoryHelper.Write(ptr, ref value);
-            });
-
-            PrimitiveConversions.Add(typeof(char), (string data, IntPtr ptr) =>
-            {
-                char value = XmlConvert.ToChar(data);
-                MemoryHelper.Write(ptr, ref value);
-            });
-
-            PrimitiveConversions.Add(typeof(ushort), (string data, IntPtr ptr) =>
-            {
-                ushort value = XmlConvert.ToUInt16(data);
-                MemoryHelper.Write(ptr, ref value);
-            });
-
-            PrimitiveConversions.Add(typeof(uint), (string data, IntPtr ptr) =>
-            {
-                uint value = XmlConvert.ToUInt32(data);
-                MemoryHelper.Write(ptr, ref value);
-            });
-
-            PrimitiveConversions.Add(typeof(ulong), (string data, IntPtr ptr) =>
-            {
-                ulong value = XmlConvert.ToUInt64(data);
-                MemoryHelper.Write(ptr, ref value);
-            });
-
-            PrimitiveConversions.Add(typeof(short), (string data, IntPtr ptr) =>
-            {
-                short value = XmlConvert.ToInt16(data);
-                MemoryHelper.Write(ptr, ref value);
-            });
-
-            PrimitiveConversions.Add(typeof(int), (string data, IntPtr ptr) =>
-            {
-                int value = XmlConvert.ToInt32(data);
-                MemoryHelper.Write(ptr, ref value);
-            });
-
-            PrimitiveConversions.Add(typeof(long), (string data, IntPtr ptr) =>
-            {
-                long value = XmlConvert.ToInt64(data);
-                MemoryHelper.Write(ptr, ref value);
-            });
-
-            PrimitiveConversions.Add(typeof(float), (string data, IntPtr ptr) =>
-            {
-                float value = XmlConvert.ToSingle(data);
-                MemoryHelper.Write(ptr, ref value);
-            });
-
-            PrimitiveConversions.Add(typeof(double), (string data, IntPtr ptr) =>
-            {
-                double value = XmlConvert.ToDouble(data);
-                MemoryHelper.Write(ptr, ref value);
-            });
-
-            PrimitiveConversions.Add(typeof(decimal), (string data, IntPtr ptr) =>
-            {
-                decimal value = XmlConvert.ToDecimal(data);
-                MemoryHelper.Write(ptr, ref value);
-            });
-
-            PrimitiveConversions.Add(typeof(bool), (string data, IntPtr ptr) =>
-            {
-                bool value = XmlConvert.ToBoolean(data);
-                MemoryHelper.Write(ptr, ref value);
-            });
+                {
+                    typeof(byte),
+                    (string data, IntPtr ptr) =>
+                    {
+                         byte value = XmlConvert.ToByte(data);
+                         MemoryHelper.Write(ptr, ref value);
+                    }
+                },
+                {
+                    typeof(sbyte),
+                    (string data, IntPtr ptr) =>
+                    {
+                        sbyte value = XmlConvert.ToSByte(data);
+                        MemoryHelper.Write(ptr, ref value);
+                    }
+                },
+                {
+                    typeof(char),
+                    (string data, IntPtr ptr) =>
+                    {
+                        char value = XmlConvert.ToChar(data);
+                        MemoryHelper.Write(ptr, ref value);
+                    }
+                },
+                {
+                    typeof(ushort),
+                    (string data, IntPtr ptr) =>
+                    {
+                        ushort value = XmlConvert.ToUInt16(data);
+                        MemoryHelper.Write(ptr, ref value);
+                    }
+                },
+                {
+                    typeof(uint),
+                    (string data, IntPtr ptr) =>
+                    {
+                        uint value = XmlConvert.ToUInt32(data);
+                        MemoryHelper.Write(ptr, ref value);
+                    }
+                },
+                {
+                    typeof(ulong),
+                    (string data, IntPtr ptr) =>
+                    {
+                        ulong value = XmlConvert.ToUInt64(data);
+                        MemoryHelper.Write(ptr, ref value);
+                    }
+                },
+                {
+                    typeof(short),
+                    (string data, IntPtr ptr) =>
+                    {
+                        short value = XmlConvert.ToInt16(data);
+                        MemoryHelper.Write(ptr, ref value);
+                    }
+                },
+                {
+                    typeof(int),
+                    (string data, IntPtr ptr) =>
+                    {
+                        int value = XmlConvert.ToInt32(data);
+                        MemoryHelper.Write(ptr, ref value);
+                    }
+                },
+                {
+                    typeof(long),
+                    (string data, IntPtr ptr) =>
+                    {
+                        long value = XmlConvert.ToInt64(data);
+                        MemoryHelper.Write(ptr, ref value);
+                    }
+                },
+                {
+                    typeof(float),
+                    (string data, IntPtr ptr) =>
+                    {
+                        float value = XmlConvert.ToSingle(data);
+                        MemoryHelper.Write(ptr, ref value);
+                    }
+                },
+                {
+                    typeof(double),
+                    (string data, IntPtr ptr) =>
+                    {
+                        double value = XmlConvert.ToDouble(data);
+                        MemoryHelper.Write(ptr, ref value);
+                    }
+                },
+                {
+                    typeof(decimal),
+                    (string data, IntPtr ptr) =>
+                    {
+                        decimal value = XmlConvert.ToDecimal(data);
+                        MemoryHelper.Write(ptr, ref value);
+                    }
+                },
+                {
+                    typeof(bool),
+                    (string data, IntPtr ptr) =>
+                    {
+                        bool value = XmlConvert.ToBoolean(data);
+                        MemoryHelper.Write(ptr, ref value);
+                    }
+                }
+            };
         }
     }
 }
