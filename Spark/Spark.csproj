@@ -71,6 +71,7 @@
     <Compile Include="Content\ResourceFileAccess.cs" />
     <Compile Include="Content\ResourceFileMode.cs" />
     <Compile Include="Content\ResourceFileShare.cs" />
+    <Compile Include="Content\ResourceImporterCollection.cs" />
     <Compile Include="Content\SavableWriteFlags.cs" />
     <Compile Include="Content\SparkContentException.cs" />
     <Compile Include="Content\ReaderWriterExtensions.cs" />
