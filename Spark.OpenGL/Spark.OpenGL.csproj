@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Graphics\Implementation\OpenGLEffectImplementation.cs" />
     <Compile Include="Graphics\Implementation\OpenGLEffectImplementationFactory.cs" />
     <Compile Include="Graphics\Implementation\OpenGLGraphicsResourceImplementationFactory.cs" />

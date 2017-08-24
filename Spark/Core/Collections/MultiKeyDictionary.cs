@@ -17,7 +17,7 @@
     /// <typeparam name="TMajorKey">Major key type.</typeparam>
     /// <typeparam name="TMinorKey">Minor key type.</typeparam>
     /// <typeparam name="TValue">Data value type.</typeparam>
-    public class MultiKeyDictionary<TMajorKey, TMinorKey, TValue> : IDictionary<MultiKey<TMajorKey, TMinorKey>, TValue>, IReadOnlyDictionary<MultiKey<TMajorKey, TMinorKey>, TValue>
+    public sealed class MultiKeyDictionary<TMajorKey, TMinorKey, TValue> : IDictionary<MultiKey<TMajorKey, TMinorKey>, TValue>, IReadOnlyDictionary<MultiKey<TMajorKey, TMinorKey>, TValue>
     {
         private int _version;
         private int _totalValueCount;
@@ -560,7 +560,7 @@
         /// </summary>
         /// <param name="array">Array of dictionary items.</param>
         /// <param name="arrayIndex">Starting position to write to the array.</param>
-        void ICollection<KeyValuePair<MultiKey<TMajorKey, TMinorKey>, TValue>>.CopyTo(KeyValuePair<MultiKey<TMajorKey, TMinorKey>, TValue>[] array, int arrayIndex)
+        public void CopyTo(KeyValuePair<MultiKey<TMajorKey, TMinorKey>, TValue>[] array, int arrayIndex)
         {
             if (array == null)
             {
@@ -593,7 +593,7 @@
         /// </summary>
         /// <param name="item">Dictionary item to check.</param>
         /// <returns>True if the item is contained, false otherwise.</returns>
-        bool ICollection<KeyValuePair<MultiKey<TMajorKey, TMinorKey>, TValue>>.Contains(KeyValuePair<MultiKey<TMajorKey, TMinorKey>, TValue> item)
+        public bool Contains(KeyValuePair<MultiKey<TMajorKey, TMinorKey>, TValue> item)
         {
             if (_table.TryGetValue(item.Key.Major, out Dictionary<TMinorKey, TValue> subDictionary) && 
                 subDictionary.TryGetValue(item.Key.Minor, out TValue value))
@@ -723,7 +723,6 @@
         /// Enumerator for <see cref="MultiKeyDictionary{TMajorKey, TMinorKey, TValue}"/> that enumerates all
         /// values in the dictionary associated with a certain minor key.
         /// </summary>
-        [Serializable]
         [StructLayout(LayoutKind.Sequential)]
         public struct MajorKeyValueEnumerator : IEnumerator<KeyValuePair<TMajorKey, TValue>>
         {
@@ -787,7 +786,7 @@
             /// <summary>
             /// Not used.
             /// </summary>
-            void IDisposable.Dispose()
+            public void Dispose()
             {
                 // No-op
             }
@@ -797,7 +796,6 @@
         /// Enumerator for <see cref="MultiKeyDictionary{TMajorKey, TMinorKey, TValue}"/> that enumerates all
         /// values in the dictionary associated with a certain major key.
         /// </summary>
-        [Serializable]
         [StructLayout(LayoutKind.Sequential)]
         public struct MinorKeyValueEnumerator : IEnumerator<KeyValuePair<TMinorKey, TValue>>
         {
@@ -907,7 +905,6 @@
         /// <summary>
         /// Enumerator for <see cref="MultiKeyDictionary{TMajorKey, TMinorKey, TValue}"/>.
         /// </summary>
-        [Serializable]
         [StructLayout(LayoutKind.Sequential)]
         public struct Enumerator : IEnumerator<KeyValuePair<MultiKey<TMajorKey, TMinorKey>, TValue>>
         {

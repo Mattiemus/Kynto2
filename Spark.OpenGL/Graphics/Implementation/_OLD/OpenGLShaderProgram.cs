@@ -94,7 +94,7 @@
             if (linkStatus == 0)
             {
                 string infoLog = OGL.GL.GetProgramInfoLog(ResourceId);
-                throw new Exception(infoLog);
+                throw new SparkGraphicsException(infoLog);
             }
         }
 
@@ -109,7 +109,7 @@
             OGL.GL.GetProgram(ResourceId, OGL.GetProgramParameterName.ValidateStatus, out int validationSuccess);
             if (validationSuccess == 0)
             {
-                throw new Exception("Could not validate shader program");
+                throw new SparkGraphicsException("Could not validate shader program");
             }
         }
 

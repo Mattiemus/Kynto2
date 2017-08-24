@@ -136,6 +136,8 @@
                 return;
             }
 
+            ImmediateContext.Dispose();
+
             base.Dispose(isDisposing);
         }
 

@@ -89,7 +89,9 @@
             {
                 return;
             }
-            
+
+            _vao.Dispose();
+
             base.Dispose(isDisposing);
         }
     }

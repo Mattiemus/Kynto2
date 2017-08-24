@@ -54,13 +54,13 @@
             OGL.GL.GetShader(ResourceId, OGL.ShaderParameter.CompileStatus, out int compileStatus);
             if (compileStatus == 0)
             {
-                throw new Exception("Could not compile shader");
+                throw new SparkGraphicsException("Could not compile shader");
             }
 
             string infoLog = OGL.GL.GetShaderInfoLog(ResourceId);
             if (!string.IsNullOrEmpty(infoLog))
             {
-                throw new Exception(infoLog);
+                throw new SparkGraphicsException(infoLog);
             }
         }
     }
