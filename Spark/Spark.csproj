@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Spark</RootNamespace>
     <AssemblyName>Spark</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,11 +44,19 @@
   <ItemGroup>
     <Compile Include="Application\SparkApplicationException.cs" />
     <Compile Include="Content\Binary\BinaryConstants.cs" />
+    <Compile Include="Content\Binary\BinaryExternalWriter.cs" />
     <Compile Include="Content\Binary\BinaryPrimitiveReader.cs" />
     <Compile Include="Content\Binary\BinaryPrimitiveWriter.cs" />
+    <Compile Include="Content\Binary\BinaryResourceExporter.cs" />
+    <Compile Include="Content\Binary\BinaryResourceImporter.cs" />
+    <Compile Include="Content\Binary\BinarySavableReader.cs" />
+    <Compile Include="Content\Binary\BinarySavableWriter.cs" />
     <Compile Include="Content\ContentHelper.cs" />
     <Compile Include="Content\ContentManager.cs" />
     <Compile Include="Content\ExternalReference.cs" />
+    <Compile Include="Content\ExternalReferenceHandler.cs" />
+    <Compile Include="Content\ExternalReferenceResolver.cs" />
+    <Compile Include="Content\ExternalSharedMode.cs" />
     <Compile Include="Content\FileResourceFile.cs" />
     <Compile Include="Content\FileResourceRepository.cs" />
     <Compile Include="Content\IContentCastable.cs" />
@@ -68,15 +77,23 @@
     <Compile Include="Content\ISavableWriter.cs" />
     <Compile Include="Content\MissingContentHandlerCollection.cs" />
     <Compile Include="Content\NullResource.cs" />
+    <Compile Include="Content\ResourceExporter.cs" />
     <Compile Include="Content\ResourceFileAccess.cs" />
     <Compile Include="Content\ResourceFileMode.cs" />
     <Compile Include="Content\ResourceFileShare.cs" />
+    <Compile Include="Content\ResourceImporter.cs" />
     <Compile Include="Content\ResourceImporterCollection.cs" />
     <Compile Include="Content\SavableWriteFlags.cs" />
     <Compile Include="Content\SparkContentException.cs" />
     <Compile Include="Content\ReaderWriterExtensions.cs" />
+    <Compile Include="Content\Xml\XmlConstants.cs" />
+    <Compile Include="Content\Xml\XmlExternalWriter.cs" />
     <Compile Include="Content\Xml\XmlPrimitiveReader.cs" />
     <Compile Include="Content\Xml\XmlPrimitiveWriter.cs" />
+    <Compile Include="Content\Xml\XmlResourceExporter.cs" />
+    <Compile Include="Content\Xml\XmlResourceImporter.cs" />
+    <Compile Include="Content\Xml\XmlSavableReader.cs" />
+    <Compile Include="Content\Xml\XmlSavableWriter.cs" />
     <Compile Include="Core\Collections\INamedList.cs" />
     <Compile Include="Core\Collections\MultiKey.cs" />
     <Compile Include="Core\Collections\MultiKeyDictionary.cs" />
@@ -109,7 +126,6 @@
     <Compile Include="Core\ServiceDescriptor.cs" />
     <Compile Include="Core\SparkException.cs" />
     <Compile Include="Core\MappedDataBuffer.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Graphics\ClearOptions.cs" />
     <Compile Include="Graphics\Effect.cs" />
     <Compile Include="Graphics\EffectParameterCollection.cs" />

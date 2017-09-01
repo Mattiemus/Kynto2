@@ -99,7 +99,7 @@
         /// <summary>
         /// Clears all buffers and causes any buffered data to be written.
         /// </summary>
-        public void Flush()
+        public virtual void Flush()
         {
             ThrowIfDisposed();
             _binaryWriter.BaseStream.Flush();

@@ -40,8 +40,9 @@
         /// </summary>
         /// <param name="output">Output to write to.</param>
         /// <param name="leaveOpen">True if the output stream should NOT be disposed/closed when the writer is disposed/closed, false otherwise.</param>
-        public XmlPrimitiveWriter(Stream output, bool leaveOpen) 
-            : this(output, new XmlWriterSettings() { CloseOutput = !leaveOpen, Encoding = Encoding.UTF8, Indent = true, ConformanceLevel = ConformanceLevel.Fragment })
+        /// <param name="conformanceLevel">Conformance level of the underlying XML document</param>
+        public XmlPrimitiveWriter(Stream output, bool leaveOpen, ConformanceLevel conformanceLevel = ConformanceLevel.Fragment) 
+            : this(output, new XmlWriterSettings() { CloseOutput = !leaveOpen, Encoding = Encoding.UTF8, Indent = true, ConformanceLevel = conformanceLevel })
         {
         }
 
@@ -112,7 +113,7 @@
         /// <summary>
         /// Clears all buffers and causes any buffered data to be written.
         /// </summary>
-        public void Flush()
+        public virtual void Flush()
         {
             ThrowIfDisposed();
             UnderlyingXmlWriter.Flush();

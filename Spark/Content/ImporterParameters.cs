@@ -15,7 +15,7 @@
         /// </summary>
         public ImporterParameters()
         {
-            ExtendedParameters = new Dictionary<String, String>();
+            ExtendedParameters = new Dictionary<string, string>();
         }
 
         /// <summary>
@@ -27,7 +27,7 @@
         /// Gets or sets an optional subresource name. When a resource file is imported it may contain multiple pieces of
         /// content of which only one needs to be imported, as identified by this name.
         /// </summary>
-        public String SubresourceName
+        public string SubresourceName
         {
             get
             {

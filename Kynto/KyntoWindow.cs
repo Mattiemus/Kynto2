@@ -4,6 +4,7 @@
     using System.IO;
 
     using Spark.Core;
+    using Spark.Content;
     using Spark.Graphics;
     using Spark.Graphics.Implementation;
     using Spark.Math;
@@ -38,6 +39,14 @@
         /// <param name="e">Event arguments</param>
         protected override void OnLoad(EventArgs e)
         {
+            ContentManager cm = new ContentManager();
+            cm.ResourceImporters.Add(new OpenGLEffectImporter());
+
+            Effect testFx = cm.Load<Effect>("Content/BasicEffect.sfx");
+
+
+
+
             string vs =
 @"#version 330 core
 layout(location = 0) in vec3 vertexPosition_modelspace;

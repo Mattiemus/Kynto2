@@ -109,9 +109,9 @@
         /// <param name="pDest">Destination pointer</param>
         /// <param name="pSrc">Source pointer</param>
         /// <param name="count">Number of bytes</param>
-        public static void CopyMemory(IntPtr pDest, IntPtr pSrc, int count)
+        public static unsafe void CopyMemory(IntPtr pDest, IntPtr pSrc, int count)
         {
-            NativeMethods.CopyMemory(pDest, pSrc, new IntPtr(count));
+            Buffer.MemoryCopy((void*)pSrc, (void*)pDest, count, count);
         }
 
         /// <summary>
@@ -186,7 +186,7 @@
             int size = SizeOf<T>();
             for (int i = startIndexInArray; i < startIndexInArray + count; i++)
             {
-                Read<T>(pSrc, out data[i]);
+                Read(pSrc, out data[i]);
                 pSrc += size;
             }
         }
@@ -199,7 +199,7 @@
         /// <param name="data">The value to write</param>
         public static void Write<T>(IntPtr pDest, T data) where T : struct
         {
-            Marshal.StructureToPtr<T>(data, pDest, false);
+            Marshal.StructureToPtr(data, pDest, false);
         }
 
         /// <summary>
@@ -210,7 +210,7 @@
         /// <param name="data">The value to write</param>
         public static void Write<T>(IntPtr pDest, ref T data) where T : struct
         {
-            Marshal.StructureToPtr<T>(data, pDest, false);
+            Marshal.StructureToPtr(data, pDest, false);
         }
 
         /// <summary>
@@ -226,7 +226,7 @@
             int size = SizeOf<T>();
             for (int i = startIndexInArray; i < startIndexInArray + count; i++)
             {
-                Write<T>(pDest, data[i]);
+                Write(pDest, data[i]);
                 pDest += size;
             }
         }

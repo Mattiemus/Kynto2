@@ -9,15 +9,6 @@
     public static class NativeMethods
     {
         /// <summary>
-        /// Copies memory from one location to another
-        /// </summary>
-        /// <param name="pDest">Destination pointer</param>
-        /// <param name="pSrc">Source pointer</param>
-        /// <param name="count">Number of bytes</param>
-        [DllImport("kernel32.dll", EntryPoint = "CopyMemory", SetLastError = false)]
-        internal static extern void CopyMemory(IntPtr pDest, IntPtr pSrc, [param: MarshalAs(UnmanagedType.SysUInt)] IntPtr count);
-
-        /// <summary>
         /// Fills a block of memory with a single value
         /// </summary>
         /// <param name="pDest">Destination pointer</param>
