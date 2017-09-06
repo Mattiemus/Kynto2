@@ -1,4 +1,4 @@
-﻿namespace Spark.Graphics.Implementation
+﻿namespace Spark.OpenGL.Graphics.Implementation
 {
     using OTK = OpenTK.Graphics;
     using OGL = OpenTK.Graphics.OpenGL;

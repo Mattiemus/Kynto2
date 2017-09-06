@@ -1,9 +1,11 @@
-﻿namespace Spark.Graphics
+﻿namespace Spark.OpenGL.Graphics
 {
-    using Math;
-    using Utilities;
-    using Implementation;
+    using Spark.Graphics;
+    using Spark.Utilities;
 
+    using Math;
+    using Implementation;
+    
     using OGL = OpenTK.Graphics.OpenGL;
 
     public sealed class OpenGLRenderContext : BaseDisposable, IRenderContext

@@ -23,7 +23,7 @@
         private readonly Dictionary<string, object> _resourceLockers;
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="ContentManager"/> class. By default, the repository is a standard file repository
+        /// Initializes a new instance of the <see cref="ContentManager"/> class. By default, the repository is a standard file repository
         /// whose root path is the application's root directory.
         /// </summary>
         public ContentManager() 
@@ -32,7 +32,7 @@
         }
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="ContentManager"/> class.
+        /// Initializes a new instance of the <see cref="ContentManager"/> class.
         /// </summary>
         /// <param name="repository">The resource repository that the content manager that loads resources from and also manages.</param>
         public ContentManager(IResourceRepository repository) 
@@ -41,7 +41,7 @@
         }
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="ContentManager"/> class. By default, the repository is a standard file repository
+        /// Initializes a new instance of the <see cref="ContentManager"/> class. By default, the repository is a standard file repository
         /// whose root path is the application's root directory.
         /// </summary>
         /// <param name="serviceProvider">Service provider the content manager should use to locate services during content loading. If null, then the 
@@ -52,7 +52,7 @@
         }
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="ContentManager"/> class.
+        /// Initializes a new instance of the <see cref="ContentManager"/> class.
         /// </summary>
         /// <param name="serviceProvider">Service provider the content manager should use to locate services during content loading. If null, then the 
         /// engine service register is used.</param>
@@ -63,7 +63,7 @@
         }
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="ContentManager"/> class.
+        /// Initializes a new instance of the <see cref="ContentManager"/> class.
         /// </summary>
         /// <param name="serviceProvider">Service provider the content manager should use to locate services during content loading. If null, then the 
         /// engine service register is used.</param>
@@ -134,10 +134,7 @@
         /// <exception cref="ArgumentNullException">Thrown if the value is null.</exception>
         public IResourceRepository ResourceRepository
         {
-            get
-            {
-                return _repository;
-            }
+            get => _repository;
             set
             {
                 if (value == null)

@@ -53,6 +53,8 @@
     <Compile Include="Content\Binary\BinarySavableWriter.cs" />
     <Compile Include="Content\ContentHelper.cs" />
     <Compile Include="Content\ContentManager.cs" />
+    <Compile Include="Content\EffectCompressionMode.cs" />
+    <Compile Include="Content\EffectImporterParameters.cs" />
     <Compile Include="Content\ExternalReference.cs" />
     <Compile Include="Content\ExternalReferenceHandler.cs" />
     <Compile Include="Content\ExternalReferenceResolver.cs" />
@@ -128,11 +130,16 @@
     <Compile Include="Core\MappedDataBuffer.cs" />
     <Compile Include="Graphics\ClearOptions.cs" />
     <Compile Include="Graphics\Effect.cs" />
+    <Compile Include="Graphics\EffectConstantBufferCollection.cs" />
     <Compile Include="Graphics\EffectParameterCollection.cs" />
+    <Compile Include="Graphics\EffectShaderGroupCollection.cs" />
+    <Compile Include="Graphics\Effects\EffectData.cs" />
     <Compile Include="Graphics\GraphicsHelpers.cs" />
     <Compile Include="Graphics\GraphicsResource.cs" />
+    <Compile Include="Graphics\IEffectConstantBuffer.cs" />
     <Compile Include="Graphics\IEffectParameter.cs" />
     <Compile Include="Graphics\IEffectPart.cs" />
+    <Compile Include="Graphics\IEffectShaderGroup.cs" />
     <Compile Include="Graphics\Implementation\GraphicsResourceImplementation.cs" />
     <Compile Include="Graphics\Implementation\GraphicsResourceImplementationFactory.cs" />
     <Compile Include="Graphics\Implementation\IEffectImplementation.cs" />
@@ -144,6 +151,7 @@
     <Compile Include="Graphics\Implementation\IVertexBufferImplementationFactory.cs" />
     <Compile Include="Graphics\IRenderContext.cs" />
     <Compile Include="Graphics\IRenderSystem.cs" />
+    <Compile Include="Graphics\ShaderMacro.cs" />
     <Compile Include="Graphics\ShaderStage.cs" />
     <Compile Include="Graphics\SparkGraphicsException.cs" />
     <Compile Include="Graphics\PrimitiveType.cs" />

@@ -52,13 +52,17 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Content\BasicEffect.sfx">
+    <None Include="Content\BasicEffect.effect">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Spark.Effects.Importer\Spark.Effects.Importer.csproj">
+      <Project>{c3baa3d0-59f3-4ed1-9368-ea169477f378}</Project>
+      <Name>Spark.Effects.Importer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Spark.OpenGL\Spark.OpenGL.csproj">
       <Project>{c407b6d2-3fbc-4517-bc6a-ad8232c307cc}</Project>
       <Name>Spark.OpenGL</Name>

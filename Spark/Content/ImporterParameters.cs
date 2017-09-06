@@ -29,10 +29,7 @@
         /// </summary>
         public string SubresourceName
         {
-            get
-            {
-                return _subresourceName;
-            }
+            get => _subresourceName;
             set
             {
                 _subresourceName = value;

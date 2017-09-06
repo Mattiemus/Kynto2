@@ -1,5 +1,8 @@
-﻿namespace Spark.Graphics.Implementation
+﻿namespace Spark.OpenGL.Graphics.Implementation
 {
+    using Spark.Graphics;
+    using Spark.Graphics.Implementation;
+
     /// <summary>
     /// Factory for creating <see cref="OpenGLEffectImplementation"/> instances
     /// </summary>

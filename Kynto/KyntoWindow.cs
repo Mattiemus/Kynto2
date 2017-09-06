@@ -1,26 +1,26 @@
 ﻿namespace Kynto
 {
     using System;
-    using System.IO;
+    using System.Linq;
 
     using Spark.Core;
     using Spark.Content;
     using Spark.Graphics;
-    using Spark.Graphics.Implementation;
     using Spark.Math;
-    using Spark.Content.Binary;
+
+    using Spark.Effects.Importer;
 
     using OTK = OpenTK;
-    using OGL = OpenTK.Graphics.OpenGL;
 
     /// <summary>
     /// Main application window
     /// </summary>
     public sealed class KyntoWindow : OTK.GameWindow
     {
-        private readonly IRenderSystem renderer;
-        private OpenGLShaderProgram program;
-        private VertexBuffer vertexBuffer;
+        private readonly IRenderSystem _renderer;
+        private readonly ContentManager _contentManager;
+        private Effect _shader;
+        private VertexBuffer _vertexBuffer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="KyntoWindow"/> class.
@@ -30,7 +30,10 @@
         {
             Engine.Initialize(Platforms.GeneralCrossPlatformInitializer);
             
-            renderer = Engine.Instance.Services.GetService<IRenderSystem>();
+            _renderer = Engine.Instance.Services.GetService<IRenderSystem>();
+
+            _contentManager = new ContentManager(Engine.Instance.Services);
+            _contentManager.ResourceImporters.Add(new EffectImporter());
         }
 
         /// <summary>
@@ -39,61 +42,15 @@
         /// <param name="e">Event arguments</param>
         protected override void OnLoad(EventArgs e)
         {
-            ContentManager cm = new ContentManager();
-            cm.ResourceImporters.Add(new OpenGLEffectImporter());
-
-            Effect testFx = cm.Load<Effect>("Content/BasicEffect.sfx");
-
-
-
-
-            string vs =
-@"#version 330 core
-layout(location = 0) in vec3 vertexPosition_modelspace;
-void main() {
-    gl_Position.xyz = vertexPosition_modelspace;
-    gl_Position.w = 1.0;
-}";
-
-            string ps =
-@"#version 330 core
-out vec3 color;
-void main() {
-    color = vec3(1, 0, 0);
-}";
-
+            _shader = _contentManager.Load<Effect>("Content/BasicEffect.effect");
+            _shader.CurrentShaderGroup = _shader.ShaderGroups.First();
             
-            using (MemoryStream stream = new MemoryStream())
-            {
-                using (BinaryPrimitiveWriter writer = new BinaryPrimitiveWriter(stream, true))
-                {
-                    writer.Write("VertexShader", vs);
-                    writer.Write("PixelShader", ps);
-                }
-                
-                stream.Seek(0, SeekOrigin.Begin);
-
-                using (BinaryPrimitiveReader reader = new BinaryPrimitiveReader(stream))
-                {
-                    string vsp = reader.ReadString();
-                    string psp = reader.ReadString();
-                }
-            }
-
-            Effect fx = new Effect(renderer, new byte[] { 1, 2, 3 });
-
-            program = new OpenGLShaderProgram(new [] 
-            {
-                new OpenGLShader(OGL.ShaderType.VertexShader, vs),
-                new OpenGLShader(OGL.ShaderType.FragmentShader, ps)
-            });
-
-            vertexBuffer = new VertexBuffer(
-                renderer,
-                new VertexLayout(new VertexElement[] {
+            _vertexBuffer = new VertexBuffer(
+                _renderer,
+                new VertexLayout(new [] {
                     new VertexElement(VertexFormat.Float3, 0)
                 }), 
-                new DataBuffer<Vector3>(new[]
+                new DataBuffer<Vector3>(new []
                 {
                     new Vector3(-1.0f, -1.0f, 0.0f),
                     new Vector3(1.0f, -1.0f, 0.0f),
@@ -109,13 +66,13 @@ void main() {
         /// <param name="e">Event arguments</param>
         protected override void OnRenderFrame(OTK.FrameEventArgs e)
         {
-            IRenderContext context = renderer.ImmediateContext;
+            IRenderContext context = _renderer.ImmediateContext;
 
             context.Clear(LinearColor.Blue);
 
-            OGL.GL.UseProgram(program.ResourceId);
-                        
-            context.SetVertexBuffer(vertexBuffer);
+            _shader.CurrentShaderGroup.Apply(context);
+            
+            context.SetVertexBuffer(_vertexBuffer);
             context.Draw(PrimitiveType.Triangles, 0, 3);
                         
             SwapBuffers();

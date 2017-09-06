@@ -1,5 +1,10 @@
-﻿namespace Spark.Graphics.Implementation
+﻿namespace Spark.OpenGL.Graphics.Implementation
 {
+    using System;
+
+    using Spark.Graphics;
+    using Spark.Graphics.Implementation;
+
     using OTK = OpenTK.Graphics;
     using OGL = OpenTK.Graphics.OpenGL;
 
@@ -20,9 +25,35 @@
         }
 
         /// <summary>
-        /// Gets all effect parameters contained in this effect.
+        /// Occurs when an effect shader group that is contained by this effect is about to be applied to a render context.
+        /// </summary>
+        public event OnApplyDelegate OnShaderGroupApply;
+
+        /// <summary>
+        /// Gets the effect sort key, used to compare effects as a first step in sorting objects to render. The sort key is the same
+        /// for cloned effects. Further sorting can then be done using the indices of the contained techniques, and the indices of their passes.
+        /// </summary>
+        public int SortKey { get; }
+
+        /// <summary>
+        /// Gets or sets the currently active shader group.
+        /// </summary>
+        public IEffectShaderGroup CurrentShaderGroup { get; set; }
+
+        /// <summary>
+        /// Gets the shader groups contained in this effect.
+        /// </summary>
+        public EffectShaderGroupCollection ShaderGroups { get; }
+
+        /// <summary>
+        /// Gets all effect parameters used by all shader groups.
         /// </summary>
         public EffectParameterCollection Parameters { get; }
+
+        /// <summary>
+        /// Gets all constant buffers that contain all value type parameters used by all shader groups.
+        /// </summary>
+        public EffectConstantBufferCollection ConstantBuffers { get; }
 
         /// <summary>
         /// Gets the compiled effect byte code that represents this effect.
@@ -30,24 +61,16 @@
         public byte[] EffectByteCode { get; }
 
         /// <summary>
-        /// Binds the set of shaders defined in the group and the resources used by them to the context.
+        /// Clones the effect, and possibly sharing relevant underlying resources. Cloned instances are guaranteed to be
+        /// completely separate from the source effect in terms of parameters, changing one will not change the other. But unlike
+        /// creating a new effect from the same compiled byte code, native resources can still be shared more effectively.
         /// </summary>
-        /// <param name="renderContext">Render context to apply to.</param>
-        public void Apply(IRenderContext renderContext)
+        /// <returns>Cloned effect implementation.</returns>
+        public IEffectImplementation Clone()
         {
-            // TODO
+            throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Queries the shader group if it contains a shader used by the specified shader stage.
-        /// </summary>
-        /// <param name="shaderStage">Shader stage to query.</param>
-        /// <returns>True if the group contains a shader that will be bound to the shader stage, false otherwise.</returns>
-        public bool ContainsShader(ShaderStage shaderStage)
-        {
-            return false;
-        }
-        
         /// <summary>
         /// Disposes the object instance
         /// </summary>

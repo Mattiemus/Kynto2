@@ -8,15 +8,10 @@
         /// <summary>
         /// Gets the platform which uses OpenTK to provide cross platform support
         /// </summary>
-        public static IPlatformInitializer GeneralCrossPlatformInitializer
-        {
-            get
-            {
-                return new PlatformInitializer(new[]
+        public static IPlatformInitializer GeneralCrossPlatformInitializer 
+            => new PlatformInitializer(new []
                 {
-                    new ServiceDescriptor("Spark.OpenGL", "Spark.Graphics.IRenderSystem", "Spark.Graphics.OpenGLRenderSystem")
+                    new ServiceDescriptor("Spark.OpenGL", "Spark.Graphics.IRenderSystem", "Spark.OpenGL.Graphics.OpenGLRenderSystem")
                 });
-            }
-        }
     }
 }

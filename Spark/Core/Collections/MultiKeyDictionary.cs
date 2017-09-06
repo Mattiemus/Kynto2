@@ -115,10 +115,7 @@
 
                 throw new KeyNotFoundException();
             }
-            set
-            {
-                Insert(key, ref value, false);
-            }
+            set => Insert(key, ref value, false);
         }
 
         /// <summary>
@@ -137,10 +134,7 @@
 
                 throw new KeyNotFoundException();
             }
-            set
-            {
-                Insert(new MultiKey<TMajorKey, TMinorKey>(majorKey, minorKey), ref value, false);
-            }
+            set => Insert(new MultiKey<TMajorKey, TMinorKey>(majorKey, minorKey), ref value, false);
         }
 
         /// <summary>

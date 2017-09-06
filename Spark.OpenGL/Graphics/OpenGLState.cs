@@ -1,4 +1,4 @@
-﻿namespace Spark.Graphics
+﻿namespace Spark.OpenGL.Graphics
 {
     using System;
     using System.Linq;

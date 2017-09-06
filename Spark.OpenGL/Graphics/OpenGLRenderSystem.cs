@@ -1,10 +1,13 @@
-﻿namespace Spark.Graphics
+﻿namespace Spark.OpenGL.Graphics
 {
     using System.Collections;
     using System.Collections.Generic;
 
+    using Spark.Utilities;
+    using Spark.Graphics;
+    using Spark.Graphics.Implementation;
+
     using Core;
-    using Utilities;
     using Implementation;
     
     /// <summary>

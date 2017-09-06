@@ -8,21 +8,6 @@
     public sealed class ExternalReference
     {
         /// <summary>
-        /// Gets a null external reference.
-        /// </summary>
-        public static ExternalReference NullReference { get; }
-
-        /// <summary>
-        /// Gets or sets the runtime target type of the reference.
-        /// </summary>
-        public Type TargetType { get; private set; }
-
-        /// <summary>
-        /// Gets or sets the resource path which should include the resource extension.
-        /// </summary>
-        public string ResourcePath { get; private set; }
-
-        /// <summary>
         /// Static constructor for the <see cref="ExternalReference"/> class
         /// </summary>
         static ExternalReference()
@@ -59,5 +44,20 @@
             ResourcePath = resourcePath;
             TargetType = targetType;
         }
+
+        /// <summary>
+        /// Gets a null external reference.
+        /// </summary>
+        public static ExternalReference NullReference { get; }
+
+        /// <summary>
+        /// Gets or sets the runtime target type of the reference.
+        /// </summary>
+        public Type TargetType { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the resource path which should include the resource extension.
+        /// </summary>
+        public string ResourcePath { get; private set; }
     }
 }

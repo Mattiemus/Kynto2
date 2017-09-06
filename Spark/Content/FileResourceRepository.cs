@@ -14,7 +14,7 @@
         private readonly DirectoryInfo _directoryInfo;
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="FileResourceRepository"/> class. Uses the default location of
+        /// Initializes a new instance of the <see cref="FileResourceRepository"/> class. Uses the default location of
         /// the application as the root path.
         /// </summary>
         public FileResourceRepository() 
@@ -23,7 +23,7 @@
         }
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="FileResourceRepository"/> class.
+        /// Initializes a new instance of the <see cref="FileResourceRepository"/> class.
         /// </summary>
         /// <param name="pathToDirectory">The directory path. If it is not a rooted path, it is assumed to be relative to the app location.</param>
         public FileResourceRepository(string pathToDirectory)

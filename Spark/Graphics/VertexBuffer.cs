@@ -55,14 +55,8 @@
         /// </summary>
         private IVertexBufferImplementation VertexBufferImplementation
         {
-            get
-            {
-                return Implementation as IVertexBufferImplementation;
-            }
-            set
-            {
-                BindImplementation(value);
-            }
+            get => Implementation as IVertexBufferImplementation;
+            set => BindImplementation(value);
         }
 
         /// <summary>

@@ -52,10 +52,7 @@
         /// </summary>
         public TimeSpan ElapsedGameTime
         {
-            get
-            {
-                return _elapsedGameTime;
-            }
+            get => _elapsedGameTime;
             set
             {
                 _elapsedGameTime = value;

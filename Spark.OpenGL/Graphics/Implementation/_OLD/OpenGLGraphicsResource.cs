@@ -1,6 +1,6 @@
-﻿namespace Spark.Graphics.Implementation
+﻿namespace Spark.OpenGL.Graphics.Implementation
 {
-    using Utilities;
+    using Spark.Utilities;
 
     /// <summary>
     /// Base implementation of a graphics resource

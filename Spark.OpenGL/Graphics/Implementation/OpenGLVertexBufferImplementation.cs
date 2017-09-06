@@ -1,6 +1,9 @@
-﻿namespace Spark.Graphics.Implementation
+﻿namespace Spark.OpenGL.Graphics.Implementation
 {
     using System;
+
+    using Spark.Graphics;
+    using Spark.Graphics.Implementation;
 
     using Core;
 

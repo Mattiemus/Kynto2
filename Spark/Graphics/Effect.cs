@@ -1,8 +1,7 @@
 ﻿namespace Spark.Graphics
 {
     using System;
-
-    using Core;
+    
     using Content;
     using Implementation;
 
@@ -18,7 +17,7 @@
         private Effect()
         {
         }
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="Effect"/> class.
         /// </summary>
@@ -30,9 +29,51 @@
         }
 
         /// <summary>
+        /// Occurs when an effect shader group that is contained in this effect is about to be applied to a render context.
+        /// </summary>
+        public event OnApplyDelegate OnShaderGroupApply
+        {
+            add => EffectImplementation.OnShaderGroupApply += value;
+            remove => EffectImplementation.OnShaderGroupApply -= value;
+        }
+
+        /// <summary>
+        /// Gets the effect sort key, used to compare effects as a first step in sorting objects to render. The sort key is the same
+        /// for cloned effects. Further sorting can then be done using the indices of the contained techniques, and the indices of their passes.
+        /// </summary>
+        public int SortKey => EffectImplementation.SortKey;
+
+        /// <summary>
+        /// Gets or sets the currently active shader group.
+        /// </summary>
+        public IEffectShaderGroup CurrentShaderGroup
+        {
+            get => EffectImplementation.CurrentShaderGroup;
+            set
+            {
+                if (value == null || !value.IsPartOf(this))
+                {
+                    return;
+                }
+
+                EffectImplementation.CurrentShaderGroup = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets the shader groups contained in this effect.
+        /// </summary>
+        public EffectShaderGroupCollection ShaderGroups => EffectImplementation.ShaderGroups;
+
+        /// <summary>
         /// Gets all effect parameters contained in this effect.
         /// </summary>
-        public EffectParameterCollection Parameters => EffectImplementation.Parameters; 
+        public EffectParameterCollection Parameters => EffectImplementation.Parameters;
+
+        /// <summary>
+        /// Gets all constant buffers that contain all value type parameters used by all passes.
+        /// </summary>
+        public EffectConstantBufferCollection ConstantBuffers => EffectImplementation.ConstantBuffers;
 
         /// <summary>
         /// Gets the compiled byte code that represents this effect.
@@ -44,33 +85,49 @@
         /// </summary>
         private IEffectImplementation EffectImplementation
         {
-            get
-            {
-                return Implementation as IEffectImplementation;
-            }
-            set
-            {
-                BindImplementation(value);
-            }
+            get => Implementation as IEffectImplementation;
+            set => BindImplementation(value);
         }
 
         /// <summary>
-        /// Binds the set of shaders defined in the group and the resources used by them to the context.
+        /// Clones the effect, and possibly sharing relevant underlying resources. Cloned instances are guaranteed to be
+        /// completely separate from the source effect in terms of parameters, changing one will not change the other. But unlike
+        /// creating a new effect from the same compiled byte code, native resources can still be shared more effectively.
         /// </summary>
-        /// <param name="renderContext">Render context to apply to.</param>
-        public void Apply(IRenderContext renderContext)
+        /// <returns>Cloned effect instance.</returns>
+        public Effect Clone()
         {
-            EffectImplementation.Apply(renderContext);
+            ThrowIfDisposed();
+
+            IEffectImplementation impl = EffectImplementation.Clone();
+
+            return new Effect()
+            {
+                EffectImplementation = impl,
+                Name = Name
+            };
         }
 
         /// <summary>
-        /// Queries the shader group if it contains a shader used by the specified shader stage.
+        /// Sets the effect's current shader group by name.
         /// </summary>
-        /// <param name="shaderStage">Shader stage to query.</param>
-        /// <returns>True if the group contains a shader that will be bound to the shader stage, false otherwise.</returns>
-        public bool ContainsShader(ShaderStage shaderStage)
+        /// <param name="shaderGroupName">Name of the shader group to set to.</param>
+        /// <returns>True if the shader group was found and set as the current active shader group, false otherwise.</returns>
+        public bool SetCurrentShaderGroup(string shaderGroupName)
         {
-            return EffectImplementation.ContainsShader(shaderStage);
+            if (string.IsNullOrEmpty(shaderGroupName))
+            {
+                return false;
+            }
+
+            IEffectShaderGroup shaderGroup = ShaderGroups[shaderGroupName];
+            if (shaderGroup == null)
+            {
+                return false;
+            }
+
+            EffectImplementation.CurrentShaderGroup = shaderGroup;
+            return true;
         }
 
         /// <summary>
@@ -79,7 +136,7 @@
         /// <param name="input">Savable reader</param>
         public void Read(ISavableReader input)
         {
-            IRenderSystem renderSystem = GraphicsHelpers.GetRenderSystem(Engine.Instance.Services);
+            IRenderSystem renderSystem = GraphicsHelpers.GetRenderSystem(input.ServiceProvider);
 
             string name = input.ReadString();
             byte[] effectByteCode = input.ReadByteArray();

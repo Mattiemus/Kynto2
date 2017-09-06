@@ -10,11 +10,6 @@
     public sealed class EffectParameterCollection : ReadOnlyNamedListFast<IEffectParameter>
     {
         /// <summary>
-        /// Empty parameter collection.
-        /// </summary>
-        public static readonly EffectParameterCollection EmptyCollection = new EffectParameterCollection();
-
-        /// <summary>
         /// Prevents a default instance of the <see cref="EffectParameterCollection"/> class from being created.
         /// </summary>
         private EffectParameterCollection()
@@ -38,5 +33,10 @@
             : base(parameters)
         {
         }
+
+        /// <summary>
+        /// Empty parameter collection.
+        /// </summary>
+        public static EffectParameterCollection EmptyCollection => new EffectParameterCollection();
     }
 }

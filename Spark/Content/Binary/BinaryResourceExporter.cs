@@ -9,7 +9,7 @@
     public sealed class BinaryResourceExporter : ResourceExporter<ISavable>
     {
         /// <summary>
-        /// Constructs a new instance of the <see cref="BinaryResourceExporter"/> class.
+        /// Initializes a new instance of the <see cref="BinaryResourceExporter"/> class.
         /// </summary>
         public BinaryResourceExporter() 
             : base(".spbo")

@@ -13,7 +13,7 @@
     public struct MultiKey<TMajorKey, TMinorKey>
     {
         /// <summary>
-        /// Constructs a new instance of the <see cref="MultiKey{TMajorKey, TMinorKey}"/> struct.
+        /// Initializes a new instance of the <see cref="MultiKey{TMajorKey, TMinorKey}"/> struct.
         /// </summary>
         /// <param name="majorKey">Major key component.</param>
         /// <param name="minorKey">Minor key component.</param>
