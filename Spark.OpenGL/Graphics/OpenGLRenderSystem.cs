@@ -1,5 +1,6 @@
 ﻿namespace Spark.OpenGL.Graphics
 {
+    using System.Threading;
     using System.Collections;
     using System.Collections.Generic;
 
@@ -16,6 +17,8 @@
     public sealed class OpenGLRenderSystem : BaseDisposable, IRenderSystem
     {
         private readonly ImplementationFactoryCollection _implementationFactories;
+        private int _currentEffectSortKey = 0;
+        private int _currentResourceId = 0;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OpenGLRenderSystem"/> class
@@ -129,6 +132,24 @@
         }
 
         /// <summary>
+        /// Gets the next unique resource id
+        /// </summary>
+        /// <returns>Unique resource id</returns>
+        internal int GetNextUniqueResourceId()
+        {
+            return Interlocked.Increment(ref _currentResourceId);
+        }
+
+        /// <summary>
+        /// Gets the next unique effect sorting key
+        /// </summary>
+        /// <returns>Unique effect sorting key</returns>
+        internal int GetNextUniqueEffectSortKey()
+        {
+            return Interlocked.Increment(ref _currentEffectSortKey);
+        }
+        
+        /// <summary>
         /// Disposes the object instance
         /// </summary>
         /// <param name="isDisposing">True if called from dispose, false if called from the finalizer</param>
@@ -150,7 +171,6 @@
         private void InitializeFactories()
         {
             new OpenGLVertexBufferImplementationFactory(this).Initialize();
-
             new OpenGLEffectImplementationFactory(this).Initialize();
         }
     }

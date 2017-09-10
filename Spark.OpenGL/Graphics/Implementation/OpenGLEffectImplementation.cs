@@ -3,6 +3,7 @@
     using System;
 
     using Spark.Graphics;
+    using Spark.Graphics.Effects;
     using Spark.Graphics.Implementation;
 
     using OTK = OpenTK.Graphics;
@@ -11,23 +12,38 @@
     /// <summary>
     /// Effect underlying implementation
     /// </summary>
-    public sealed class OpenGLEffectImplementation : GraphicsResourceImplementation, IEffectImplementation
+    public sealed class OpenGLEffectImplementation : OpenGLGraphicsResourceImplementation, IEffectImplementation
     {
+        private readonly int _programId;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OpenGLEffectImplementation"/> class
         /// </summary>
         /// <param name="renderSystem">Render system used to create the underlying implementation.</param>
         /// <param name="shaderByteCode">Compiled shader byte code.</param>
-        public OpenGLEffectImplementation(OpenGLRenderSystem renderSystem, byte[] shaderByteCode)
-            : base(renderSystem, OGL.GL.CreateProgram())
+        public OpenGLEffectImplementation(OpenGLRenderSystem renderSystem, EffectData effectData)
+            : base(renderSystem)
         {
-            EffectByteCode = shaderByteCode;
+            _programId = OGL.GL.CreateProgram();
+
+            EffectData = effectData;
+            SortKey = 0;
+            ShaderGroups = new EffectShaderGroupCollection();
+            Parameters = new EffectParameterCollection();
+            ConstantBuffers = new EffectConstantBufferCollection();
+
+            Initialize();
         }
 
         /// <summary>
         /// Occurs when an effect shader group that is contained by this effect is about to be applied to a render context.
         /// </summary>
         public event OnApplyDelegate OnShaderGroupApply;
+
+        /// <summary>
+        /// Gets the effect data
+        /// </summary>
+        public EffectData EffectData { get; }
 
         /// <summary>
         /// Gets the effect sort key, used to compare effects as a first step in sorting objects to render. The sort key is the same
@@ -54,12 +70,7 @@
         /// Gets all constant buffers that contain all value type parameters used by all shader groups.
         /// </summary>
         public EffectConstantBufferCollection ConstantBuffers { get; }
-
-        /// <summary>
-        /// Gets the compiled effect byte code that represents this effect.
-        /// </summary>
-        public byte[] EffectByteCode { get; }
-
+        
         /// <summary>
         /// Clones the effect, and possibly sharing relevant underlying resources. Cloned instances are guaranteed to be
         /// completely separate from the source effect in terms of parameters, changing one will not change the other. But unlike
@@ -84,10 +95,18 @@
 
             if (OTK.GraphicsContext.CurrentContext != null && !OTK.GraphicsContext.CurrentContext.IsDisposed)
             {
-                OGL.GL.DeleteProgram(ResourceId);
+                OGL.GL.DeleteProgram(_programId);
             }
 
             base.Dispose(isDisposing);
+        }
+
+        /// <summary>
+        /// Initializes the effect implementation
+        /// </summary>
+        protected void Initialize()
+        {
+
         }
     }
 }

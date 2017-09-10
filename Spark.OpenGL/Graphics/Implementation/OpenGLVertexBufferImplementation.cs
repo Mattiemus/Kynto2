@@ -13,8 +13,10 @@
     /// <summary>
     /// Vertex buffer underlying implementation
     /// </summary>
-    public sealed class OpenGLVertexBufferImplementation : GraphicsResourceImplementation, IVertexBufferImplementation
+    public sealed class OpenGLVertexBufferImplementation : OpenGLGraphicsResourceImplementation, IVertexBufferImplementation
     {
+        private readonly int _bufferId;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OpenGLVertexBufferImplementation"/> class
         /// </summary>
@@ -22,13 +24,15 @@
         /// <param name="vertexLayout">Vertex layout that defines the vertex data of this buffer</param>
         /// <param name="vertexCount">Number of vertices the buffer will contain</param>
         public OpenGLVertexBufferImplementation(OpenGLRenderSystem renderSystem, VertexLayout vertexLayout, int vertexCount)
-            : base(renderSystem, OGL.GL.GenBuffer())
+            : base(renderSystem)
         {
+            _bufferId = OGL.GL.GenBuffer();
+
             VertexLayout = vertexLayout;
             VertexCount = vertexCount;
 
-            OGL.GL.BindBuffer(OGL.BufferTarget.ArrayBuffer, ResourceId);
-            OGL.GL.NamedBufferData(ResourceId, vertexCount * vertexLayout.VertexStride, IntPtr.Zero, OGL.BufferUsageHint.StaticDraw);
+            OGL.GL.BindBuffer(OGL.BufferTarget.ArrayBuffer, _bufferId);
+            OGL.GL.NamedBufferData(_bufferId, vertexCount * vertexLayout.VertexStride, IntPtr.Zero, OGL.BufferUsageHint.StaticDraw);
         }
 
         /// <summary>
@@ -38,15 +42,17 @@
         /// <param name="vertexLayout">Vertex layout that defines the vertex data of this buffer</param>
         /// <param name="data">The interleaved vertex data to initialize the vertex buffer with.</param>
         public OpenGLVertexBufferImplementation(OpenGLRenderSystem renderSystem, VertexLayout vertexLayout, IReadOnlyDataBuffer data)
-            : base(renderSystem, OGL.GL.GenBuffer())
+            : base(renderSystem)
         {
+            _bufferId = OGL.GL.GenBuffer();
+
             VertexLayout = vertexLayout;
             VertexCount = data.SizeInBytes / vertexLayout.VertexStride;
 
-            OGL.GL.BindBuffer(OGL.BufferTarget.ArrayBuffer, ResourceId);
+            OGL.GL.BindBuffer(OGL.BufferTarget.ArrayBuffer, _bufferId);
             using (MappedDataBuffer mappedData = data.Map())
             {
-                OGL.GL.NamedBufferData(ResourceId, data.SizeInBytes, mappedData.Pointer, OGL.BufferUsageHint.StaticDraw);
+                OGL.GL.NamedBufferData(_bufferId, data.SizeInBytes, mappedData.Pointer, OGL.BufferUsageHint.StaticDraw);
             }
         }
 
@@ -90,7 +96,7 @@
 
             using (MappedDataBuffer mappedData = data.Map())
             {
-                OGL.GL.NamedBufferSubData(ResourceId, new IntPtr(offsetInBytes), elementCount * data.ElementSizeInBytes, mappedData.Pointer);
+                OGL.GL.NamedBufferSubData(_bufferId, new IntPtr(offsetInBytes), elementCount * data.ElementSizeInBytes, mappedData.Pointer);
             }
         }
 
@@ -107,7 +113,7 @@
 
             if (OTK.GraphicsContext.CurrentContext != null && !OTK.GraphicsContext.CurrentContext.IsDisposed)
             {
-                OGL.GL.DeleteBuffer(ResourceId);
+                OGL.GL.DeleteBuffer(_bufferId);
             }
 
             base.Dispose(isDisposing);

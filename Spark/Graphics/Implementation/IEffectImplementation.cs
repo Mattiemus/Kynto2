@@ -1,5 +1,7 @@
 ﻿namespace Spark.Graphics.Implementation
 {
+    using Effects;
+
     /// <summary>
     /// Defines a callback when an effect shader group is applied to execute any pre-apply logic.
     /// </summary>
@@ -16,6 +18,11 @@
         /// Occurs when an effect shader group that is contained by this effect is about to be applied to a render context.
         /// </summary>
         event OnApplyDelegate OnShaderGroupApply;
+
+        /// <summary>
+        /// Gets the effect data
+        /// </summary>
+        EffectData EffectData { get; }
 
         /// <summary>
         /// Gets the effect sort key, used to compare effects as a first step in sorting objects to render. The sort key is the same
@@ -42,12 +49,7 @@
         /// Gets all constant buffers that contain all value type parameters used by all shader groups.
         /// </summary>
         EffectConstantBufferCollection ConstantBuffers { get; }
-
-        /// <summary>
-        /// Gets the compiled effect byte code that represents this effect.
-        /// </summary>
-        byte[] EffectByteCode { get; }
-
+        
         /// <summary>
         /// Clones the effect, and possibly sharing relevant underlying resources. Cloned instances are guaranteed to be
         /// completely separate from the source effect in terms of parameters, changing one will not change the other. But unlike

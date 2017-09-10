@@ -32,8 +32,7 @@
             ValidateParameters(resourceFile, contentManager, ref parameters);
 
             EffectImporterParameters fxParams = parameters as EffectImporterParameters;
-
-            EffectCompressionMode compressionMode = (fxParams == null) ? EffectCompressionMode.GZip : fxParams.CompressionMode;
+            
             ShaderMacro[] shaderMacros = (fxParams == null) ? null : fxParams.ShaderMacros;
 
             DefaultIncludeHandler includeHandler = new DefaultIncludeHandler();
@@ -61,7 +60,7 @@
                 throw new SparkContentException(errorString.ToString());
             }
 
-            return new Effect(GraphicsHelpers.GetRenderSystem(contentManager.ServiceProvider), EffectData.Write(result.EffectData, compressionMode));
+            return new Effect(GraphicsHelpers.GetRenderSystem(contentManager.ServiceProvider), result.EffectData);
         }
 
         /// <summary>
@@ -76,8 +75,7 @@
             ValidateParameters(input, contentManager, ref parameters);
 
             EffectImporterParameters fxParams = parameters as EffectImporterParameters;
-
-            EffectCompressionMode compressionMode = (fxParams == null) ? EffectCompressionMode.GZip : fxParams.CompressionMode;
+            
             ShaderMacro[] shaderMacros = (fxParams == null) ? null : fxParams.ShaderMacros;
 
             using (StreamReader reader = new StreamReader(input, Encoding.UTF8, true, 1024, true))
@@ -96,7 +94,7 @@
                     throw new SparkContentException(errorString.ToString());
                 }
 
-                return new Effect(GraphicsHelpers.GetRenderSystem(contentManager.ServiceProvider), EffectData.Write(result.EffectData, compressionMode));
+                return new Effect(GraphicsHelpers.GetRenderSystem(contentManager.ServiceProvider), result.EffectData);
             }
         }
     }

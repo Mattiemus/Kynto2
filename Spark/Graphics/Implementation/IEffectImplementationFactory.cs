@@ -1,5 +1,7 @@
 ﻿namespace Spark.Graphics.Implementation
 {
+    using Graphics.Effects;
+
     /// <summary>
     /// Defines a factory that creates platform-specific implementations of type <see cref="IEffectImplementationFactory"/>.
     /// </summary>
@@ -8,8 +10,8 @@
         /// <summary>
         /// Creates a new implementation object instance.
         /// </summary>
-        /// <param name="shaderByteCode">Compiled shader byte code.</param>
+        /// <param name="effectData">Effect data</param>
         /// <returns>The effect implementation.</returns>
-        IEffectImplementation CreateImplementation(byte[] shaderByteCode);
+        IEffectImplementation CreateImplementation(EffectData effectData);
     }
 }

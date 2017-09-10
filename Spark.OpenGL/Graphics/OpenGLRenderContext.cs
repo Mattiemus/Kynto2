@@ -42,6 +42,7 @@
         {
             OGL.GL.BindBuffer(OGL.BufferTarget.ArrayBuffer, vertexBuffer.VertexBuffer.ResourceId);
 
+            // TODO: base this off the vertex buffer layout
             OGL.GL.EnableVertexAttribArray(0);
             OGL.GL.VertexAttribPointer(0, 3, OGL.VertexAttribPointerType.Float, false, 0, 0);
         }

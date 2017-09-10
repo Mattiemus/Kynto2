@@ -1,6 +1,7 @@
 ﻿namespace Spark.OpenGL.Graphics.Implementation
 {
     using Spark.Graphics;
+    using Spark.Graphics.Effects;
     using Spark.Graphics.Implementation;
 
     /// <summary>
@@ -20,11 +21,11 @@
         /// <summary>
         /// Creates a new implementation object instance.
         /// </summary>
-        /// <param name="shaderByteCode">Compiled shader byte code.</param>
+        /// <param name="effectData">Effect data</param>
         /// <returns>The effect implementation.</returns>
-        public IEffectImplementation CreateImplementation(byte[] shaderByteCode)
+        public IEffectImplementation CreateImplementation(EffectData effectData)
         {
-            return new OpenGLEffectImplementation(OpenGLRenderSystem, shaderByteCode);
+            return new OpenGLEffectImplementation(OpenGLRenderSystem, effectData);
         }
 
         /// <summary>

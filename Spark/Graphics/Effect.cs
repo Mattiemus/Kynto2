@@ -1,7 +1,8 @@
 ﻿namespace Spark.Graphics
 {
     using System;
-    
+
+    using Effects;
     using Content;
     using Implementation;
 
@@ -17,15 +18,15 @@
         private Effect()
         {
         }
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Effect"/> class.
         /// </summary>
         /// <param name="renderSystem">Render system used to create the underlying implementation.</param>
-        /// <param name="effectByteCode">Compiled effect code that represents this effect.</param>
-        public Effect(IRenderSystem renderSystem, byte[] effectByteCode)
+        /// <param name="effectData">Compiled effect data that represents this effect.</param>
+        public Effect(IRenderSystem renderSystem, EffectData effectData)
         {
-            CreateImplementation(renderSystem, effectByteCode);
+            CreateImplementation(renderSystem, effectData);
         }
 
         /// <summary>
@@ -36,6 +37,11 @@
             add => EffectImplementation.OnShaderGroupApply += value;
             remove => EffectImplementation.OnShaderGroupApply -= value;
         }
+
+        /// <summary>
+        /// Gets the effect data
+        /// </summary>
+        public EffectData EffectData => EffectImplementation.EffectData;
 
         /// <summary>
         /// Gets the effect sort key, used to compare effects as a first step in sorting objects to render. The sort key is the same
@@ -74,12 +80,7 @@
         /// Gets all constant buffers that contain all value type parameters used by all passes.
         /// </summary>
         public EffectConstantBufferCollection ConstantBuffers => EffectImplementation.ConstantBuffers;
-
-        /// <summary>
-        /// Gets the compiled byte code that represents this effect.
-        /// </summary>
-        public byte[] EffectByteCode => EffectImplementation.EffectByteCode;
-
+        
         /// <summary>
         /// Gets the effect implementation
         /// </summary>
@@ -140,8 +141,9 @@
 
             string name = input.ReadString();
             byte[] effectByteCode = input.ReadByteArray();
+            EffectData effectData = EffectData.Read(effectByteCode);
 
-            CreateImplementation(renderSystem, effectByteCode);
+            CreateImplementation(renderSystem, effectData);
             Name = name;
         }
 
@@ -151,25 +153,27 @@
         /// <param name="output">Savable writer</param>
         public void Write(ISavableWriter output)
         {
+            byte[] effectBytes = EffectData.Write(EffectData);
+
             output.Write("Name", EffectImplementation.Name);
-            output.Write("EffectByteCode", EffectImplementation.EffectByteCode);
+            output.Write("EffectByteCode", effectBytes);
         }
-        
+
         /// <summary>
         /// Creates the underlying implementation
         /// </summary>
-        /// <param name="renderSystem"></param>
-        /// <param name="effectByteCode"></param>
-        private void CreateImplementation(IRenderSystem renderSystem, byte[] effectByteCode)
+        /// <param name="renderSystem">Parent render system</param>
+        /// <param name="effectData">Compiled effect data</param>
+        private void CreateImplementation(IRenderSystem renderSystem, EffectData effectData)
         {
             if (renderSystem == null)
             {
                 throw new ArgumentNullException(nameof(renderSystem), "Render system cannot be null");
             }
 
-            if (effectByteCode == null || effectByteCode.Length == 0)
+            if (effectData == null)
             {
-                throw new ArgumentNullException(nameof(effectByteCode));
+                throw new ArgumentNullException(nameof(effectData));
             }
             
             if (!renderSystem.TryGetImplementationFactory(out IEffectImplementationFactory factory))
@@ -179,7 +183,7 @@
 
             try
             {
-                EffectImplementation = factory.CreateImplementation(effectByteCode);
+                EffectImplementation = factory.CreateImplementation(effectData);
             }
             catch (Exception e)
             {

@@ -34,11 +34,7 @@
         public string Name
         {
             get => _name;
-            set
-            {
-                _name = value;
-                OnNameChange(value);
-            }
+            set => _name = value;
         }
 
         /// <summary>
@@ -74,15 +70,6 @@
             }
 
             Parent = resource;
-        }
-
-        /// <summary>
-        /// Called when the name of the graphics resource is changed, useful if the implementation wants to set the name to
-        /// be used as a debug name.
-        /// </summary>
-        /// <param name="name">New name of the resource</param>
-        protected virtual void OnNameChange(string name)
-        {
         }
 
         /// <summary>
