@@ -46,6 +46,10 @@
     <Compile Include="EffectCompiler.cs" />
     <Compile Include="EffectCompilerResult.cs" />
     <Compile Include="EffectImporter.cs" />
+    <Compile Include="Parser\EffectNodeType.cs" />
+    <Compile Include="Parser\EffectParser.cs" />
+    <Compile Include="Parser\EffectScanner.cs" />
+    <Compile Include="Parser\EffectTokenType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

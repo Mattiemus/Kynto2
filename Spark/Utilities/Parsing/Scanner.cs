@@ -4,9 +4,7 @@
     using System.Linq;
     using System.Collections.Generic;
     using System.Text.RegularExpressions;
-
-    using Core;
-
+    
     /// <summary>
     /// Scanner for extracting a stream of tokens from an input block of text
     /// </summary>
@@ -18,8 +16,6 @@
         private readonly List<TokenT> _skipList;
         private string _input;
         private int _startPos;
-        private int _endPos;
-        private Token<TokenT> _lookahead;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Scanner{TokenT}"/> class
@@ -32,6 +28,16 @@
         }
 
         /// <summary>
+        /// Gets the default token
+        /// </summary>
+        public abstract TokenT DefaultToken { get; }
+
+        /// <summary>
+        /// Gets the token that represents end of file
+        /// </summary>
+        public abstract TokenT EndOfFileToken { get; }
+
+        /// <summary>
         /// Initializes the scanner
         /// </summary>
         /// <param name="input">Input to initialize with</param>
@@ -39,8 +45,6 @@
         {
             _input = input;
             _startPos = 0;
-            _endPos = 0;
-            _lookahead = null;
         }
 
         /// <summary>
@@ -63,9 +67,7 @@
             ThrowIfNotInitialized();
 
             Token<TokenT> tok = LookAhead(expectedTokens);
-            _lookahead = null;
             _startPos = tok.EndPosition;
-            _endPos = tok.EndPosition;
             return tok;
         }
 
@@ -93,11 +95,6 @@
                 throw new ArgumentNullException(nameof(expectedTokens));
             }
 
-            if (_lookahead != null)
-            {
-                return _lookahead;
-            }
-
             TokenT[] searchingTokens = expectedTokens.Concat(_skipList)
                                                      .Distinct()
                                                      .ToArray();
@@ -107,12 +104,18 @@
             TokenT? nextTokenType = null;
             do
             {
+                if (startPos == _input.Length)
+                {
+                    nextTokenType = EndOfFileToken;
+                    break;
+                }
+
                 int len = -1;
                 foreach (TokenT tokenType in searchingTokens)
                 {
                     Regex r = _patterns[tokenType];
                     Match m = r.Match(_input, startPos);
-                    if (m.Success && m.Index == startPos && m.Length >= len)
+                    if (m.Success && m.Index == startPos && m.Length > len)
                     {
                         len = m.Length;
                         nextTokenType = tokenType;
@@ -128,19 +131,20 @@
                 {
                     startPos = endPos;
                 }
+
+                if (len == -1)
+                {
+                    break;
+                }
             }
             while (nextTokenType.HasValue && _skipList.Contains(nextTokenType.Value));
 
             if (nextTokenType.HasValue)
             {
-                _lookahead = new Token<TokenT>(nextTokenType.Value, _input, startPos, endPos);
-            }
-            else
-            {
-                _lookahead = null;
+                return new Token<TokenT>(nextTokenType.Value, _input, startPos, endPos);
             }
 
-            return _lookahead;
+            return new Token<TokenT>(DefaultToken, _input, startPos, endPos);
         }
         
         /// <summary>
@@ -171,7 +175,7 @@
         {
             if (_input == null)
             {
-                throw new SparkException("Scanner has not been initialized");
+                throw new SparkParseException("Scanner has not been initialized");
             }
         }
     }

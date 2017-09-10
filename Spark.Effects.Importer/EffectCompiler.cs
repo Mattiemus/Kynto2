@@ -4,7 +4,7 @@
     using System.IO;
     
     using Graphics;
-    using System.Text.RegularExpressions;
+    using Parser;
 
     /// <summary>
     /// 
@@ -74,11 +74,10 @@
         /// <returns></returns>
         public EffectCompilerResult Compile(string readToEnd, CompileFlags flags, string sourceFileName, ShaderMacro[] shaderMacro)
         {
-            Regex codeblock = new Regex(@"\s*\{[^\}]*\}([^};][^}]*\})*", RegexOptions.Compiled);
-
-            var s = readToEnd.Substring(readToEnd.IndexOf('{'));
-            var m = codeblock.Match(s);
-
+            EffectScanner scanner = new EffectScanner();
+            EffectParser parser = new EffectParser(scanner);
+            var test = parser.Parse(readToEnd);
+            
             throw new NotImplementedException();
         }
     }
