@@ -5,14 +5,14 @@
     /// <summary>
     /// Represents the result of compiling an effect source file.
     /// </summary>
-    public sealed class EffectCompilerResult
+    internal sealed class EffectCompilerResult
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EffectCompilerResult"/> class.
         /// </summary>
         /// <param name="effectData">Compiled effect data.</param>
         /// <param name="errorMessages">Compile error messages.</param>
-        public EffectCompilerResult(EffectData effectData, string[] errorMessages)
+        public EffectCompilerResult(EffectData effectData, string[] errorMessages = null)
         {
             EffectData = effectData;
             CompileErrors = errorMessages;

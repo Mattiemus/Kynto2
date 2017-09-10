@@ -6,8 +6,11 @@
     /// Enumeration of shader compiler flags
     /// </summary>
     [Flags]
-    public enum CompileFlags
+    internal enum CompileFlags
     {
+        /// <summary>
+        /// Empty compile flags
+        /// </summary>
         None = 0
     }
 }

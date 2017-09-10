@@ -1,16 +1,14 @@
 ﻿namespace Spark.Effects.Importer
 {
-    using System;
-
     /// <summary>
-    /// 
+    /// Handler for processing include directives
     /// </summary>
-    public class DefaultIncludeHandler
+    internal class DefaultIncludeHandler
     {
         /// <summary>
-        /// 
+        /// Adds an include directory that should be searched when resolving includes
         /// </summary>
-        /// <param name="directoryName"></param>
+        /// <param name="directoryName">Directory to be included</param>
         public void AddIncludeDirectory(string directoryName)
         {
             // No-op

@@ -47,7 +47,7 @@
         /// <returns>The initialized engine instance.</returns>
         public static Engine Initialize()
         {
-            if (Instance != null)
+            if (IsInitialized)
             {
                 throw new SparkException("Engine is already initialized");
             }
