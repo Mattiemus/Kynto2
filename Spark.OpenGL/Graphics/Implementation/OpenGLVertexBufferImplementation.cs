@@ -15,8 +15,6 @@
     /// </summary>
     public sealed class OpenGLVertexBufferImplementation : OpenGLGraphicsResourceImplementation, IVertexBufferImplementation
     {
-        private readonly int _bufferId;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="OpenGLVertexBufferImplementation"/> class
         /// </summary>
@@ -26,13 +24,13 @@
         public OpenGLVertexBufferImplementation(OpenGLRenderSystem renderSystem, VertexLayout vertexLayout, int vertexCount)
             : base(renderSystem)
         {
-            _bufferId = OGL.GL.GenBuffer();
+            OpenGLBufferId = OGL.GL.GenBuffer();
 
             VertexLayout = vertexLayout;
             VertexCount = vertexCount;
 
-            OGL.GL.BindBuffer(OGL.BufferTarget.ArrayBuffer, _bufferId);
-            OGL.GL.NamedBufferData(_bufferId, vertexCount * vertexLayout.VertexStride, IntPtr.Zero, OGL.BufferUsageHint.StaticDraw);
+            OGL.GL.BindBuffer(OGL.BufferTarget.ArrayBuffer, OpenGLBufferId);
+            OGL.GL.NamedBufferData(OpenGLBufferId, vertexCount * vertexLayout.VertexStride, IntPtr.Zero, OGL.BufferUsageHint.StaticDraw);
         }
 
         /// <summary>
@@ -44,17 +42,22 @@
         public OpenGLVertexBufferImplementation(OpenGLRenderSystem renderSystem, VertexLayout vertexLayout, IReadOnlyDataBuffer data)
             : base(renderSystem)
         {
-            _bufferId = OGL.GL.GenBuffer();
+            OpenGLBufferId = OGL.GL.GenBuffer();
 
             VertexLayout = vertexLayout;
             VertexCount = data.SizeInBytes / vertexLayout.VertexStride;
 
-            OGL.GL.BindBuffer(OGL.BufferTarget.ArrayBuffer, _bufferId);
+            OGL.GL.BindBuffer(OGL.BufferTarget.ArrayBuffer, OpenGLBufferId);
             using (MappedDataBuffer mappedData = data.Map())
             {
-                OGL.GL.NamedBufferData(_bufferId, data.SizeInBytes, mappedData.Pointer, OGL.BufferUsageHint.StaticDraw);
+                OGL.GL.NamedBufferData(OpenGLBufferId, data.SizeInBytes, mappedData.Pointer, OGL.BufferUsageHint.StaticDraw);
             }
         }
+        
+        /// <summary>
+        /// Gets the OpenGL buffer id
+        /// </summary>
+        public int OpenGLBufferId { get; }
 
         /// <summary>
         /// Gets the vertex layout that describes the structure of vertex data contained in the buffer.
@@ -96,7 +99,7 @@
 
             using (MappedDataBuffer mappedData = data.Map())
             {
-                OGL.GL.NamedBufferSubData(_bufferId, new IntPtr(offsetInBytes), elementCount * data.ElementSizeInBytes, mappedData.Pointer);
+                OGL.GL.NamedBufferSubData(OpenGLBufferId, new IntPtr(offsetInBytes), elementCount * data.ElementSizeInBytes, mappedData.Pointer);
             }
         }
 
@@ -113,7 +116,7 @@
 
             if (OTK.GraphicsContext.CurrentContext != null && !OTK.GraphicsContext.CurrentContext.IsDisposed)
             {
-                OGL.GL.DeleteBuffer(_bufferId);
+                OGL.GL.DeleteBuffer(OpenGLBufferId);
             }
 
             base.Dispose(isDisposing);

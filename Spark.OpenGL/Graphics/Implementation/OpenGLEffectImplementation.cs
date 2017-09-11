@@ -6,31 +6,26 @@
     using Spark.Graphics.Effects;
     using Spark.Graphics.Implementation;
 
-    using OTK = OpenTK.Graphics;
-    using OGL = OpenTK.Graphics.OpenGL;
+    using Effects;
 
     /// <summary>
     /// Effect underlying implementation
     /// </summary>
     public sealed class OpenGLEffectImplementation : OpenGLGraphicsResourceImplementation, IEffectImplementation
     {
-        private readonly int _programId;
+        private readonly OpenGLRenderSystem _renderSystem;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OpenGLEffectImplementation"/> class
         /// </summary>
         /// <param name="renderSystem">Render system used to create the underlying implementation.</param>
-        /// <param name="shaderByteCode">Compiled shader byte code.</param>
+        /// <param name="effectData">Effect data.</param>
         public OpenGLEffectImplementation(OpenGLRenderSystem renderSystem, EffectData effectData)
             : base(renderSystem)
         {
-            _programId = OGL.GL.CreateProgram();
+            _renderSystem = renderSystem;
 
             EffectData = effectData;
-            SortKey = 0;
-            ShaderGroups = new EffectShaderGroupCollection();
-            Parameters = new EffectParameterCollection();
-            ConstantBuffers = new EffectConstantBufferCollection();
 
             Initialize();
         }
@@ -39,7 +34,7 @@
         /// Occurs when an effect shader group that is contained by this effect is about to be applied to a render context.
         /// </summary>
         public event OnApplyDelegate OnShaderGroupApply;
-
+        
         /// <summary>
         /// Gets the effect data
         /// </summary>
@@ -49,7 +44,7 @@
         /// Gets the effect sort key, used to compare effects as a first step in sorting objects to render. The sort key is the same
         /// for cloned effects. Further sorting can then be done using the indices of the contained techniques, and the indices of their passes.
         /// </summary>
-        public int SortKey { get; }
+        public int SortKey { get; private set; }
 
         /// <summary>
         /// Gets or sets the currently active shader group.
@@ -59,17 +54,17 @@
         /// <summary>
         /// Gets the shader groups contained in this effect.
         /// </summary>
-        public EffectShaderGroupCollection ShaderGroups { get; }
+        public EffectShaderGroupCollection ShaderGroups { get; private set; }
 
         /// <summary>
         /// Gets all effect parameters used by all shader groups.
         /// </summary>
-        public EffectParameterCollection Parameters { get; }
+        public EffectParameterCollection Parameters { get; private set; }
 
         /// <summary>
         /// Gets all constant buffers that contain all value type parameters used by all shader groups.
         /// </summary>
-        public EffectConstantBufferCollection ConstantBuffers { get; }
+        public EffectConstantBufferCollection ConstantBuffers { get; private set; }
         
         /// <summary>
         /// Clones the effect, and possibly sharing relevant underlying resources. Cloned instances are guaranteed to be
@@ -93,9 +88,10 @@
                 return;
             }
 
-            if (OTK.GraphicsContext.CurrentContext != null && !OTK.GraphicsContext.CurrentContext.IsDisposed)
+            foreach (IEffectShaderGroup shaderGroup in ShaderGroups)
             {
-                OGL.GL.DeleteProgram(_programId);
+                OpenGLEffectShaderGroup oglGroup = shaderGroup as OpenGLEffectShaderGroup;
+                oglGroup?.Dispose();
             }
 
             base.Dispose(isDisposing);
@@ -106,7 +102,13 @@
         /// </summary>
         protected void Initialize()
         {
+            SortKey = _renderSystem.GetNextUniqueEffectSortKey();
+            
+            OpenGLEffectShaderGroup shaderGroup = new OpenGLEffectShaderGroup(this, EffectData);
 
+            ShaderGroups = new EffectShaderGroupCollection(new [] { shaderGroup });
+            Parameters = new EffectParameterCollection();
+            ConstantBuffers = new EffectConstantBufferCollection();
         }
     }
 }

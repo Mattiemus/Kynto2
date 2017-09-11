@@ -1,4 +1,4 @@
-﻿namespace Spark.OpenGL.Utilities
+﻿namespace Spark.OpenGL.Graphics
 {
     using Spark.Graphics;
 
@@ -7,7 +7,7 @@
     /// <summary>
     /// Helper methods for rendering
     /// </summary>
-    public static class GraphicsHelpers
+    public static class OpenGLHelpers
     {
         /// <summary>
         /// Converts a value to its native type

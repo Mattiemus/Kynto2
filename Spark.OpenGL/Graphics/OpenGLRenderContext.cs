@@ -40,7 +40,9 @@
         /// <param name="vertexBuffer">Vertex buffer to bind.</param>
         public void SetVertexBuffer(VertexBufferBinding vertexBuffer)
         {
-            OGL.GL.BindBuffer(OGL.BufferTarget.ArrayBuffer, vertexBuffer.VertexBuffer.ResourceId);
+            OpenGLVertexBufferImplementation oglVertexBuffer = vertexBuffer.VertexBuffer.Implementation as OpenGLVertexBufferImplementation;
+
+            OGL.GL.BindBuffer(OGL.BufferTarget.ArrayBuffer, oglVertexBuffer.OpenGLBufferId);
 
             // TODO: base this off the vertex buffer layout
             OGL.GL.EnableVertexAttribArray(0);
@@ -68,7 +70,7 @@
             OpenGLState.ColorBuffer.ClearValue = color;
             OpenGLState.DepthBuffer.ClearValue = depth;
             OpenGLState.StencilBuffer.ClearValue = stencil;
-            OGL.GL.Clear(Utilities.GraphicsHelpers.ToNative(options));
+            OGL.GL.Clear(OpenGLHelpers.ToNative(options));
         }
 
         /// <summary>
@@ -79,7 +81,7 @@
         /// <param name="startVertexIndex">Starting index in a vertex buffer at which to read vertices from.</param>
         public void Draw(PrimitiveType primitiveType, int vertexCount, int startVertexIndex)
         {
-            OGL.GL.DrawArrays(Utilities.GraphicsHelpers.ToNative(primitiveType), vertexCount, startVertexIndex);
+            OGL.GL.DrawArrays(OpenGLHelpers.ToNative(primitiveType), vertexCount, startVertexIndex);
         }
 
         /// <summary>

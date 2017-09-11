@@ -140,8 +140,7 @@
             IRenderSystem renderSystem = GraphicsHelpers.GetRenderSystem(input.ServiceProvider);
 
             string name = input.ReadString();
-            byte[] effectByteCode = input.ReadByteArray();
-            EffectData effectData = EffectData.Read(effectByteCode);
+            EffectData effectData = input.ReadSavable<EffectData>();
 
             CreateImplementation(renderSystem, effectData);
             Name = name;
@@ -153,10 +152,8 @@
         /// <param name="output">Savable writer</param>
         public void Write(ISavableWriter output)
         {
-            byte[] effectBytes = EffectData.Write(EffectData);
-
             output.Write("Name", EffectImplementation.Name);
-            output.Write("EffectByteCode", effectBytes);
+            output.WriteSavable("EffectData", EffectData);
         }
 
         /// <summary>
