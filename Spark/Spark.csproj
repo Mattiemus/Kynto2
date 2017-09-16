@@ -131,7 +131,9 @@
     <Compile Include="Graphics\ClearOptions.cs" />
     <Compile Include="Graphics\Effect.cs" />
     <Compile Include="Graphics\EffectConstantBufferCollection.cs" />
+    <Compile Include="Graphics\EffectParameterClass.cs" />
     <Compile Include="Graphics\EffectParameterCollection.cs" />
+    <Compile Include="Graphics\EffectParameterType.cs" />
     <Compile Include="Graphics\EffectShaderGroupCollection.cs" />
     <Compile Include="Graphics\Effects\EffectData.cs" />
     <Compile Include="Graphics\GraphicsHelpers.cs" />
@@ -151,7 +153,9 @@
     <Compile Include="Graphics\Implementation\IVertexBufferImplementationFactory.cs" />
     <Compile Include="Graphics\IRenderContext.cs" />
     <Compile Include="Graphics\IRenderSystem.cs" />
+    <Compile Include="Graphics\IShaderResource.cs" />
     <Compile Include="Graphics\ShaderMacro.cs" />
+    <Compile Include="Graphics\ShaderResourceType.cs" />
     <Compile Include="Graphics\ShaderStage.cs" />
     <Compile Include="Graphics\SparkGraphicsException.cs" />
     <Compile Include="Graphics\PrimitiveType.cs" />
@@ -160,6 +164,7 @@
     <Compile Include="Graphics\VertexElement.cs" />
     <Compile Include="Graphics\VertexFormat.cs" />
     <Compile Include="Graphics\VertexLayout.cs" />
+    <Compile Include="Graphics\VertexSemantic.cs" />
     <Compile Include="Math\Angle.cs" />
     <Compile Include="Math\Color.cs" />
     <Compile Include="Math\LinearColor.cs" />

@@ -48,7 +48,7 @@
             _vertexBuffer = new VertexBuffer(
                 _renderer,
                 new VertexLayout(new [] {
-                    new VertexElement(VertexFormat.Float3, 0)
+                    new VertexElement(VertexSemantic.Position, 0, VertexFormat.Float3, 0)
                 }), 
                 new DataBuffer<Vector3>(new []
                 {
@@ -73,7 +73,7 @@
             _shader.CurrentShaderGroup.Apply(context);
             
             context.SetVertexBuffer(_vertexBuffer);
-            context.Draw(PrimitiveType.Triangles, 0, 3);
+            context.Draw(PrimitiveType.TriangleList, 0, 3);
                         
             SwapBuffers();
 

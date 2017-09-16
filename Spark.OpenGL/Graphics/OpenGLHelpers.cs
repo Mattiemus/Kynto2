@@ -42,22 +42,16 @@
         {
             switch (value)
             {
-                case PrimitiveType.Points:
-                    return OGL.PrimitiveType.Points;
-                case PrimitiveType.Lines:
-                    return OGL.PrimitiveType.Lines;
-                case PrimitiveType.LineLoop:
-                    return OGL.PrimitiveType.LineLoop;
-                case PrimitiveType.LineStrip:
-                    return OGL.PrimitiveType.LineStrip;
-                case PrimitiveType.Triangles:
+                case PrimitiveType.TriangleList:
                     return OGL.PrimitiveType.Triangles;
                 case PrimitiveType.TriangleStrip:
                     return OGL.PrimitiveType.TriangleStrip;
-                case PrimitiveType.TriangleFan:
-                    return OGL.PrimitiveType.TriangleFan;
-                case PrimitiveType.Quads:
-                    return OGL.PrimitiveType.Quads;
+                case PrimitiveType.LineList:
+                    return OGL.PrimitiveType.Lines;
+                case PrimitiveType.LineStrip:
+                    return OGL.PrimitiveType.LineStrip;
+                case PrimitiveType.PointList:
+                    return OGL.PrimitiveType.Points;
                 default:
                     throw new SparkGraphicsException($"Cannot cast {value.GetType()} value to native value");
             }

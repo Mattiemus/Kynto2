@@ -14,6 +14,16 @@
     public struct VertexElement : IEquatable<VertexElement>, IPrimitiveValue
     {
         /// <summary>
+        /// Semantic name that this element is bound to.
+        /// </summary>
+        public VertexSemantic SemanticName;
+
+        /// <summary>
+        /// Semantic index this element is bound to.
+        /// </summary>
+        public int SemanticIndex;
+
+        /// <summary>
         /// Format of this element.
         /// </summary>
         public VertexFormat Format;
@@ -26,10 +36,14 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="VertexElement"/> struct.
         /// </summary>
+        /// <param name="semantic">The element's shader semantic.</param>
+        /// <param name="semanticIndex">The element's shader semantic index</param>
         /// <param name="format">The element's format.</param>
         /// <param name="offset">The element's offset from the start of the vertex data.</param>
-        public VertexElement(VertexFormat format, int offset)
+        public VertexElement(VertexSemantic semantic, int semanticIndex, VertexFormat format, int offset)
         {
+            SemanticName = semantic;
+            SemanticIndex = semanticIndex;
             Format = format;
             Offset = offset;
         }
@@ -79,7 +93,7 @@
         /// <returns>True if both are equal, false otherwise.</returns>
         public bool Equals(VertexElement other)
         {
-            return (Offset == other.Offset) && (Format == other.Format);
+            return (SemanticName == other.SemanticName) && (SemanticIndex == other.SemanticIndex) && (Offset == other.Offset) && (Format == other.Format);
         }
 
         /// <summary>
@@ -90,7 +104,9 @@
         {
             unchecked
             {
-                int hash = 17;                
+                int hash = 17;
+                hash = (hash * 31) + SemanticName.GetHashCode();
+                hash = (hash * 31) + SemanticIndex.GetHashCode();
                 hash = (hash * 31) + Format.GetHashCode();
                 hash = (hash * 31) + Offset.GetHashCode();
                 return hash;
@@ -103,7 +119,7 @@
         /// <returns>A <see cref="T:System.String" /> containing a fully qualified type name.</returns>
         public override string ToString()
         {
-            return string.Format(CultureInfo.CurrentCulture, "Format: {0}, Offset: {1}", new object[] { Format.ToString(), Offset.ToString() });
+            return string.Format(CultureInfo.CurrentCulture, "SemanticName: {0}, SemanticIndex: {1}, Format: {2}, Offset: {3}", new object[] { SemanticName.ToString(), SemanticIndex.ToString(), Format.ToString(), Offset.ToString() });
         }
 
         /// <summary>
@@ -112,7 +128,9 @@
         /// <param name="output">Primitive writer</param>
         public void Write(IPrimitiveWriter output)
         {
-            output.WriteEnum("VertexFormat", Format);
+            output.WriteEnum<VertexSemantic>("SemanticName", SemanticName);
+            output.Write("SemanticIndex", SemanticIndex);
+            output.WriteEnum<VertexFormat>("VertexFormat", Format);
             output.Write("Offset", Offset);
         }
 
@@ -122,6 +140,8 @@
         /// <param name="input">Primitive reader</param>
         public void Read(IPrimitiveReader input)
         {
+            SemanticName = input.ReadEnum<VertexSemantic>();
+            SemanticIndex = input.ReadInt32();
             Format = input.ReadEnum<VertexFormat>();
             Offset = input.ReadInt32();
         }
