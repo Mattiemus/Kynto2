@@ -8,7 +8,7 @@
     using Content;
 
     /// <summary>
-    /// A linear, 32-bit/component floating point RGBA color
+    /// A linear  128-bit floating point color using red, green, blue, and alpha components (in RGBA order).
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential, Pack = 4)]

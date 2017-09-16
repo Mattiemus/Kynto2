@@ -161,8 +161,13 @@
     <Compile Include="Graphics\VertexFormat.cs" />
     <Compile Include="Graphics\VertexLayout.cs" />
     <Compile Include="Math\Angle.cs" />
+    <Compile Include="Math\Color.cs" />
     <Compile Include="Math\LinearColor.cs" />
     <Compile Include="Math\MathHelper.cs" />
+    <Compile Include="Math\Matrix4x4.cs" />
+    <Compile Include="Math\Plane.cs" />
+    <Compile Include="Math\Transform.cs" />
+    <Compile Include="Math\Triad.cs" />
     <Compile Include="Math\Vector3.cs" />
     <Compile Include="Math\Vector2.cs" />
     <Compile Include="Math\Quaternion.cs" />

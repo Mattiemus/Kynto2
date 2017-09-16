@@ -120,7 +120,19 @@
         /// <returns>True if the two values are equal</returns>
         public static bool IsApproxEquals(float a, float b)
         {
-            return Math.Abs(a - b) <= ZeroTolerance;
+            return IsApproxEquals(a, b, ZeroTolerance);
+        }
+
+        /// <summary>
+        /// Checks equality between a and b using the specified tolerance
+        /// </summary>
+        /// <param name="a">First value</param>
+        /// <param name="b">Second value</param>
+        /// <param name="tolerance">Tolerance that a and b should be within</param>
+        /// <returns>True if a is nearly equal to b</returns>
+        public static bool IsApproxEquals(float a, float b, float tolerance)
+        {
+            return Math.Abs(a - b) <= tolerance;
         }
 
         /// <summary>
@@ -130,7 +142,7 @@
         /// <returns>True if the input is nearly equal to zero</returns>
         public static bool IsApproxZero(float value)
         {
-            return value <= ZeroTolerance;
+            return Math.Abs(value) <= ZeroTolerance;
         }
 
         /// <summary>
@@ -159,6 +171,65 @@
             value = (value > max) ? max : value;
             value = (value < min) ? min : value;
             return value;
+        }
+
+        /// <summary>
+        /// Clamps an integer to the byte range 0-255.
+        /// </summary>
+        /// <param name="value">Integer to be clamped</param>
+        /// <returns>Clamped value</returns>
+        public static int ClampToByte(int value)
+        {
+            return Clamp(value, 0, 255);
+        }
+
+        /// <summary>
+        /// Clamps and rounds a value within the specified range.
+        /// </summary>
+        /// <param name="value">Source value</param>
+        /// <param name="min">Minimum value</param>
+        /// <param name="max">Maximum value</param>
+        /// <returns>Clamped and rounded value in double precision</returns>
+        public static double ClampAndRound(float value, float min, float max)
+        {
+            if (float.IsNaN(value))
+            {
+                return 0.0;
+            }
+
+            if (float.IsInfinity(value))
+            {
+                return (float.IsNegativeInfinity(value) ? min : max);
+            }
+
+            if (value < min)
+            {
+                return min;
+            }
+
+            if (value > max)
+            {
+                return max;
+            }
+
+            return Math.Round(value);
+        }
+
+        /// <summary>
+        /// Checks if a value is within the specified range.
+        /// </summary>
+        /// <param name="value">Source value</param>
+        /// <param name="min">Minimum value</param>
+        /// <param name="max">Maximum value</param>
+        /// <returns>True if the value is within the interval false otherwise.</returns>
+        public static bool InInterval(float value, float min, float max)
+        {
+            if (value > max || value < min)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
