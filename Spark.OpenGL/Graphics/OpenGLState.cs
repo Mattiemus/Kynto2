@@ -5,8 +5,8 @@
     using System.Collections.Generic;
 
     using Math;
-    using Implementation;
-
+    using Implementation.Effects;
+    
     using OGL = OpenTK.Graphics.OpenGL;
     
     public sealed class OpenGLState
@@ -125,7 +125,7 @@
         {
             if (!ReferenceEquals(program, _currentProgram))
             {
-                OGL.GL.UseProgram(program.ResourceId);
+                OGL.GL.UseProgram(program.ProgramId);
                 _currentProgram = program;
                 return true;
             }

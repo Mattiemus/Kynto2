@@ -191,6 +191,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Application\Implementation\" />
+    <Folder Include="Graphics\Geometry\" />
+    <Folder Include="Graphics\Lights\" />
+    <Folder Include="Graphics\Materials\" />
+    <Folder Include="Graphics\Renderer\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -70,7 +70,7 @@
             OpenGLState.ColorBuffer.ClearValue = color;
             OpenGLState.DepthBuffer.ClearValue = depth;
             OpenGLState.StencilBuffer.ClearValue = stencil;
-            OGL.GL.Clear(OpenGLHelpers.ToNative(options));
+            OGL.GL.Clear(OpenGLHelper.ToNative(options));
         }
 
         /// <summary>
@@ -81,7 +81,7 @@
         /// <param name="startVertexIndex">Starting index in a vertex buffer at which to read vertices from.</param>
         public void Draw(PrimitiveType primitiveType, int vertexCount, int startVertexIndex)
         {
-            OGL.GL.DrawArrays(OpenGLHelpers.ToNative(primitiveType), vertexCount, startVertexIndex);
+            OGL.GL.DrawArrays(OpenGLHelper.ToNative(primitiveType), vertexCount, startVertexIndex);
         }
 
         /// <summary>

@@ -1,6 +1,8 @@
-﻿namespace Spark.OpenGL.Graphics.Implementation
+﻿namespace Spark.OpenGL.Graphics.Implementation.Effects
 {
     using Spark.Graphics;
+
+    using Utilities;
 
     using OTK = OpenTK.Graphics;
     using OGL = OpenTK.Graphics.OpenGL;
@@ -8,19 +10,39 @@
     /// <summary>
     /// Representation of a shader
     /// </summary>
-    public sealed class OpenGLShader : OpenGLGraphicsResource
+    public sealed class OpenGLShader : BaseDisposable
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="OpenGLShader"/> class
         /// </summary>
-        /// <param name="shaderType">Shader type</param>
+        /// <param name="stage">Shader stage</param>
         /// <param name="source">Shader source code</param>
-        public OpenGLShader(OGL.ShaderType shaderType, string source)
+        public OpenGLShader(ShaderStage stage, string source)
         {
-            ResourceId = OGL.GL.CreateShader(shaderType);
-            Compile(source);
+            Stage = stage;
+            Source = source;
+
+            OGL.ShaderType shaderType = OpenGLHelper.ToNative(stage);
+            ShaderId = OGL.GL.CreateShader(shaderType);
+
+            Compile();
         }
-        
+
+        /// <summary>
+        /// Gets the shader stage
+        /// </summary>
+        public ShaderStage Stage { get; }
+
+        /// <summary>
+        /// Gets the shader source
+        /// </summary>
+        public string Source { get; }
+
+        /// <summary>
+        /// Gets the shader object id
+        /// </summary>
+        public int ShaderId { get; }
+
         /// <summary>
         /// Disposes the object instance
         /// </summary>
@@ -31,10 +53,10 @@
             {
                 return;
             }
-
+            
             if (OTK.GraphicsContext.CurrentContext != null && !OTK.GraphicsContext.CurrentContext.IsDisposed)
             {
-                OGL.GL.DeleteShader(ResourceId);
+                OGL.GL.DeleteShader(ShaderId);
             }
 
             base.Dispose(isDisposing);
@@ -43,21 +65,18 @@
         /// <summary>
         /// Compiles the shader
         /// </summary>
-        /// <param name="source"></param>
-        private void Compile(string source)
+        private void Compile()
         {
-            ThrowIfDisposed();
-            
-            OGL.GL.ShaderSource(ResourceId, source);
-            OGL.GL.CompileShader(ResourceId);
+            OGL.GL.ShaderSource(ShaderId, Source);
+            OGL.GL.CompileShader(ShaderId);
 
-            OGL.GL.GetShader(ResourceId, OGL.ShaderParameter.CompileStatus, out int compileStatus);
+            OGL.GL.GetShader(ShaderId, OGL.ShaderParameter.CompileStatus, out int compileStatus);
             if (compileStatus == 0)
             {
                 throw new SparkGraphicsException("Could not compile shader");
             }
 
-            string infoLog = OGL.GL.GetShaderInfoLog(ResourceId);
+            string infoLog = OGL.GL.GetShaderInfoLog(ShaderId);
             if (!string.IsNullOrEmpty(infoLog))
             {
                 throw new SparkGraphicsException(infoLog);

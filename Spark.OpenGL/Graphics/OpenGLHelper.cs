@@ -7,8 +7,30 @@
     /// <summary>
     /// Helper methods for rendering
     /// </summary>
-    public static class OpenGLHelpers
+    public static class OpenGLHelper
     {
+        /// <summary>
+        /// Converts a value to its native type
+        /// </summary>
+        /// <param name="value">Value to convert</param>
+        /// <returns>Native version of the input value</returns>
+        public static OGL.ShaderType ToNative(ShaderStage value)
+        {
+            switch (value)
+            {
+                case ShaderStage.VertexShader:
+                    return OGL.ShaderType.VertexShader;
+                case ShaderStage.GeometryShader:
+                    return OGL.ShaderType.GeometryShader;
+                case ShaderStage.PixelShader:
+                    return OGL.ShaderType.FragmentShader;
+                case ShaderStage.ComputeShader:
+                    return OGL.ShaderType.ComputeShader;
+                default:
+                    throw new SparkGraphicsException($"Cannot cast {value.GetType()} value to native value");
+            }
+        }
+        
         /// <summary>
         /// Converts a value to its native type
         /// </summary>
