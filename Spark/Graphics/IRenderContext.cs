@@ -20,7 +20,7 @@
         /// Clears all bounded render targets to the specified color
         /// </summary>
         /// <param name="color">Color to clear to</param>
-        void Clear(LinearColor color);
+        void Clear(Color color);
 
         /// <summary>
         /// Clears all bounded render targets and depth buffer.
@@ -29,7 +29,7 @@
         /// <param name="color">Color to clear to</param>
         /// <param name="depth">Depth value to clear to</param>
         /// <param name="stencil">Stencil value to clear to</param>
-        void Clear(ClearOptions options, LinearColor color, float depth, int stencil);
+        void Clear(ClearOptions options, Color color, float depth, int stencil);
 
         /// <summary>
         /// Draws non-indexed, non-instanced geometry.

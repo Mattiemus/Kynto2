@@ -53,7 +53,7 @@
         /// Clears all bounded render targets to the specified color
         /// </summary>
         /// <param name="color">Color to clear to</param>
-        public void Clear(LinearColor color)
+        public void Clear(Color color)
         {
             Clear(ClearOptions.All, color, 1.0f, 0);
         }
@@ -65,7 +65,7 @@
         /// <param name="color">Color to clear to</param>
         /// <param name="depth">Depth value to clear to</param>
         /// <param name="stencil">Stencil value to clear to</param>
-        public void Clear(ClearOptions options, LinearColor color, float depth, int stencil)
+        public void Clear(ClearOptions options, Color color, float depth, int stencil)
         {
             OpenGLState.ColorBuffer.ClearValue = color;
             OpenGLState.DepthBuffer.ClearValue = depth;

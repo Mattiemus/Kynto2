@@ -68,7 +68,7 @@
         {
             IRenderContext context = _renderer.ImmediateContext;
 
-            context.Clear(LinearColor.Blue);
+            context.Clear(Color.Indigo);
 
             _shader.CurrentShaderGroup.Apply(context);
             

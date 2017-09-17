@@ -183,7 +183,7 @@
         private void Initialize()
         {
             // Other defaults
-            ColorBuffer.ClearValue = LinearColor.Black;
+            ColorBuffer.ClearValue = Color.Black;
             DepthBuffer.ClearValue = 1.0f;
             StencilBuffer.ClearValue = 0;
 
@@ -209,7 +209,7 @@
         /// </summary>
         public sealed class ColorBufferState
         {
-            private LinearColor _clearValue;
+            private Color _clearValue;
             private readonly OpenGLState _state;
             
             /// <summary>
@@ -222,13 +222,13 @@
 
                 float[] values = new float[4];
                 OGL.GL.GetFloat(OGL.GetPName.ColorClearValue, values);
-                _clearValue = new LinearColor(values[0], values[1], values[2], values[3]);
+                _clearValue = new Color(values[0], values[1], values[2], values[3]);
             }
 
             /// <summary>
             /// Gets or sets the clear color value
             /// </summary>
-            public LinearColor ClearValue
+            public Color ClearValue
             {
                 get
                 {
@@ -241,7 +241,8 @@
                         return;
                     }
 
-                    OGL.GL.ClearColor(value.R, value.G, value.B, value.A);
+                    Vector4 colorValue = value.ToVector4();
+                    OGL.GL.ClearColor(colorValue.X, colorValue.Y, colorValue.Z, colorValue.W);
                     _clearValue = value;
                 }
             }
