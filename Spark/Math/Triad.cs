@@ -28,9 +28,9 @@
         /// Z-Axis of the coordinate system.
         /// </summary>
         public Vector3 ZAxis;
-        
+
         /// <summary>
-        /// Constructs a new instance of the <see cref="Triad"/> struct.
+        /// Initializes a new instance of the <see cref="Triad"/> struct.
         /// </summary>
         /// <param name="xAxis">X-Axis of the coordinate system.</param>
         /// <param name="yAxis">Y-Axis of the coordinate system.</param>

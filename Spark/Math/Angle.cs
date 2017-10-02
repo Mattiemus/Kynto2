@@ -405,7 +405,7 @@
         }
 
         /// <summary>
-        /// Constructs a new <see cref="Angle"/> from an angle in degrees.
+        /// Initializes a new <see cref="Angle"/> from an angle in degrees.
         /// </summary>
         /// <param name="angleInDegrees">Angle in degrees</param>
         /// <returns>The angle</returns>
@@ -416,7 +416,7 @@
         }
 
         /// <summary>
-        /// Constructs a new <see cref="Angle"/> from an angle in degrees.
+        /// Initializes a new <see cref="Angle"/> from an angle in degrees.
         /// </summary>
         /// <param name="angleInDegrees">Angle in degrees</param>
         /// <param name="result">The angle</param>
@@ -426,7 +426,7 @@
         }
 
         /// <summary>
-        /// Constructs a new <see cref="Angle"/> from an angle in radians.
+        /// Initializes a new <see cref="Angle"/> from an angle in radians.
         /// </summary>
         /// <param name="angleInRadians">Angle in radians</param>
         /// <returns>The angle</returns>
@@ -437,7 +437,7 @@
         }
 
         /// <summary>
-        /// Constructs a new <see cref="Angle"/> from an angle in radians.
+        /// Initializes a new <see cref="Angle"/> from an angle in radians.
         /// </summary>
         /// <param name="angleInRadians">Angle in radians</param>
         /// <param name="result">The angle</param>

@@ -8,369 +8,272 @@
     using Content;
 
     /// <summary>
-    /// Defines an infinite plane at an origin with a normal. The origin of the plane is represented by a distance value from zero, along the normal vector.
+    /// Defines a finite line segment that has a start point and an end point.
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Plane : IEquatable<Plane>, IFormattable, IPrimitiveValue
+    public struct Segment : IEquatable<Segment>, IFormattable, IPrimitiveValue
     {
         /// <summary>
-        /// The normal vector of the plane.
+        /// Start point of the line segment.
         /// </summary>
-        public Vector3 Normal;
+        public Vector3 StartPoint;
 
         /// <summary>
-        /// The plane constant, which is the (negative) distance from the origin (0, 0, 0) to the origin of the plane along its normal.
+        /// End point of the line segment.
         /// </summary>
-        public float D;
-
+        public Vector3 EndPoint;
+        
         /// <summary>
-        /// Initializes a new instance of the <see cref="Plane"/> struct.
+        /// Initializes a new instance of the <see cref="Segment"/> struct.
         /// </summary>
-        /// <param name="x">X component of the plane normal</param>
-        /// <param name="y">Y component of the plane normal</param>
-        /// <param name="z">Z component of the plane normal</param>
-        /// <param name="d">Plane constant, (negative) distance from origin (0, 0, 0) to plane origin.</param>
-        public Plane(float x, float y, float z, float d)
+        /// <param name="start">Start point of the line.</param>
+        /// <param name="end">End point of the line.</param>
+        public Segment(Vector3 start, Vector3 end)
         {
-            Normal = new Vector3(x, y, z);
-            D = d;
+            StartPoint = start;
+            EndPoint = end;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Plane"/> struct.
+        /// Gets the size of the <see cref="Segment"/> type in bytes.
         /// </summary>
-        /// <param name="normal">Plane normal</param>
-        /// <param name="d">Plane constant, (negative) distance from origin (0, 0, 0) to plane origin.</param>
-        public Plane(Vector3 normal, float d)
-        {
-            Normal = normal;
-            D = d;
-        }
+        public static int SizeInBytes => MemoryHelper.SizeOf<Segment>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Plane"/> struct.
+        /// Gets the degenerate segment where both endpoints are at the origin.
         /// </summary>
-        /// <param name="plane">XYZ contains the plane normal vector, and W contains the plane constant.</param>
-        public Plane(Vector4 plane)
-        {
-            Normal = new Vector3(plane.X, plane.Y, plane.Z);
-            D = plane.W;
-        }
+        public static Segment Zero => new Segment(Vector3.Zero, Vector3.Zero);
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Plane"/> struct.
+        /// Gets the length of the line segment.
         /// </summary>
-        /// <param name="normal">Plane normal.</param>
-        /// <param name="origin">Plane origin.</param>
-        public Plane(Vector3 normal, Vector3 origin)
-        {
-            Vector3.Dot(ref normal, ref origin, out float dot);
-
-            Normal = normal;
-            D = -dot;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Plane"/> struct from three points.
-        /// </summary>
-        /// <param name="p1">First position</param>
-        /// <param name="p2">Second position</param>
-        /// <param name="p3">Third position</param>
-        public Plane(Vector3 p1, Vector3 p2, Vector3 p3)
-        {
-            // Compute first vector
-            Vector3 v1;
-            v1.X = p2.X - p1.X;
-            v1.Y = p2.Y - p1.Y;
-            v1.Z = p2.Z - p1.Z;
-
-            // Compute second vector
-            Vector3 v2;
-            v2.X = p3.X - p1.X;
-            v2.Y = p3.Y - p1.Y;
-            v2.Z = p3.Z - p1.Z;
-
-            // Take cross product
-            Vector3.NormalizedCross(ref v1, ref v2, out Normal);
-
-            D = -((p1.X * Normal.X) + (p1.Y * Normal.Y) + (p1.Z * Normal.Z));
-        }
-
-        /// <summary>
-        /// Gets a unit <see cref="Plane"/> that has its origin at zero and normal set to (1, 0, 0).
-        /// </summary>
-        public static Plane UnitX => new Plane(Vector3.UnitX, 0.0f);
-
-        /// <summary>
-        /// Gets a unit <see cref="Plane"/> that has its origin at zero and normal set to (0, 1, 0).
-        /// </summary>
-        public static Plane UnitY => new Plane(Vector3.UnitY, 0.0f);
-
-        /// <summary>
-        /// Gets a unit <see cref="Plane"/> that has its origin at zero and normal set to (0, 0, 1).
-        /// </summary>
-        public static Plane UnitZ => new Plane(Vector3.UnitZ, 0.0f);
-
-        /// <summary>
-        /// Gets or sets the plane's origin.
-        /// </summary>
-        public Vector3 Origin
+        public float Length
         {
             get
             {
-                Vector3.Multiply(ref Normal, -D, out Vector3 origin);
-                return origin;
+                Vector3.Distance(ref StartPoint, ref EndPoint, out float length);
+                return length;
+            }
+        }
+
+        /// <summary>
+        /// Gets the half-length (length from the center to each end point) of the line segment.
+        /// </summary>
+        public float Extent
+        {
+            get
+            {
+                Vector3.Distance(ref StartPoint, ref EndPoint, out float length);
+                return length * 0.5f;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the center point of the line segment.
+        /// </summary>
+        public Vector3 Center
+        {
+            get
+            {
+                Vector3.Subtract(ref EndPoint, ref StartPoint, out Vector3 dir);
+
+                float halfLength = dir.Length() * 0.5f;
+                dir.Normalize();
+
+                Vector3.Multiply(ref dir, halfLength, out dir);
+                Vector3.Add(ref dir, ref StartPoint, out Vector3 center);
+
+                return center;
             }
             set
             {
-                Vector3.Dot(ref Normal, ref value, out float dot);
-                D = -dot;
+                Vector3.Subtract(ref EndPoint, ref StartPoint, out Vector3 dir);
+
+                float halfLength = dir.Length() * 0.5f;
+                dir.Normalize();
+
+                Vector3.Multiply(ref dir, -halfLength, out Vector3 temp);
+                Vector3.Add(ref temp, ref value, out StartPoint);
+
+                Vector3.Multiply(ref dir, halfLength, out temp);
+                Vector3.Add(ref temp, ref value, out EndPoint);
             }
         }
 
         /// <summary>
-        /// Gets the size of Plane structure in bytes.
+        /// Gets the direction of the line segment.
         /// </summary>
-        public static int SizeInBytes => MemoryHelper.SizeOf<Plane>();
-
-        /// <summary>
-        /// Gets if the plane is degenerate (normal is zero).
-        /// </summary>
-        public bool IsDegenerate => Normal.Equals(Vector3.Zero);
-
-        /// <summary>
-        /// Gets whether any of the components of the plane are NaN (Not A Number).
-        /// </summary>
-        public bool IsNaN => float.IsNaN(D) || Normal.IsNaN;
-
-        /// <summary>
-        /// Gets whether any of the components of the plane are positive or negative infinity.
-        /// </summary>
-        public bool IsInfinity => float.IsNegativeInfinity(D) || float.IsPositiveInfinity(D) || Normal.IsInfinity;
-
-        #region Public static methods
-
-        /// <summary>
-        /// Compute the dot product between the two specified planes (4D dot product where normals are XYZ and D is W).
-        /// </summary>
-        /// <param name="a">First plane</param>
-        /// <param name="b">Second plane</param>
-        /// <returns>Dot product</returns>
-        public static float Dot(Plane a, Plane b)
+        public Vector3 Direction
         {
-            Dot(ref a, ref b, out float result);
-            return result;
-        }
-
-        /// <summary>
-        /// Compute the dot product between the two specified planes (4D dot product where normals are XYZ and D is W).
-        /// </summary>
-        /// <param name="a">First plane</param>
-        /// <param name="b">Second plane</param>
-        /// <param name="result">Dot product</param>
-        public static void Dot(ref Plane a, ref Plane b, out float result)
-        {
-            result = (a.Normal.X * b.Normal.X) + (a.Normal.Y * b.Normal.Y) + (a.Normal.Z * b.Normal.Z) + (a.D * b.D);
-        }
-
-        /// <summary>
-        /// Compute the dot product between the specified plane's normal and vector plus the plane's constant.
-        /// </summary>
-        /// <param name="plane">Plane</param>
-        /// <param name="value">Vector3</param>
-        /// <returns>Dot product</returns>
-        public static float DotCoordinate(Plane plane, Vector3 value)
-        {
-            DotCoordinate(ref plane, ref value, out float result);
-            return result;
-        }
-
-        /// <summary>
-        /// Compute the dot product between the specified plane's normal and vector plus the plane's constant.
-        /// </summary>
-        /// <param name="plane">Plane</param>
-        /// <param name="value">Vector3</param>
-        /// <param name="result">Dot product</param>
-        public static void DotCoordinate(ref Plane plane, ref Vector3 value, out float result)
-        {
-            result = (plane.Normal.X * value.X) + (plane.Normal.Y * value.Y) + (plane.Normal.Z * value.Z) + plane.D;
-        }
-
-        /// <summary>
-        /// Compute the dot product between the specified plane's normal and vector.
-        /// </summary>
-        /// <param name="plane">Plane</param>
-        /// <param name="value">Vector</param>
-        /// <returns>Dot product</returns>
-        public static float DotNormal(Plane plane, Vector3 value)
-        {
-            DotNormal(ref plane, ref value, out float result);
-            return result;
-        }
-
-        /// <summary>
-        /// Compute the dot product between the specified plane's normal and vector.
-        /// </summary>
-        /// <param name="plane">Plane</param>
-        /// <param name="value">Vector3</param>
-        /// <param name="result">Dot product</param>
-        public static void DotNormal(ref Plane plane, ref Vector3 value, out float result)
-        {
-            result = (plane.Normal.X * value.X) + (plane.Normal.Y * value.Y) + (plane.Normal.Z * value.Z);
-        }
-
-        /// <summary>
-        /// Compute the dot product between the two specified plane's normals.
-        /// </summary>
-        /// <param name="a">First plane</param>
-        /// <param name="b">Second plane</param>
-        /// <returns>Dot product</returns>
-        public static float DotNormal(Plane a, Plane b)
-        {
-            DotNormal(ref a, ref b, out float result);
-            return result;
-        }
-
-        /// <summary>
-        /// Compute the dot product between the two specified plane's normals.
-        /// </summary>
-        /// <param name="a">First plane</param>
-        /// <param name="b">Second plane</param>
-        /// <param name="result">Dot product</param>
-        public static void DotNormal(ref Plane a, ref Plane b, out float result)
-        {
-            result = (a.Normal.X * b.Normal.X) + (a.Normal.Y * b.Normal.Y) + (a.Normal.Z * b.Normal.Z);
-        }
-
-        /// <summary>
-        /// Normalizes the plane's normal to be unit length.
-        /// </summary>
-        /// <param name="plane">Plane to normalize.</param>
-        /// <returns>Normalized plane.</returns>
-        public static Plane Normalize(Plane plane)
-        {
-            Normalize(ref plane, out Plane result);
-            return plane;
-        }
-
-        /// <summary>
-        /// Normalizes the plane's normal to be unit length.
-        /// </summary>
-        /// <param name="plane">Plane to normalize.</param>
-        /// <param name="result">Normalized plane.</param>
-        public static void Normalize(ref Plane plane, out Plane result)
-        {
-            result = plane;
-
-            float lengthSquared = (result.Normal.X * result.Normal.X) + (result.Normal.Y * result.Normal.Y) + (result.Normal.Z * result.Normal.Z);
-            if(lengthSquared != 0.0f)
+            get
             {
-                float invLength = 1.0f / (float) Math.Sqrt(lengthSquared);
-                Vector3.Multiply(ref result.Normal, invLength, out result.Normal);
-                result.D *= invLength;
+                Vector3.Subtract(ref EndPoint, ref StartPoint, out Vector3 dir);
+                dir.Normalize();
+
+                return dir;
             }
         }
 
         /// <summary>
-        /// Reverses the plane's normal so it is pointing in the opposite direction.
+        /// Gets if the line segment is degenerate (a point).
         /// </summary>
-        /// <param name="plane">Plane to reverse.</param>
-        /// <returns>Reversed plane.</returns>
-        public static Plane Negate(Plane plane)
+        public bool IsDegenerate => MathHelper.IsApproxEquals(Length, 0.0f, MathHelper.ZeroTolerance);
+
+        /// <summary>
+        /// Gets whether any of the components of the segment are NaN (Not A Number).
+        /// </summary>
+        public bool IsNaN => StartPoint.IsNaN || EndPoint.IsNaN;
+
+        /// <summary>
+        /// Gets whether any of the components of the segment are positive or negative infinity.
+        /// </summary>
+        public bool IsInfinity => StartPoint.IsInfinity || EndPoint.IsInfinity;
+
+        #region From methods
+
+        /// <summary>
+        /// Creates a segment from a center-extent representation. The extent is the half-length positive and negative distance along the direction
+        /// vector from the center to each end point. 
+        /// </summary>
+        /// <param name="center">Center of the segment.</param>
+        /// <param name="direction">Direction of the segment.</param>
+        /// <param name="extent">Half-length extent of the segment.</param>
+        /// <returns>Segment</returns>
+        public static Segment FromCenterExtent(Vector3 center, Vector3 direction, float extent)
         {
-            Negate(ref plane, out Plane result);
+            FromCenterExtent(ref center, ref direction, extent, out Segment result);
             return result;
         }
 
         /// <summary>
-        /// Reverses the plane's normal so it is pointing in the opposite direction.
+        /// Creates a segment from a center-extent representation. The extent is the half-length positive and negative distance along the direction
+        /// vector from the center to each end point. 
         /// </summary>
-        /// <param name="plane">Plane to reverse</param>
-        /// <param name="result">Reversed plane.</param>
-        public static void Negate(ref Plane plane, out Plane result)
+        /// <param name="center">Center of the segment.</param>
+        /// <param name="direction">Direction of the segment.</param>
+        /// <param name="extent">Half-length extent of the segment.</param>
+        /// <param name="result">Segment</param>
+        public static void FromCenterExtent(ref Vector3 center, ref Vector3 direction, float extent, out Segment result)
         {
-            result = plane;
-            result.Negate();
+            Vector3.Multiply(ref direction, -extent, out Vector3 temp);
+            Vector3.Add(ref temp, ref center, out result.StartPoint);
+
+            Vector3.Multiply(ref direction, extent, out temp);
+            Vector3.Add(ref temp, ref center, out result.EndPoint);
         }
-        
+
+        #endregion
+
+        #region Transform
+
         /// <summary>
-        /// Transforms the plane by the given <see cref="Quaternion"/>.
+        /// Transforms the segment's end points by the given <see cref="Matrix4x4"/>.
         /// </summary>
-        /// <param name="plane">Plane to transform.</param>
+        /// <param name="segment">Segment to transform.</param>
+        /// <param name="m">Transformation matrix.</param>
+        /// <returns>Transformed segment.</returns>
+        public static Segment Transform(Segment segment, Matrix4x4 m)
+        {
+            Transform(ref segment, ref m, out Segment result);
+            return result;
+        }
+
+        /// <summary>
+        /// Transforms the segment's end points by the given <see cref="Matrix"/>.
+        /// </summary>
+        /// <param name="segment">Segment to transform.</param>
+        /// <param name="m">Transformation matrix.</param>
+        /// <param name="result">Transformed segment.</param>
+        public static void Transform(ref Segment segment, ref Matrix4x4 m, out Segment result)
+        {
+            Vector3.Transform(ref segment.StartPoint, ref m, out result.StartPoint);
+            Vector3.Transform(ref segment.EndPoint, ref m, out result.EndPoint);
+        }
+
+        /// <summary>
+        /// Transforms the segment's end points by the given <see cref="Quaternion"/>.
+        /// </summary>
+        /// <param name="segment">Segment to transform.</param>
         /// <param name="rotation">Quaternion rotation.</param>
-        /// <returns>Transformed plane.</returns>
-        public static Plane Transform(Plane plane, Quaternion rotation)
+        /// <returns>Transformed segment.</returns>
+        public static Segment Transform(Segment segment, Quaternion rotation)
         {
-            Transform(ref plane, ref rotation, out Plane result);
-            return plane;
+            Transform(ref segment, ref rotation, out Segment result);
+            return result;
         }
 
         /// <summary>
-        /// Transforms the plane by the given <see cref="Quaternion"/>.
+        /// Transforms the segment's end points by the given <see cref="Quaternion"/>.
         /// </summary>
-        /// <param name="plane">Plane to transform.</param>
+        /// <param name="segment">Segment to transform.</param>
         /// <param name="rotation">Quaternion rotation.</param>
-        /// <param name="result">Transformed plane.</param>
-        public static void Transform(ref Plane plane, ref Quaternion rotation, out Plane result)
+        /// <param name="result">Transformed segment.</param>
+        public static void Transform(ref Segment segment, ref Quaternion rotation, out Segment result)
         {
-            result.D = plane.D;
-            Vector3.Transform(ref plane.Normal, ref rotation, out result.Normal);
+            Vector3.Transform(ref segment.StartPoint, ref rotation, out result.StartPoint);
+            Vector3.Transform(ref segment.EndPoint, ref rotation, out result.EndPoint);
         }
 
         /// <summary>
-        /// Transforms the plane by the given <see cref="Matrix4x4"/>.
+        /// Scales the segment by the given scaling factor. This will scale the extents (half-lengths from the center
+        /// to the end points) and then recompute the end points using the scaled extent and the direction of the
+        /// original segment.
         /// </summary>
-        /// <param name="plane">Plane to transform.</param>
-        /// <param name="transform">Transformation matrix.</param>
-        /// <returns>Transformed plane.</returns>
-        public static Plane Transform(Plane plane, Matrix4x4 transform)
+        /// <param name="segment">Segment to transform.</param>
+        /// <param name="scale">Scaling factor.</param>
+        /// <returns>Transformed segment.</returns>
+        public static Segment Transform(Segment segment, float scale)
         {
-            Transform(ref plane, ref transform, out Plane result);
+            Transform(ref segment, scale, out Segment result);
             return result;
         }
 
         /// <summary>
-        /// Transforms the plane by the given <see cref="Matrix"/>.
+        /// Scales the segment by the given scaling factor. This will scale the extents (half-lengths from the center
+        /// to the end points) and then recompute the end points using the scaled extent and the direction of the
+        /// original segment.
         /// </summary>
-        /// <param name="plane">Plane to transform.</param>
-        /// <param name="transform">Transformation matrix.</param>
-        /// <param name="result">Transformed plane.</param>
-        public static void Transform(ref Plane plane, ref Matrix4x4 transform, out Plane result)
+        /// <param name="segment">Segment to transform.</param>
+        /// <param name="scale">Scaling factor.</param>
+        /// <param name="result">Transformed segment.</param>
+        public static void Transform(ref Segment segment, float scale, out Segment result)
         {
-            Vector3 planeNormal = plane.Normal;
-            Vector3 planeOrigin = plane.Origin;
+            Vector3 dir, center;
+            float extent;
+            GeometricToolsHelper.CalculateSegmentProperties(ref segment, out center, out dir, out extent);
 
-            Vector3.Transform(ref planeOrigin, ref transform, out planeOrigin);
-            Vector3.TransformNormal(ref planeNormal, ref transform, out planeNormal);
+            extent *= scale;
 
-            result = new Plane(planeNormal, planeOrigin);
+            Vector3.Multiply(ref dir, -extent, out result.StartPoint);
+            Vector3.Add(ref result.StartPoint, ref center, out result.StartPoint);
+
+            Vector3.Multiply(ref dir, extent, out result.EndPoint);
+            Vector3.Add(ref result.EndPoint, ref center, out result.EndPoint);
         }
 
         /// <summary>
-        /// Translates the plane by the given translation vector.
+        /// Translates the segment by the given translation vector.
         /// </summary>
-        /// <param name="plane">Plane to transform.</param>
+        /// <param name="segment">Segment to transform.</param>
         /// <param name="translation">Translation vector.</param>
-        /// <returns>Transformed plane.</returns>
-        public static Plane Transform(Plane plane, Vector3 translation)
+        /// <returns>Transformed segment.</returns>
+        public static Segment Transform(Segment segment, Vector3 translation)
         {
-            Transform(ref plane, ref translation, out Plane result);
+            Transform(ref segment, ref translation, out Segment result);
             return result;
         }
 
         /// <summary>
-        /// Translates the plane by the given translation vector.
+        /// Translates the segment by the given translation vector.
         /// </summary>
-        /// <param name="plane">Plane to transform.</param>
+        /// <param name="segment">Segment to transform.</param>
         /// <param name="translation">Translation vector.</param>
-        /// <param name="result">Transformed plane.</param>
-        public static void Transform(ref Plane plane, ref Vector3 translation, out Plane result)
+        /// <param name="result">Transformed segment.</param>
+        public static void Transform(ref Segment segment, ref Vector3 translation, out Segment result)
         {
-            Vector3 planeOrigin = plane.Origin;
-            Vector3.Add(ref planeOrigin, ref translation, out planeOrigin);
-
-            result = new Plane(plane.Normal, planeOrigin);
+            Vector3.Add(ref segment.StartPoint, ref translation, out result.StartPoint);
+            Vector3.Add(ref segment.EndPoint, ref translation, out result.EndPoint);
         }
 
         #endregion
@@ -378,23 +281,23 @@
         #region Equality Operators
 
         /// <summary>
-        /// Checks equality between two planes.
+        /// Tests equality between two lines.
         /// </summary>
-        /// <param name="a">First plane</param>
-        /// <param name="b">Second plane</param>
-        /// <returns>True if the planes are equal, false otherwise.</returns>
-        public static bool operator ==(Plane a, Plane b)
+        /// <param name="a">First line</param>
+        /// <param name="b">Second line</param>
+        /// <returns>True if both lines are equal, false otherwise.</returns>
+        public static bool operator ==(Segment a, Segment b)
         {
             return a.Equals(ref b);
         }
 
         /// <summary>
-        /// Checks inequality between two planes.
+        /// Tests inequality between two lines.
         /// </summary>
-        /// <param name="a">First plane</param>
-        /// <param name="b">Second plane</param>
-        /// <returns>True if the planes are not equal, false otherwise.</returns>
-        public static bool operator !=(Plane a, Plane b)
+        /// <param name="a">First line</param>
+        /// <param name="b">Second line</param>
+        /// <returns>True if both lines are not equal, false otherwise.</returns>
+        public static bool operator !=(Segment a, Segment b)
         {
             return !a.Equals(ref b);
         }
@@ -404,84 +307,58 @@
         #region Public methods
 
         /// <summary>
-        /// Reverses the plane's normal so it is pointing in the opposite direction.
+        /// Tests if the line is perpendicular to the specified line.
         /// </summary>
-        public void Negate()
+        /// <param name="line">Line to test against.</param>
+        /// <returns>True if the lines are perpendicular, false otherwise.</returns>
+        public bool IsPerpendicularTo(Segment line)
         {
-            Normal.Negate();
-            D = -D;
-        }
-
-        /// <summary>
-        /// Normalizes the plane's normal to be unit length.
-        /// </summary>
-        public void Normalize()
-        {
-            float lengthSquared = (Normal.X * Normal.X) + (Normal.Y * Normal.Y) + (Normal.Z * Normal.Z);
-            if(lengthSquared != 0.0f)
-            {
-                float invLength = 1.0f / (float) Math.Sqrt(lengthSquared);
-                Vector3.Multiply(ref Normal, invLength, out Normal);
-                D *= invLength;
-            }
-        }
-
-        /// <summary>
-        /// Determines which side of the plane the point lies on.
-        /// </summary>
-        /// <param name="point">Point to test.</param>
-        /// <returns>Which side of the plane the point lies on.</returns>
-        public PlaneIntersectionType WhichSide(Vector3 point)
-        {
-            return WhichSide(ref point);
-        }
-
-        /// <summary>
-        /// Determines which side of the plane the point lies on.
-        /// </summary>
-        /// <param name="point">Point to test.</param>
-        /// <returns>Which side of the plane the point lies on.</returns>
-        public PlaneIntersectionType WhichSide(ref Vector3 point)
-        {
-            Vector3.Dot(ref Normal, ref point, out float dot);
-
-            float distance = dot + D;
-
-            if (distance > 0.0f)
-            {
-                return PlaneIntersectionType.Front;
-            }
-            else if (distance < 0.0f)
-            {
-                return PlaneIntersectionType.Back;
-            }
-
-            return PlaneIntersectionType.Intersects;
-        }
-
-        /// <summary>
-        /// Determines the signed distance between this object and a point. If negative, the point is on the
-        /// back of the plane, if positive then on the front.
-        /// </summary>
-        /// <param name="point">Point to test.</param>
-        /// <returns>Distance between the two objects.</returns>
-        public float SignedDistanceTo(Vector3 point)
-        {
-            SignedDistanceTo(ref point, out float result);
+            IsPerpendicularTo(ref line, out bool result);
             return result;
         }
 
         /// <summary>
-        /// Determines the signed distance between this object and a point. If negative, the point is on the
-        /// back of the plane, if positive then on the front.
+        /// Tests if the line is perpendicular to the specified line.
         /// </summary>
-        /// <param name="point">Point to test.</param>
-        /// <param name="result">Distance between the two objects.</param>
-        public void SignedDistanceTo(ref Vector3 point, out float result)
+        /// <param name="line">Line to test against.</param>
+        /// <param name="result">True if the lines are perpendicular, false otherwise.</param>
+        public void IsPerpendicularTo(ref Segment line, out bool result)
         {
-            float dot;
-            Vector3.Dot(ref Normal, ref point, out dot);
-            result = dot + D;
+            Vector3.Subtract(ref EndPoint, ref StartPoint, out Vector3 v0);
+            Vector3.Subtract(ref line.EndPoint, ref line.StartPoint, out Vector3 v1);
+
+            v0.Normalize();
+            v1.Normalize();
+            
+            Vector3.Dot(ref v0, ref v1, out float dot);
+
+            result = MathHelper.IsApproxEquals(dot, 0.0f);
+        }
+
+        /// <summary>
+        /// Tests if the line is parallel to the specified line.
+        /// </summary>
+        /// <param name="line">Line to test against.</param>
+        /// <returns>True if the lines are parallel, false otherwise.</returns>
+        public bool IsParallelTo(Segment line)
+        {
+            IsParallelTo(ref line, out bool result);
+            return result;
+        }
+
+        /// <summary>
+        /// Tests if the line is parallel to the specified line.
+        /// </summary>
+        /// <param name="line">Line to test against.</param>
+        /// <param name="result">True if the lines are parallel, false otherwise.</param>
+        public void IsParallelTo(ref Segment line, out bool result)
+        {
+            Vector3.Subtract(ref EndPoint, ref StartPoint, out Vector3 v0);
+            Vector3.Subtract(ref line.EndPoint, ref line.StartPoint, out Vector3 v1);
+            
+            Vector3.NormalizedCross(ref v0, ref v1, out Vector3 cross);
+
+            result = cross.Equals(Vector3.Zero);
         }
 
         #endregion
@@ -489,87 +366,87 @@
         #region Intersects
 
         /// <summary>
-        /// Determines whether there is an intersection between this object and a <see cref="Ray"/>.
+        /// Determines whether there is an apparent 2D (XY only) intersection between this object and a <see cref="Ray"/>.
         /// </summary>
         /// <param name="ray">Ray to test.</param>
         /// <returns>True if an intersection between the two objects occurs, false otherwise.</returns>
-        public bool Intersects(Ray ray)
+        public bool IntersectsXY(Ray ray)
         {
-            return GeometricToolsHelper.IntersectRayPlane(ref ray, ref this);
+            return GeometricToolsHelper.IntersectRaySegmentXY(ref ray, ref this);
         }
 
         /// <summary>
-        /// Determines whether there is an intersection between this object and a <see cref="Ray"/>.
-        /// </summary>
-        /// <param name="ray">Ray to test.</param>
-        /// <param name="result">Intersection result between the two objects.</param>
-        /// <returns>True if an intersection between the two objects occurs, false otherwise.</returns>
-        public bool IntersectsXY(Ray ray, out LineIntersectionResult result)
-        {
-            return GeometricToolsHelper.IntersectRayPlane(ref ray, ref this, out result);
-        }
-
-        /// <summary>
-        /// Determines whether there is an intersection between this object and a <see cref="Ray"/>.
-        /// </summary>
-        /// <param name="ray">Ray to test.</param>
-        /// <returns>True if an intersection between the two objects occurs, false otherwise.</returns>
-        public bool Intersects(ref Ray ray)
-        {
-            return GeometricToolsHelper.IntersectRayPlane(ref ray, ref this);
-        }
-
-        /// <summary>
-        /// Determines whether there is an intersection between this object and a <see cref="Ray"/>.
+        /// Determines whether there is an apparent 2D (XY only) intersection between this object and a <see cref="Ray"/>.
         /// </summary>
         /// <param name="ray">Ray to test.</param>
         /// <param name="result">Intersection result between the two objects.</param>
         /// <returns>True if an intersection between the two objects occurs, false otherwise.</returns>
-        public bool Intersects(ref Ray ray, out LineIntersectionResult result)
+        public bool IntersectsXY(Ray ray, out Vector3 result)
         {
-            return GeometricToolsHelper.IntersectRayPlane(ref ray, ref this, out result);
+            return GeometricToolsHelper.IntersectRaySegmentXY(ref ray, ref this, out result, out float rayParam, out float segParam);
         }
 
         /// <summary>
-        /// Determines whether there is an intersection between this object and a <see cref="Segment"/>.
+        /// Determines whether there is an apparent 2D (XY only) intersection between this object and a <see cref="Ray"/>.
+        /// </summary>
+        /// <param name="ray">Ray to test.</param>
+        /// <returns>True if an intersection between the two objects occurs, false otherwise.</returns>
+        public bool IntersectsXY(ref Ray ray)
+        {
+            return GeometricToolsHelper.IntersectRaySegmentXY(ref ray, ref this);
+        }
+
+        /// <summary>
+        /// Determines whether there is an apparent 2D (XY only) intersection between this object and a <see cref="Ray"/>.
+        /// </summary>
+        /// <param name="ray">Ray to test.</param>
+        /// <param name="result">Intersection result between the two objects.</param>
+        /// <returns>True if an intersection between the two objects occurs, false otherwise.</returns>
+        public bool IntersectsXY(ref Ray ray, out Vector3 result)
+        {
+            return GeometricToolsHelper.IntersectRaySegmentXY(ref ray, ref this, out result, out float rayParam, out float segParam);
+        }
+
+        /// <summary>
+        /// Determines whether there is an apparent 2D (XY only) intersection between this object and a <see cref="Segment"/>.
         /// </summary>
         /// <param name="segment">Segment to test.</param>
         /// <returns>True if an intersection between the two objects occurs, false otherwise.</returns>
-        public bool Intersects(Segment segment)
+        public bool IntersectsXY(Segment segment)
         {
-            return GeometricToolsHelper.IntersectSegmentPlane(ref segment, ref this);
+            return GeometricToolsHelper.IntersectSegmentSegmentXY(ref this, ref segment);
         }
 
         /// <summary>
-        /// Determines whether there is an intersection between this object and a <see cref="Segment"/>.
+        /// Determines whether there is an apparent 2D (XY only) intersection between this object and a <see cref="Segment"/>.
         /// </summary>
         /// <param name="segment">Segment to test.</param>
         /// <param name="result">Intersection result between the two objects.</param>
         /// <returns>True if an intersection between the two objects occurs, false otherwise.</returns>
-        public bool Intersects(Segment segment, out LineIntersectionResult result)
+        public bool IntersectsXY(Segment segment, out Vector3 result)
         {
-            return GeometricToolsHelper.IntersectSegmentPlane(ref segment, ref this, out result);
+            return GeometricToolsHelper.IntersectSegmentSegmentXY(ref this, ref segment, out result, out float seg0Param, out float seg1Param);
         }
 
         /// <summary>
-        /// Determines whether there is an intersection between this object and a <see cref="Segment"/>.
+        /// Determines whether there is an apparent 2D (XY only) intersection between this object and a <see cref="Segment"/>.
         /// </summary>
         /// <param name="segment">Segment to test.</param>
         /// <returns>True if an intersection between the two objects occurs, false otherwise.</returns>
-        public bool Intersects(ref Segment segment)
+        public bool IntersectsXY(ref Segment segment)
         {
-            return GeometricToolsHelper.IntersectSegmentPlane(ref segment, ref this);
+            return GeometricToolsHelper.IntersectSegmentSegmentXY(ref this, ref segment);
         }
 
         /// <summary>
-        /// Determines whether there is an intersection between this object and a <see cref="Segment"/>.
+        /// Determines whether there is an apparent 2D (XY only) intersection between this object and a <see cref="Segment"/>.
         /// </summary>
         /// <param name="segment">Segment to test.</param>
         /// <param name="result">Intersection result between the two objects.</param>
         /// <returns>True if an intersection between the two objects occurs, false otherwise.</returns>
-        public bool Intersects(ref Segment segment, out LineIntersectionResult result)
+        public bool IntersectsXY(ref Segment segment, out Vector3 result)
         {
-            return GeometricToolsHelper.IntersectSegmentPlane(ref segment, ref this, out result);
+            return GeometricToolsHelper.IntersectSegmentSegmentXY(ref this, ref segment, out result, out float seg0Param, out float seg1Param);
         }
 
         /// <summary>
@@ -579,7 +456,7 @@
         /// <returns>True if an intersection between the two objects occurs, false otherwise.</returns>
         public bool Intersects(Plane plane)
         {
-            return GeometricToolsHelper.IntersectPlanePlane(ref this, ref plane);
+            return GeometricToolsHelper.IntersectSegmentPlane(ref this, ref plane);
         }
 
         /// <summary>
@@ -588,9 +465,9 @@
         /// <param name="plane">Plane to test.</param>
         /// <param name="result">Intersection result between the two objects.</param>
         /// <returns>True if an intersection between the two objects occurs, false otherwise.</returns>
-        public bool Intersects(Plane plane, out Ray result)
+        public bool Intersects(Plane plane, out LineIntersectionResult result)
         {
-            return GeometricToolsHelper.IntersectPlanePlane(ref this, ref plane, out result);
+            return GeometricToolsHelper.IntersectSegmentPlane(ref this, ref plane, out result);
         }
 
         /// <summary>
@@ -600,7 +477,7 @@
         /// <returns>True if an intersection between the two objects occurs, false otherwise.</returns>
         public bool Intersects(ref Plane plane)
         {
-            return GeometricToolsHelper.IntersectPlanePlane(ref this, ref plane);
+            return GeometricToolsHelper.IntersectSegmentPlane(ref this, ref plane);
         }
 
         /// <summary>
@@ -609,40 +486,20 @@
         /// <param name="plane">Plane to test.</param>
         /// <param name="result">Intersection result between the two objects.</param>
         /// <returns>True if an intersection between the two objects occurs, false otherwise.</returns>
-        public bool Intersects(ref Plane plane, out Ray result)
+        public bool Intersects(ref Plane plane, out LineIntersectionResult result)
         {
-            return GeometricToolsHelper.IntersectPlanePlane(ref this, ref plane, out result);
+            return GeometricToolsHelper.IntersectSegmentPlane(ref this, ref plane, out result);
         }
 
         /// <summary>
         /// Determines whether there is an intersection between this object and a <see cref="Triangle"/>.
         /// </summary>
         /// <param name="triangle">Triangle to test.</param>
+        /// <param name="ignoreBackface">True if the test should ignore an intersection if the triangle is a back face, false if otherwise.</param>
         /// <returns>True if an intersection between the two objects occurs, false otherwise.</returns>
-        public bool Intersects(Triangle triangle)
+        public bool Intersects(Triangle triangle, bool ignoreBackface = false)
         {
-            return GeometricToolsHelper.IntersectPlaneTriangle(ref triangle, ref this);
-        }
-
-        /// <summary>
-        /// Determines whether there is an intersection between this object and a <see cref="Triangle"/>.
-        /// </summary>
-        /// <param name="triangle">Triangle to test.</param>
-        /// <param name="result">Intersection result between the two objects.</param>
-        /// <returns>True if an intersection between the two objects occurs, false otherwise.</returns>
-        public bool Intersects(Triangle triangle, out Segment result)
-        {
-            return GeometricToolsHelper.IntersectPlaneTriangle(ref triangle, ref this, out result);
-        }
-
-        /// <summary>
-        /// Determines whether there is an intersection between this object and a <see cref="Triangle"/>.
-        /// </summary>
-        /// <param name="triangle">Triangle to test.</param>
-        /// <returns>True if an intersection between the two objects occurs, false otherwise.</returns>
-        public bool Intersects(ref Triangle triangle)
-        {
-            return GeometricToolsHelper.IntersectPlaneTriangle(ref triangle, ref this);
+            return GeometricToolsHelper.IntersectSegmentTriangle(ref triangle, ref this, ignoreBackface, out LineIntersectionResult result);
         }
 
         /// <summary>
@@ -650,10 +507,34 @@
         /// </summary>
         /// <param name="triangle">Triangle to test.</param>
         /// <param name="result">Intersection result between the two objects.</param>
+        /// <param name="ignoreBackface">True if the test should ignore an intersection if the triangle is a back face, false if otherwise.</param>
         /// <returns>True if an intersection between the two objects occurs, false otherwise.</returns>
-        public bool Intersects(ref Triangle triangle, out Segment result)
+        public bool Intersects(Triangle triangle, out LineIntersectionResult result, bool ignoreBackface = false)
         {
-            return GeometricToolsHelper.IntersectPlaneTriangle(ref triangle, ref this, out result);
+            return GeometricToolsHelper.IntersectSegmentTriangle(ref triangle, ref this, ignoreBackface, out result);
+        }
+
+        /// <summary>
+        /// Determines whether there is an intersection between this object and a <see cref="Triangle"/>.
+        /// </summary>
+        /// <param name="triangle">Triangle to test.</param>
+        /// <param name="ignoreBackface">True if the test should ignore an intersection if the triangle is a back face, false if otherwise.</param>
+        /// <returns>True if an intersection between the two objects occurs, false otherwise.</returns>
+        public bool Intersects(ref Triangle triangle, bool ignoreBackface = false)
+        {
+            return GeometricToolsHelper.IntersectSegmentTriangle(ref triangle, ref this, ignoreBackface, out LineIntersectionResult result);
+        }
+
+        /// <summary>
+        /// Determines whether there is an intersection between this object and a <see cref="Triangle"/>.
+        /// </summary>
+        /// <param name="triangle">Triangle to test.</param>
+        /// <param name="result">Intersection result between the two objects.</param>
+        /// <param name="ignoreBackface">True if the test should ignore an intersection if the triangle is a back face, false if otherwise.</param>
+        /// <returns>True if an intersection between the two objects occurs, false otherwise.</returns>
+        public bool Intersects(ref Triangle triangle, out LineIntersectionResult result, bool ignoreBackface = false)
+        {
+            return GeometricToolsHelper.IntersectSegmentTriangle(ref triangle, ref this, ignoreBackface, out result);
         }
 
         /// <summary>
@@ -673,7 +554,7 @@
         /// <param name="ellipse">Ellipse to test.</param>
         /// <param name="result">Intersection result between the two objects.</param>
         /// <returns>True if an intersection between the two objects occurs, false otherwise.</returns>
-        public bool Intersects(Ellipse ellipse, out Segment result)
+        public bool Intersects(Ellipse ellipse, out LineIntersectionResult result)
         {
             // TODO
             throw new NotImplementedException();
@@ -696,7 +577,7 @@
         /// <param name="ellipse">Ellipse to test.</param>
         /// <param name="result">Intersection result between the two objects.</param>
         /// <returns>True if an intersection between the two objects occurs, false otherwise.</returns>
-        public bool Intersects(ref Ellipse ellipse, out Segment result)
+        public bool Intersects(ref Ellipse ellipse, out LineIntersectionResult result)
         {
             // TODO
             throw new NotImplementedException();
@@ -706,15 +587,97 @@
         /// Determines whether there is an intersection between this object and a <see cref="BoundingVolume"/>.
         /// </summary>
         /// <param name="volume">Bounding volume to test.</param>
-        /// <returns>Type of plane intersection.</returns>
-        public PlaneIntersectionType Intersects(BoundingVolume volume)
+        /// <returns>True if an intersection between the two objects occurs, false otherwise.</returns>
+        public bool Intersects(BoundingVolume volume)
         {
             if (volume == null)
             {
-                return PlaneIntersectionType.Front;
+                return false;
             }
 
             return volume.Intersects(ref this);
+        }
+
+        /// <summary>
+        /// Determines whether there is an intersection between this object and a <see cref="BoundingVolume"/>.
+        /// </summary>
+        /// <param name="volume">Bounding volume to test.</param>
+        /// <param name="result">Bounding intersection result.</param>
+        /// <returns>True if an intersection between the two objects occurs, false otherwise.</returns>
+        public bool Intersects(BoundingVolume volume, out BoundingIntersectionResult result)
+        {
+            if (volume == null)
+            {
+                result = new BoundingIntersectionResult();
+                return false;
+            }
+
+            return volume.Intersects(ref this, out result);
+        }
+
+        #endregion
+
+        #region Distance/Point To/From
+
+        /// <summary>
+        /// Gets the point along the segment that is the distance from the start point.
+        /// </summary>
+        /// <param name="distance">Distance of the point from the start point.</param>
+        /// <returns>The point along the segment.</returns>
+        public Vector3 PointAtDistance(float distance)
+        {
+            PointAtDistance(distance, out Vector3 result);
+            return result;
+        }
+
+        /// <summary>
+        /// Gets the point along the segment that is the distance from the start point.
+        /// </summary>
+        /// <param name="distance">Distance of the point from the start point.</param>
+        /// <param name="result">The point along the segment.</param>
+        public void PointAtDistance(float distance, out Vector3 result)
+        {
+            Vector3.Subtract(ref EndPoint, ref StartPoint, out Vector3 dir);
+            dir.Normalize();
+
+            Vector3.Multiply(ref dir, distance, out result);
+            Vector3.Add(ref StartPoint, ref result, out result);
+        }
+
+        /// <summary>
+        /// Gets the distance of the point (or closest on the segment) from the start point.
+        /// </summary>
+        /// <param name="point">Point along or near the segment.</param>
+        /// <returns>The distance from the point (or point closest on the segment) to the start point.</returns>
+        public float DistanceAtPoint(Vector3 point)
+        {
+            DistanceAtPoint(ref point, out float distance);
+            return distance;
+        }
+
+        /// <summary>
+        /// Gets the distance of the point (or closest on the segment) from the start point.
+        /// </summary>
+        /// <param name="point">Point along or near the segment.</param>
+        /// <param name="distance">The distance from the point (or point closest on the segment) to the start point.</param>
+        public void DistanceAtPoint(ref Vector3 point, out float distance)
+        {
+            Vector3.Subtract(ref point, ref StartPoint, out Vector3 v);
+            
+            Vector3.Subtract(ref EndPoint, ref StartPoint, out Vector3 dir);
+            dir.Normalize();
+            
+            Vector3.Dot(ref dir, ref v, out float dot);
+            
+            Vector3.Dot(ref dir, ref dir, out float dotDir);
+
+            if (MathHelper.IsApproxEquals(dotDir, MathHelper.ZeroTolerance))
+            {
+                distance = 0.0f;
+                return;
+            }
+
+            distance = dot / dotDir;
         }
 
         #endregion
@@ -728,8 +691,8 @@
         /// <returns>Distance between the two objects.</returns>
         public float DistanceTo(Vector3 point)
         {
-            GeometricToolsHelper.DistancePointPlane(ref this, ref point, out Vector3 ptOnPlane, out float sqrDist);
-            return (float)Math.Sqrt(sqrDist);
+            DistanceTo(ref point, out float result);
+            return result;
         }
 
         /// <summary>
@@ -739,7 +702,7 @@
         /// <param name="result">Distance between the two objects.</param>
         public void DistanceTo(ref Vector3 point, out float result)
         {
-            GeometricToolsHelper.DistancePointPlane(ref this, ref point, out Vector3 ptOnPlane, out float sqrDist);
+            GeometricToolsHelper.DistancePointSegment(ref point, ref this, out Vector3 ptOnSegment, out float segParam, out float sqrDist);
             result = (float)Math.Sqrt(sqrDist);
         }
 
@@ -750,7 +713,7 @@
         /// <returns>Distance between the two objects.</returns>
         public float DistanceTo(Ray ray)
         {
-            GeometricToolsHelper.DistanceRayPlane(ref this, ref ray, out Vector3 ptOnPlane, out Vector3 ptOnRay, out float sqrDist);
+            GeometricToolsHelper.DistanceRaySegment(ref ray, ref this, out float rayParam, out float segParam, out float sqrDist);
             return (float)Math.Sqrt(sqrDist);
         }
 
@@ -761,7 +724,7 @@
         /// <param name="result">Distance between the two objects.</param>
         public void DistanceTo(ref Ray ray, out float result)
         {
-            GeometricToolsHelper.DistanceRayPlane(ref this, ref ray, out Vector3 ptOnPlane, out Vector3 ptOnRay, out float sqrDist);
+            GeometricToolsHelper.DistanceRaySegment(ref ray, ref this, out float rayParam, out float segParam, out float sqrDist);
             result = (float)Math.Sqrt(sqrDist);
         }
 
@@ -772,7 +735,7 @@
         /// <returns>Distance between the two objects.</returns>
         public float DistanceTo(Segment segment)
         {
-            GeometricToolsHelper.DistanceSegmentPlane(ref this, ref segment, out Vector3 ptOnPlane, out Vector3 ptOnSegment, out float sqrDist);
+            GeometricToolsHelper.DistanceSegmentSegment(ref this, ref segment, out float seg0Param, out float seg1Param, out float sqrDist);
             return (float)Math.Sqrt(sqrDist);
         }
 
@@ -783,7 +746,7 @@
         /// <param name="result">Distance between the two objects.</param>
         public void DistanceTo(ref Segment segment, out float result)
         {
-            GeometricToolsHelper.DistanceSegmentPlane(ref this, ref segment, out Vector3 ptOnPlane, out Vector3 ptOnSegment, out float sqrDist);
+            GeometricToolsHelper.DistanceSegmentSegment(ref this, ref segment, out float seg0Param, out float seg1Param, out float sqrDist);
             result = (float)Math.Sqrt(sqrDist);
         }
 
@@ -794,8 +757,8 @@
         /// <returns>Distance between the two objects.</returns>
         public float DistanceTo(Plane plane)
         {
-            DistanceTo(ref plane, out float result);
-            return result;
+            GeometricToolsHelper.DistanceSegmentPlane(ref plane, ref this, out Vector3 ptOnPlane, out Vector3 ptOnSegment, out float sqrDist);
+            return (float)Math.Sqrt(sqrDist);
         }
 
         /// <summary>
@@ -805,17 +768,8 @@
         /// <param name="result">Distance between the two objects.</param>
         public void DistanceTo(ref Plane plane, out float result)
         {
-            Ray intr;
-            if (GeometricToolsHelper.IntersectPlanePlane(ref this, ref plane, out intr))
-            {
-                result = 0.0f;
-            }
-            else
-            {
-                Vector3 p0Origin = Origin;
-                Vector3 p1Origin = plane.Origin;
-                Vector3.Distance(ref p1Origin, ref p0Origin, out result);
-            }
+            GeometricToolsHelper.DistanceSegmentPlane(ref plane, ref this, out Vector3 ptOnPlane, out Vector3 ptOnSegment, out float sqrDist);
+            result = (float)Math.Sqrt(sqrDist);
         }
 
         /// <summary>
@@ -825,8 +779,8 @@
         /// <returns>Distance between the two objects.</returns>
         public float DistanceTo(Triangle triangle)
         {
-            DistanceTo(ref triangle, out float result);
-            return result;
+            GeometricToolsHelper.DistanceSegmentTriangle(ref triangle, ref this, out Vector3 ptOnTriangle, out Vector3 ptOnSegment, out float sqrDist);
+            return (float)Math.Sqrt(sqrDist);
         }
 
         /// <summary>
@@ -836,7 +790,7 @@
         /// <param name="result">Distance between the two objects.</param>
         public void DistanceTo(ref Triangle triangle, out float result)
         {
-            GeometricToolsHelper.DistancePlaneTriangle(ref triangle, ref this, out Vector3 ptOnTriangle, out Vector3 ptOnPlane, out float sqrDist);
+            GeometricToolsHelper.DistanceSegmentTriangle(ref triangle, ref this, out Vector3 ptOnTriangle, out Vector3 ptOnSegment, out float sqrDist);
             result = (float)Math.Sqrt(sqrDist);
         }
 
@@ -873,7 +827,7 @@
         /// <returns>Distance squared between the two objects.</returns>
         public float DistanceSquaredTo(Vector3 point)
         {
-            GeometricToolsHelper.DistancePointPlane(ref this, ref point, out Vector3 ptOnPlane, out float sqrDist);
+            GeometricToolsHelper.DistancePointSegment(ref point, ref this, out Vector3 ptOnSegment, out float segParam, out float sqrDist);
             return sqrDist;
         }
 
@@ -884,7 +838,7 @@
         /// <param name="result">Distance squared between the two objects.</param>
         public void DistanceSquaredTo(ref Vector3 point, out float result)
         {
-            GeometricToolsHelper.DistancePointPlane(ref this, ref point, out Vector3 ptOnPlane, out result);
+            GeometricToolsHelper.DistancePointSegment(ref point, ref this, out Vector3 ptOnSegment, out float segParam, out result);
         }
 
         /// <summary>
@@ -894,7 +848,7 @@
         /// <returns>Distance squared between the two objects.</returns>
         public float DistanceSquaredTo(Ray ray)
         {
-            GeometricToolsHelper.DistanceRayPlane(ref this, ref ray, out Vector3 ptOnPlane, out Vector3 ptOnRay, out float sqrDist);
+            GeometricToolsHelper.DistanceRaySegment(ref ray, ref this, out float rayParam, out float segParam, out float sqrDist);
             return sqrDist;
         }
 
@@ -905,7 +859,7 @@
         /// <param name="result">Distance squared between the two objects.</param>
         public void DistanceSquaredTo(ref Ray ray, out float result)
         {
-            GeometricToolsHelper.DistanceRayPlane(ref this, ref ray, out Vector3 ptOnPlane, out Vector3 ptOnRay, out result);
+            GeometricToolsHelper.DistanceRaySegment(ref ray, ref this, out float rayParam, out float segParam, out result);
         }
 
         /// <summary>
@@ -915,7 +869,7 @@
         /// <returns>Distance squared between the two objects.</returns>
         public float DistanceSquaredTo(Segment segment)
         {
-            GeometricToolsHelper.DistanceSegmentPlane(ref this, ref segment, out Vector3 ptOnPlane, out Vector3 ptOnSegment, out float sqrDist);
+            GeometricToolsHelper.DistanceSegmentSegment(ref this, ref segment, out float seg0Param, out float seg1Param, out float sqrDist);
             return sqrDist;
         }
 
@@ -926,7 +880,7 @@
         /// <param name="result">Distance squared between the two objects.</param>
         public void DistanceSquaredTo(ref Segment segment, out float result)
         {
-            GeometricToolsHelper.DistanceSegmentPlane(ref this, ref segment, out Vector3 ptOnPlane, out Vector3 ptOnSegment, out result);
+            GeometricToolsHelper.DistanceSegmentSegment(ref this, ref segment, out float seg0Param, out float seg1Param, out result);
         }
 
         /// <summary>
@@ -936,8 +890,8 @@
         /// <returns>Distance squared between the two objects.</returns>
         public float DistanceSquaredTo(Plane plane)
         {
-            DistanceSquaredTo(ref plane, out float result);
-            return result;
+            GeometricToolsHelper.DistanceSegmentPlane(ref plane, ref this, out Vector3 ptOnPlane, out Vector3 ptOnSegment, out float sqrDist);
+            return sqrDist;
         }
 
         /// <summary>
@@ -947,16 +901,7 @@
         /// <param name="result">Distance squared between the two objects.</param>
         public void DistanceSquaredTo(ref Plane plane, out float result)
         {
-            if (GeometricToolsHelper.IntersectPlanePlane(ref this, ref plane, out Ray intr))
-            {
-                result = 0.0f;
-            }
-            else
-            {
-                Vector3 p0Origin = Origin;
-                Vector3 p1Origin = plane.Origin;
-                Vector3.DistanceSquared(ref p1Origin, ref p0Origin, out result);
-            }
+            GeometricToolsHelper.DistanceSegmentPlane(ref plane, ref this, out Vector3 ptOnPlane, out Vector3 ptOnSegment, out result);
         }
 
         /// <summary>
@@ -966,7 +911,7 @@
         /// <returns>Distance squared between the two objects.</returns>
         public float DistanceSquaredTo(Triangle triangle)
         {
-            GeometricToolsHelper.DistancePlaneTriangle(ref triangle, ref this, out Vector3 ptOnTriangle, out Vector3 ptOnPlane, out float sqrDist);
+            GeometricToolsHelper.DistanceSegmentTriangle(ref triangle, ref this, out Vector3 ptOnTriangle, out Vector3 ptOnSegment, out float sqrDist);
             return sqrDist;
         }
 
@@ -977,7 +922,7 @@
         /// <param name="result">Distance squared between the two objects.</param>
         public void DistanceSquaredTo(ref Triangle triangle, out float result)
         {
-            GeometricToolsHelper.DistancePlaneTriangle(ref triangle, ref this, out Vector3 ptOnTriangle, out Vector3 ptOnPlane, out result);
+            GeometricToolsHelper.DistanceSegmentTriangle(ref triangle, ref this, out Vector3 ptOnTriangle, out Vector3 ptOnSegment, out result);
         }
 
         /// <summary>
@@ -1013,8 +958,8 @@
         /// <returns>Closest point on this object.</returns>
         public Vector3 ClosestPointTo(Vector3 point)
         {
-            GeometricToolsHelper.DistancePointPlane(ref this, ref point, out Vector3 ptOnPlane, out float sqrDist);
-            return ptOnPlane;
+            GeometricToolsHelper.DistancePointSegment(ref point, ref this, out Vector3 ptOnSegment, out float segParam, out float sqrDist);
+            return ptOnSegment;
         }
 
         /// <summary>
@@ -1024,7 +969,7 @@
         /// <param name="result">Closest point on this object.</param>
         public void ClosestPointTo(ref Vector3 point, out Vector3 result)
         {
-            GeometricToolsHelper.DistancePointPlane(ref this, ref point, out result, out float sqrDist);
+            GeometricToolsHelper.DistancePointSegment(ref point, ref this, out result, out float segParam, out float sqrDist);
         }
 
         /// <summary>
@@ -1035,7 +980,7 @@
         /// <param name="squaredDistance">Squared distance between the two objects.</param>
         public void ClosestPointTo(ref Vector3 point, out Vector3 result, out float squaredDistance)
         {
-            GeometricToolsHelper.DistancePointPlane(ref this, ref point, out result, out squaredDistance);
+            GeometricToolsHelper.DistancePointSegment(ref point, ref this, out result, out float segParam, out squaredDistance);
         }
 
         /// <summary>
@@ -1045,8 +990,7 @@
         /// <returns>Closest approach segment between the two objects.</returns>
         public Segment ClosestApproachSegment(Ray ray)
         {
-            Segment result;
-            GeometricToolsHelper.DistanceRayPlane(ref this, ref ray, out result.StartPoint, out result.EndPoint, out float sqrDist);
+            ClosestApproachSegment(ref ray, out Segment result);
             return result;
         }
 
@@ -1057,7 +1001,7 @@
         /// <param name="result">Closest approach segment between the two objects.</param>
         public void ClosestApproachSegment(ref Ray ray, out Segment result)
         {
-            GeometricToolsHelper.DistanceRayPlane(ref this, ref ray, out result.StartPoint, out result.EndPoint, out float sqrDist);
+            ClosestApproachSegment(ref ray, out result, out float squaredDistance);
         }
 
         /// <summary>
@@ -1068,7 +1012,18 @@
         /// <param name="squaredDistance">Squared distance between the two objects.</param>
         public void ClosestApproachSegment(ref Ray ray, out Segment result, out float squaredDistance)
         {
-            GeometricToolsHelper.DistanceRayPlane(ref this, ref ray, out result.StartPoint, out result.EndPoint, out squaredDistance);
+            GeometricToolsHelper.DistanceRaySegment(ref ray, ref this, out float rayParam, out float segParam, out squaredDistance);
+
+            // Calculate point along segment;
+            Vector3.Subtract(ref EndPoint, ref StartPoint, out Vector3 dir);
+            dir.Normalize();
+
+            Vector3.Multiply(ref dir, segParam, out result.StartPoint);
+            Vector3.Add(ref result.StartPoint, ref StartPoint, out result.StartPoint);
+
+            // Calculate point along ray
+            Vector3.Multiply(ref ray.Direction, rayParam, out result.EndPoint);
+            Vector3.Add(ref result.EndPoint, ref ray.Origin, out result.EndPoint);
         }
 
         /// <summary>
@@ -1078,8 +1033,7 @@
         /// <returns>Closest approach segment between the two objects.</returns>
         public Segment ClosestApproachSegment(Segment segment)
         {
-            Segment result;
-            GeometricToolsHelper.DistanceSegmentPlane(ref this, ref segment, out result.StartPoint, out result.EndPoint, out float sqrDist);
+            ClosestApproachSegment(ref segment, out Segment result, out float squaredDistance);
             return result;
         }
 
@@ -1090,7 +1044,7 @@
         /// <param name="result">Closest approach segment between the two objects.</param>
         public void ClosestApproachSegment(ref Segment segment, out Segment result)
         {
-            GeometricToolsHelper.DistanceSegmentPlane(ref this, ref segment, out result.StartPoint, out result.EndPoint, out float sqrDist);
+            ClosestApproachSegment(ref segment, out result, out float squaredDistance);
         }
 
         /// <summary>
@@ -1101,7 +1055,21 @@
         /// <param name="squaredDistance">Squared distance between the two objects.</param>
         public void ClosestApproachSegment(ref Segment segment, out Segment result, out float squaredDistance)
         {
-            GeometricToolsHelper.DistanceSegmentPlane(ref this, ref segment, out result.StartPoint, out result.EndPoint, out squaredDistance);
+            GeometricToolsHelper.DistanceSegmentSegment(ref this, ref segment, out float seg0Param, out float seg1Param, out squaredDistance);
+
+            // Calculate point along first segment
+            Vector3.Subtract(ref EndPoint, ref StartPoint, out Vector3 dir);
+            dir.Normalize();
+
+            Vector3.Multiply(ref dir, seg0Param, out result.StartPoint);
+            Vector3.Add(ref result.StartPoint, ref StartPoint, out result.StartPoint);
+
+            // Calculate point along second segment
+            Vector3.Subtract(ref segment.EndPoint, ref segment.StartPoint, out dir);
+            dir.Normalize();
+
+            Vector3.Multiply(ref dir, seg1Param, out dir);
+            Vector3.Add(ref segment.StartPoint, ref dir, out result.EndPoint);
         }
 
         /// <summary>
@@ -1112,17 +1080,7 @@
         public Segment ClosestApproachSegment(Plane plane)
         {
             Segment result;
-            if (GeometricToolsHelper.IntersectPlanePlane(ref this, ref plane, out Ray intr))
-            {
-                result.StartPoint = intr.Origin;
-                result.EndPoint = intr.Origin;
-            }
-            else
-            {
-                result.StartPoint = Origin;
-                result.EndPoint = plane.Origin;
-            }
-
+            GeometricToolsHelper.DistanceSegmentPlane(ref plane, ref this, out result.EndPoint, out result.StartPoint, out float sqrDist);
             return result;
         }
 
@@ -1133,16 +1091,7 @@
         /// <param name="result">Closest approach segment between the two objects.</param>
         public void ClosestApproachSegment(ref Plane plane, out Segment result)
         {
-            if (GeometricToolsHelper.IntersectPlanePlane(ref this, ref plane, out Ray intr))
-            {
-                result.StartPoint = intr.Origin;
-                result.EndPoint = intr.Origin;
-            }
-            else
-            {
-                result.StartPoint = Origin;
-                result.EndPoint = plane.Origin;
-            }
+            GeometricToolsHelper.DistanceSegmentPlane(ref plane, ref this, out result.EndPoint, out result.StartPoint, out float sqrDist);
         }
 
         /// <summary>
@@ -1153,19 +1102,7 @@
         /// <param name="squaredDistance">Squared distance between the two objects.</param>
         public void ClosestApproachSegment(ref Plane plane, out Segment result, out float squaredDistance)
         {
-            if (GeometricToolsHelper.IntersectPlanePlane(ref this, ref plane, out Ray intr))
-            {
-                result.StartPoint = intr.Origin;
-                result.EndPoint = intr.Origin;
-                squaredDistance = 0.0f;
-            }
-            else
-            {
-                result.StartPoint = Origin;
-                result.EndPoint = plane.Origin;
-                squaredDistance = result.Length;
-                squaredDistance *= squaredDistance;
-            }
+            GeometricToolsHelper.DistanceSegmentPlane(ref plane, ref this, out result.EndPoint, out result.StartPoint, out squaredDistance);
         }
 
         /// <summary>
@@ -1176,7 +1113,7 @@
         public Segment ClosestApproachSegment(Triangle triangle)
         {
             Segment result;
-            GeometricToolsHelper.DistancePlaneTriangle(ref triangle, ref this, out result.EndPoint, out result.StartPoint, out float sqrDist);
+            GeometricToolsHelper.DistanceSegmentTriangle(ref triangle, ref this, out result.EndPoint, out result.StartPoint, out float sqrDist);
             return result;
         }
 
@@ -1187,7 +1124,7 @@
         /// <param name="result">Closest approach segment between the two objects.</param>
         public void ClosestApproachSegment(ref Triangle triangle, out Segment result)
         {
-            GeometricToolsHelper.DistancePlaneTriangle(ref triangle, ref this, out result.EndPoint, out result.StartPoint, out float sqrDist);
+            GeometricToolsHelper.DistanceSegmentTriangle(ref triangle, ref this, out result.EndPoint, out result.StartPoint, out float sqrDist);
         }
 
         /// <summary>
@@ -1198,7 +1135,7 @@
         /// <param name="squaredDistance">Squared distance between the two objects.</param>
         public void ClosestApproachSegment(ref Triangle triangle, out Segment result, float squaredDistance)
         {
-            GeometricToolsHelper.DistancePlaneTriangle(ref triangle, ref this, out result.EndPoint, out result.StartPoint, out squaredDistance);
+            GeometricToolsHelper.DistanceSegmentTriangle(ref triangle, ref this, out result.EndPoint, out result.StartPoint, out squaredDistance);
         }
 
         /// <summary>
@@ -1237,62 +1174,63 @@
 
         #endregion
 
+        #region Equality
+
         /// <summary>
-        /// Tests equality between the vector and another vector.
+        /// Indicates whether this instance and a specified object are equal.
         /// </summary>
-        /// <param name="other">Vector to test against</param>
-        /// <returns>True if components are equal, false otherwise.</returns>
-        public bool Equals(Plane other)
+        /// <param name="obj">Another object to compare to.</param>
+        /// <returns>True if <paramref name="obj" /> and this instance are the same type and represent the same value; otherwise, false.</returns>
+        public override bool Equals(Object obj)
         {
-            return Equals(ref other);
+            if (obj is Segment)
+            {
+                return Equals((Segment)obj);
+            }
+
+            return false;
         }
 
         /// <summary>
-        /// Tests equality between the vector and another vector.
+        /// Tests equality between the line and another line.
         /// </summary>
-        /// <param name="other">Vector to test against</param>
-        /// <returns>True if components are equal, false otherwise.</returns>
-        public bool Equals(ref Plane other)
+        /// <param name="other">Other line to test against</param>
+        /// <returns>True if the lines are equal, false otherwise.</returns>
+        public bool Equals(Segment other)
         {
             return Equals(ref other, MathHelper.ZeroTolerance);
         }
 
         /// <summary>
-        /// Tests equality between the vector and another vector.
+        /// Tests equality between the line and another line.
         /// </summary>
-        /// <param name="other">Vector to test against</param>
+        /// <param name="other">Other line to test against</param>
         /// <param name="tolerance">Tolerance</param>
-        /// <returns>True if components are equal within tolerance, false otherwise.</returns>
-        public bool Equals(Plane other, float tolerance)
+        /// <returns>True if the lines are equal, false otherwise.</returns>
+        public bool Equals(Segment other, float tolerance)
         {
             return Equals(ref other, tolerance);
         }
 
         /// <summary>
-        /// Checks inequality between the plane and another plane.
+        /// Tests equality between the line and another line.
         /// </summary>
-        /// <param name="other">Other plane</param>
-        /// <param name="tolerance">Tolerance</param>
-        /// <returns>True if the planes are equal, false otherwise.</returns>
-        public bool Equals(ref Plane other, float tolerance)
+        /// <param name="other">Other line to test against</param>
+        /// <returns>True if the lines are equal, false otherwise.</returns>
+        public bool Equals(ref Segment other)
         {
-            return Normal.Equals(ref other.Normal, tolerance) &&
-                   (Math.Abs(D - other.D) <= tolerance);
+            return Equals(ref other, MathHelper.ZeroTolerance);
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="object" /> is equal to this instance.
+        /// Tests equality between the line and another line.
         /// </summary>
-        /// <param name="obj">The <see cref="object" /> to compare with this instance.</param>
-        /// <returns>True if the specified <see cref="object" /> is equal to this instance; otherwise, false.</returns>
-        public override bool Equals(object obj)
+        /// <param name="other">Other line to test against</param>
+        /// <param name="tolerance">Tolerance</param>
+        /// <returns>True if the lines are equal, false otherwise.</returns>
+        public bool Equals(ref Segment other, float tolerance)
         {
-            if (obj is Plane)
-            {
-                return Equals((Plane)obj);
-            }
-
-            return false;
+            return StartPoint.Equals(ref other.StartPoint, tolerance) && EndPoint.Equals(ref other.EndPoint, tolerance);
         }
 
         /// <summary>
@@ -1303,17 +1241,21 @@
         {
             unchecked
             {
-                return Normal.GetHashCode() + D.GetHashCode();
+                return StartPoint.GetHashCode() + EndPoint.GetHashCode();
             }
         }
-        
+
+        #endregion
+
+        #region ToString
+
         /// <summary>
         /// Returns a <see cref="string" /> that represents this instance.
         /// </summary>
         /// <returns>A <see cref="string" /> that represents this instance.</returns>
         public override string ToString()
         {
-            return ToString("G", CultureInfo.CurrentCulture);
+            return ToString("G");
         }
 
         /// <summary>
@@ -1323,7 +1265,7 @@
         /// <returns>A <see cref="string" /> that represents this instance.</returns>
         public string ToString(string format)
         {
-            return ToString(format, CultureInfo.CurrentCulture);
+            return ToString("G", CultureInfo.CurrentCulture);
         }
 
         /// <summary>
@@ -1333,6 +1275,11 @@
         /// <returns>A <see cref="string" /> that represents this instance.</returns>
         public string ToString(IFormatProvider formatProvider)
         {
+            if (formatProvider == null)
+            {
+                return ToString();
+            }
+
             return ToString("G", formatProvider);
         }
 
@@ -1354,8 +1301,12 @@
                 return ToString(formatProvider);
             }
 
-            return string.Format(formatProvider, "Normal: {0}, D: {1}, Origin: {2}", new object[] { Normal.ToString(format, formatProvider), D.ToString(format, formatProvider), Origin.ToString(format, formatProvider) });
+            return string.Format(formatProvider, "Start: ({0}), End: ({1}), Length: {2}", new object[] { StartPoint.ToString(format, formatProvider), EndPoint.ToString(format, formatProvider), Length.ToString(format, formatProvider) });
         }
+
+        #endregion
+
+        #region IPrimitiveValue
 
         /// <summary>
         /// Writes the primitive data to the output.
@@ -1363,8 +1314,8 @@
         /// <param name="output">Primitive writer</param>
         void IPrimitiveValue.Write(IPrimitiveWriter output)
         {
-            output.Write("Normal", Normal);
-            output.Write("D", D);
+            output.Write("Start", StartPoint);
+            output.Write("End", EndPoint);
         }
 
         /// <summary>
@@ -1373,8 +1324,10 @@
         /// <param name="input">Primitive reader</param>
         void IPrimitiveValue.Read(IPrimitiveReader input)
         {
-            Normal = input.Read<Vector3>();
-            D = input.ReadSingle();
+            StartPoint = input.Read<Vector3>();
+            EndPoint = input.Read<Vector3>();
         }
+
+        #endregion
     }
 }
