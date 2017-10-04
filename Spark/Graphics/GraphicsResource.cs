@@ -157,6 +157,25 @@
         }
 
         /// <summary>
+        /// Checks if writing to a resource is permitted with a deferred render context. Writing is valid if its the immediate
+        /// context, or if deferred and the resource is a dynamic resource.
+        /// </summary>
+        /// <param name="renderContext">The current render context</param>
+        /// <param name="usage">Usage of the resource</param>
+        protected void ThrowIfDefferedSetDataIsNotPermitted(IRenderContext renderContext, ResourceUsage usage)
+        {
+            if (renderContext == null)
+            {
+                throw new ArgumentNullException(nameof(renderContext), "Render context cannot be  null");
+            }
+
+            if (!renderContext.IsImmediateContext && usage != ResourceUsage.Dynamic)
+            {
+                throw new SparkGraphicsException("Deferred set data must be dynamic");
+            }
+        }
+
+        /// <summary>
         /// Checks if the resource was disposed and if so, throws an ObjectDisposedException.
         /// </summary>
         protected void ThrowIfDisposed()

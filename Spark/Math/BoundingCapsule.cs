@@ -6,6 +6,7 @@
 
     using Core;
     using Content;
+    using Graphics.Geometry;
 
     /// <summary>
     /// Represents a Bounding Capsule that is a cylinder capped with two half spheres. The capsule is defined by a center line segment and a radius.

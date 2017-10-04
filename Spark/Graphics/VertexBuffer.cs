@@ -51,7 +51,7 @@
         public int VertexCount => VertexBufferImplementation.VertexCount;
 
         /// <summary>
-        /// Gets the vertex buffer implementation
+        /// Gets or sets the vertex buffer implementation
         /// </summary>
         private IVertexBufferImplementation VertexBufferImplementation
         {

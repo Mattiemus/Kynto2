@@ -4,6 +4,7 @@
     using System.Runtime.CompilerServices;
 
     using Core;
+    using Graphics.Geometry;
 
     /// <summary>
     /// Helper methods for intersection and distance queries. Algorithms adapted from Schneider/Eberly's "Geometric Tools for Computer Graphics" cookbook unless otherwise

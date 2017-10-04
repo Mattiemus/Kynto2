@@ -1,4 +1,4 @@
-﻿namespace Spark.Core
+﻿namespace Spark.Graphics.Geometry
 {
     using System;
     using System.Linq;
@@ -6,7 +6,7 @@
     using System.Collections.Generic;
 
     using Content;
-    using Interop;
+    using Core;
 
     /// <summary>
     /// A lightweight wrapper for index data, which may be in a 32-bit or 16-bit format. This wrapper allows clients to iterate over index data regardless of

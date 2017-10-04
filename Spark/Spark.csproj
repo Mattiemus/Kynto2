@@ -116,8 +116,8 @@
     <Compile Include="Core\IGameTimer.cs" />
     <Compile Include="Core\INamable.cs" />
     <Compile Include="Core\INamed.cs" />
-    <Compile Include="Core\IndexData.cs" />
-    <Compile Include="Core\IndexFormat.cs" />
+    <Compile Include="Graphics\Geometry\IndexData.cs" />
+    <Compile Include="Graphics\IndexFormat.cs" />
     <Compile Include="Core\Interop\MemoryHelper.cs" />
     <Compile Include="Core\Interop\NativeMethods.cs" />
     <Compile Include="Core\Interop\RawBuffer.cs" />
@@ -131,6 +131,7 @@
     <Compile Include="Core\SparkException.cs" />
     <Compile Include="Core\MappedDataBuffer.cs" />
     <Compile Include="Graphics\ClearOptions.cs" />
+    <Compile Include="Graphics\DataWriteOptions.cs" />
     <Compile Include="Graphics\Effect.cs" />
     <Compile Include="Graphics\EffectConstantBufferCollection.cs" />
     <Compile Include="Graphics\EffectParameterClass.cs" />
@@ -150,12 +151,16 @@
     <Compile Include="Graphics\Implementation\IEffectImplementationFactory.cs" />
     <Compile Include="Graphics\Implementation\IGraphicsResourceImplementation.cs" />
     <Compile Include="Graphics\Implementation\IGraphicsResourceImplementationFactory.cs" />
+    <Compile Include="Graphics\Implementation\IIndexBufferImplementation.cs" />
+    <Compile Include="Graphics\Implementation\IIndexBufferImplementationFactory.cs" />
     <Compile Include="Graphics\Implementation\ImplementationFactoryCollection.cs" />
     <Compile Include="Graphics\Implementation\IVertexBufferImplementation.cs" />
     <Compile Include="Graphics\Implementation\IVertexBufferImplementationFactory.cs" />
+    <Compile Include="Graphics\IndexBuffer.cs" />
     <Compile Include="Graphics\IRenderContext.cs" />
     <Compile Include="Graphics\IRenderSystem.cs" />
     <Compile Include="Graphics\IShaderResource.cs" />
+    <Compile Include="Graphics\ResourceUsage.cs" />
     <Compile Include="Graphics\ShaderMacro.cs" />
     <Compile Include="Graphics\ShaderResourceType.cs" />
     <Compile Include="Graphics\ShaderStage.cs" />
@@ -218,7 +223,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Application\Implementation\" />
-    <Folder Include="Graphics\Geometry\" />
     <Folder Include="Graphics\Lights\" />
     <Folder Include="Graphics\Materials\" />
     <Folder Include="Graphics\Renderer\" />

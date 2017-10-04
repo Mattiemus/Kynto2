@@ -11,6 +11,11 @@
     public interface IRenderContext : IDisposable
     {
         /// <summary>
+        /// Gets if the render context is immediate. If false, then it is deferred.
+        /// </summary>
+        bool IsImmediateContext { get; }
+
+        /// <summary>
         /// Binds the specified vertex buffer to the first slot and the remaining slots are set to null. A value of null will unbind all currently bound buffers.
         /// </summary>
         /// <param name="vertexBuffer">Vertex buffer to bind.</param>

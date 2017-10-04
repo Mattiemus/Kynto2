@@ -5,6 +5,7 @@
 
     using Core;
     using Content;
+    using Graphics.Geometry;
 
     /// <summary>
     /// Represents an orthogonal view frustum. The frustum is defined by six planes (left, right, top, bottom, near, and far in that order) and looks

@@ -25,6 +25,11 @@
         }
 
         /// <summary>
+        /// Gets if the render context is immediate. If false, then it is deferred.
+        /// </summary>
+        public bool IsImmediateContext => true;
+
+        /// <summary>
         /// Gets the parent render system
         /// </summary>
         internal OpenGLRenderSystem OpenGLRenderSystem { get; }
@@ -33,7 +38,7 @@
         /// Gets the state manager instance
         /// </summary>
         internal OpenGLState OpenGLState { get; }
-
+        
         /// <summary>
         /// Binds the specified vertex buffer to the first slot and the remaining slots are set to null. A value of null will unbind all currently bound buffers.
         /// </summary>

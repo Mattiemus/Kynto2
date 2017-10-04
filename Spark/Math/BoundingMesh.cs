@@ -4,6 +4,7 @@
 
     using Core;
     using Content;
+    using Graphics.Geometry;
 
     public sealed class BoundingMesh : BoundingVolume
     {

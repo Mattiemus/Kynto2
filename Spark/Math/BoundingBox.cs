@@ -6,6 +6,7 @@
 
     using Core;
     using Content;
+    using Graphics.Geometry;
 
     /// <summary>
     /// Represents an Axis-Aligned Bounding Box. The box is defined by extents from its center along the XYZ standard axes.
