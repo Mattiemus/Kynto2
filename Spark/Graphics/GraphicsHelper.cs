@@ -7,7 +7,7 @@
     /// <summary>
     /// General graphics helper
     /// </summary>
-    public static class GraphicsHelpers
+    public static class GraphicsHelper
     {
         /// <summary>
         /// Gets a render system from the service provider.

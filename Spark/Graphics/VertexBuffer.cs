@@ -9,12 +9,12 @@
     /// Represents a buffer of vertices that exists on the GPU. A vertex is made up of individual attributes such as a position
     /// and other properties like colors, texture coordinates, or normals.
     /// </summary>
-    public sealed class VertexBuffer : GraphicsResource
+    public class VertexBuffer : GraphicsResource
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="VertexBuffer"/> class.
         /// </summary>
-        private VertexBuffer()
+        protected VertexBuffer()
         {
         }
 
@@ -193,7 +193,7 @@
         /// </summary>
         /// <param name="vertexLayout">The vertex layout that describes the data.</param>
         /// <param name="vertexCount">The number of vertices the buffer will contain.</param>
-        private void ValidateCreationParameters(VertexLayout vertexLayout, int vertexCount)
+        protected void ValidateCreationParameters(VertexLayout vertexLayout, int vertexCount)
         {
             if (vertexLayout == null)
             {
@@ -211,7 +211,7 @@
         /// </summary>
         /// <param name="vertexLayout">The vertex layout that describes the data.</param>
         /// <param name="data">The interleaved vertex data to initialize the vertex buffer with.</param>
-        private void ValidateCreationParameters(VertexLayout vertexLayout, IReadOnlyDataBuffer data)
+        protected void ValidateCreationParameters(VertexLayout vertexLayout, IReadOnlyDataBuffer data)
         {
             if (vertexLayout == null)
             {

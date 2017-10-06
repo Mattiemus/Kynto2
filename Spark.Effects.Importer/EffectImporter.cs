@@ -60,7 +60,7 @@
                 throw new SparkContentException(errorString.ToString());
             }
 
-            return new Effect(GraphicsHelpers.GetRenderSystem(contentManager.ServiceProvider), result.EffectData);
+            return new Effect(GraphicsHelper.GetRenderSystem(contentManager.ServiceProvider), result.EffectData);
         }
 
         /// <summary>
@@ -94,7 +94,7 @@
                     throw new SparkContentException(errorString.ToString());
                 }
 
-                return new Effect(GraphicsHelpers.GetRenderSystem(contentManager.ServiceProvider), result.EffectData);
+                return new Effect(GraphicsHelper.GetRenderSystem(contentManager.ServiceProvider), result.EffectData);
             }
         }
     }

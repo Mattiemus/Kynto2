@@ -1,13 +1,20 @@
 ﻿namespace Spark.OpenGL.Graphics
 {
+    using System;
+    using System.Collections.Generic;
+
     using Spark.Graphics;
     using Spark.Utilities;
 
+    using Core;
     using Math;
     using Implementation;
     
     using OGL = OpenTK.Graphics.OpenGL;
 
+    /// <summary>
+    /// Render context for the OpenGL renderer
+    /// </summary>
     public sealed class OpenGLRenderContext : BaseDisposable, IRenderContext
     {
         private readonly VertexArrayObject _vao;
@@ -20,14 +27,11 @@
         {
             OpenGLState = new OpenGLState();
 
+            RenderSystem = renderSystem;
+
             _vao = new VertexArrayObject();
             OGL.GL.BindVertexArray(_vao.ResourceId);
         }
-
-        /// <summary>
-        /// Gets if the render context is immediate. If false, then it is deferred.
-        /// </summary>
-        public bool IsImmediateContext => true;
 
         /// <summary>
         /// Gets the parent render system
@@ -38,7 +42,261 @@
         /// Gets the state manager instance
         /// </summary>
         internal OpenGLState OpenGLState { get; }
+
+        /// <summary>
+        /// Event for when the render context is in the process of being disposed.
+        /// </summary>
+        public event TypedEventHandler<IRenderContext, EventArgs> Disposing;
+
+        /// <summary>
+        /// Gets if the render context is immediate. If false, then it is deferred.
+        /// </summary>
+        public bool IsImmediateContext => true;
+
+        /// <summary>
+        /// Gets the render system that this context belongs to.
+        /// </summary>
+        public IRenderSystem RenderSystem { get; }
         
+        /// <summary>
+        /// Gets or sets the blend state. By default, this is <see cref="Spark.Graphics.BlendState.Opaque"/>.
+        /// </summary>
+        public BlendState BlendState
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the rasterizer state. By default, this is <see cref="Spark.Graphics.RasterizerState.CullBackClockwiseFront"/>.
+        /// </summary>
+        public RasterizerState RasterizerState
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the depth stencil state. By default, this is <see cref="Spark.Graphics.DepthStencilState.Default"/>.
+        /// </summary>
+        public DepthStencilState DepthStencilState
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the currently enforced render state. If a state is enforced, then the currently active one is preserved and subsequent state setting
+        /// is filtered.
+        /// </summary>
+        public EnforcedRenderState EnforcedRenderState
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the rectangle used for scissor testing, if it is enabled.
+        /// </summary>
+        public Rectangle ScissorRectangle
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the blend factor which is a constant color used for alpha blending. By default, this value is <see cref="Color.White"/>. This is
+        /// a "high frequency" render state and setting a blend state to the context will also set this value.
+        /// </summary>
+        public Color BlendFactor
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the bitmask which defines which samples can be written during multisampling. By default, this value is -1 (0xffffffff). This is
+        /// a "high frequency" render state and setting a blend state to the context will also set this value.
+        /// </summary>
+        public int BlendSampleMask
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the reference value for stencil testing. By default, this value is 0. This is a "high frequency" render state and setting a 
+        /// depth stencil state to the context will also set this value.
+        /// </summary>
+        public int ReferenceStencil
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the currently active camera. The camera controls the viewport which identifies the portion of the 
+        /// currently bound render target which is being rendered to.
+        /// </summary>
+        public Camera Camera
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the currently active backbuffer (swapchain). If render targets are set to null, the backbuffer is set as the current render target.
+        /// </summary>
+        public SwapChain BackBuffer
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>
+        /// Gets the shader stage corresponding to the enumeration type. If not supported, this will return null. A shader stage manages
+        /// resources that can be bound to that particular stage in the pipeline.
+        /// </summary>
+        /// <param name="shaderStage">Shader stage type</param>
+        /// <returns>The shader stage, if it exists. Otherwise null.</returns>
+        public IShaderStage GetShaderStage(ShaderStage shaderStage)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets all supported shader stages. A shader stage manages
+        /// resources that can be bound to that particular stage in the pipeline.
+        /// </summary>
+        /// <returns>All supported shader stages.</returns>
+        public IEnumerable<IShaderStage> GetShaderStages()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Queries if the specified shader stage type is supported or not. A shader stage manages
+        /// resources that can be bound to that particular stage in the pipeline.
+        /// </summary>
+        /// <param name="shaderStage">Shader stage type</param>
+        /// <returns>True if the shader stage is supported, false otherwise.</returns>
+        public bool IsShaderStageSupported(ShaderStage shaderStage)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets a render extension of the specified type. Render extensions extend the functionality of a render context with platform-specific
+        /// functionality which are not supported by the engine core.
+        /// </summary>
+        /// <typeparam name="T">Type of render extension.</typeparam>
+        /// <returns>The render extension, if registered, otherwise null.</returns>
+        public T GetExtension<T>() where T : IRenderContextExtension
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets all supported render extensions. Render extensions extend the functionality of a render context with platform-specific
+        /// functionality which are not supported by the engine core.
+        /// </summary>
+        /// <returns>All supported render extensions.</returns>
+        public IEnumerable<IRenderContextExtension> GetExtensions()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Queries if render extension of the specified type is supported or not. Render extensions extend the functionality of a render context with 
+        /// platform-specific functionality which are not supported by the engine core.
+        /// </summary>
+        /// <typeparam name="T">Type of render extension.</typeparam>
+        /// <returns>True if the extension is supported, false otherwise.</returns>
+        public bool IsExtensionSupported<T>() where T : IRenderContextExtension
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Executes the command list by playbacking the recorded GPU commands contained in the list.
+        /// </summary>
+        /// <param name="commandList">Command list to execute</param>
+        /// <param name="restoreImmediateContextState">True if the render context state should be preserved or not. If true, the context state is saved and then restored
+        /// after playback. Typically this is set to false to prevent unnecessary state setting. If false, the context state returns to the defautl state (e.g. as if ClearState was called).</param>
+        public void ExecuteCommandList(ICommandList commandList, bool restoreImmediateContextState)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Binds the index buffer to the render context. A value of null will unbind the currently bound index buffer.
+        /// </summary>
+        /// <param name="indexBuffer">Index buffer to bind.</param>
+        public void SetIndexBuffer(IndexBuffer indexBuffer)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Binds the specified vertex buffer to the first slot and the remaining slots are set to null. A value of null will unbind all currently bound buffers.
         /// </summary>
@@ -55,9 +313,106 @@
         }
 
         /// <summary>
-        /// Clears all bounded render targets to the specified color
+        /// Binds the specified number of vertex buffers, starting at the first slot. Any remaining slots are set to null. A value of null
+        /// will unbind all currently bound buffers.
         /// </summary>
-        /// <param name="color">Color to clear to</param>
+        /// <param name="vertexBuffers">Vertexbuffers to bind.</param>
+        public void SetVertexBuffers(params VertexBufferBinding[] vertexBuffers)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Binds the specified stream output buffer to the first slot and the remaining slots are set to null. A stream output buffer cannot be bound 
+        /// as both input and output at the same time. A value of null will unbind all currently bound buffers.
+        /// </summary>
+        /// <param name="streamOutputBuffer">Stream output buffer to bind.</param>
+        public void SetStreamOutputTarget(StreamOutputBufferBinding streamOutputBuffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Binds the specified number of stream output buffers, starting at the first slot. Any remaining slots are set to null. A stream output buffer cannot
+        /// be bound as both input and output at the same time. A value of null will unbind all currently bound buffers.
+        /// </summary>
+        /// <param name="streamOutputBuffers">Stream output buffers to bind.</param>
+        public void SetStreamOutputTargets(params StreamOutputBufferBinding[] streamOutputBuffers)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Binds the specified render target to the first slot and the remaining slots are set to null. A value of null will unbind all currently bound
+        /// render targets.
+        /// </summary>
+        /// <param name="options">Options when setting the render target.</param>
+        /// <param name="renderTarget">Render target to bind.</param>
+        public void SetRenderTarget(SetTargetOptions options, IRenderTarget renderTarget)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Binds the specified number of render targets, starting at the first slot. Any remaining slots are set to null. A render target cannot be bound
+        /// as both input and output at the same time. A value of null will unbind all currently
+        /// bound render targets.
+        /// </summary>
+        /// <param name="options">Options when setting the render targets.</param>
+        /// <param name="renderTargets">Render targets to bind.</param>
+        public void SetRenderTargets(SetTargetOptions options, params IRenderTarget[] renderTargets)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets the currently bound index buffer, or null if one is not bound
+        /// </summary>
+        /// <returns>Currently bound index buffer.</returns>
+        public IndexBuffer GetIndexBuffer()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets the currently bound vertex buffers.
+        /// </summary>
+        /// <returns>Currently bound vertex buffers.</returns>
+        public VertexBufferBinding[] GetVertexBuffers()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets the currently bound stream output buffers.
+        /// </summary>
+        /// <returns>Currently bound stream output buffers.</returns>
+        public StreamOutputBufferBinding[] GetStreamOutputTargets()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets the currently bound render targets.
+        /// </summary>
+        /// <returns>Currently bound render targets.</returns>
+        public IRenderTarget[] GetRenderTargets()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Clears the state of the context to the default. This includes all render states, bound resources and targets, and other properties.
+        /// </summary>
+        public void ClearState()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Clears all bounded render targets to the specified color.
+        /// </summary>
+        /// <param name="color">Color to clear to.</param>
         public void Clear(Color color)
         {
             Clear(ClearOptions.All, color, 1.0f, 0);
@@ -89,6 +444,62 @@
             OGL.GL.DrawArrays(OpenGLHelper.ToNative(primitiveType), vertexCount, startVertexIndex);
         }
 
+        /// <summary>
+        /// Draws indexed, non-instanced geometry.
+        /// </summary>
+        /// <param name="primitiveType">Type of primitives to draw.</param>
+        /// <param name="indexCount">Number of indices to draw.</param>
+        /// <param name="startIndex">Starting index in the index buffer at which to read vertex indices from.</param>
+        /// <param name="baseVertexOffset">Offset to add to each index before reading a vertex from a vertex buffer.</param>
+        public void DrawIndexed(PrimitiveType primitiveType, int indexCount, int startIndex, int baseVertexOffset)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Draws indexed, instanced geometry.
+        /// </summary>
+        /// <param name="primitiveType">Type of primitives to draw.</param>
+        /// <param name="indexCountPerInstance">Number of indices per instance to draw.</param>
+        /// <param name="instanceCount">Number of instances to draw.</param>
+        /// <param name="startIndex">Starting index in the index buffer at which to read vertex indices from.</param>
+        /// <param name="baseVertexOffset">Offset to add to each index before reading a vertex from a vertex buffer.</param>
+        /// <param name="startInstanceOffset">Offset to add to each index before reading per-instance data from a vertex buffer.</param>
+        public void DrawIndexedInstanced(PrimitiveType primitiveType, int indexCountPerInstance, int instanceCount, int startIndex, int baseVertexOffset, int startInstanceOffset)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Draws non-indexed, instanced geometry.
+        /// </summary>
+        /// <param name="primitiveType">Type of primitives to draw.</param>
+        /// <param name="vertexCountPerInstance">Number of vertices per instance to draw.</param>
+        /// <param name="instanceCount">Number of instances to draw.</param>
+        /// <param name="startVertexIndex">Starting index in a vertex buffer at which to read vertices from.</param>
+        /// <param name="startInstanceOffset">Offset to add to each index before reading per-instance data from a vertex buffer.</param>
+        public void DrawInstanced(PrimitiveType primitiveType, int vertexCountPerInstance, int instanceCount, int startVertexIndex, int startInstanceOffset)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Draws geometry of an unknown size that has been streamed out.
+        /// </summary>
+        /// <param name="primitiveType">Type of primitives to draw.</param>
+        public void DrawAuto(PrimitiveType primitiveType)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Sends queued up commands in the command buffer to the GPU.
+        /// </summary>
+        public void Flush()
+        {
+            throw new NotImplementedException();
+        }
+                
         /// <summary>
         /// Disposes the object instance
         /// </summary>

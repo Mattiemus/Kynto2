@@ -23,6 +23,43 @@
         IRenderContext ImmediateContext { get; }
 
         /// <summary>
+        /// Gets the graphics adapter the render system was created with.
+        /// </summary>
+        IGraphicsAdapter Adapter { get; }
+
+        /// <summary>
+        /// Gets if command lists are supported or not. If not, then creating deferred render contexts will fail.
+        /// </summary>
+        bool AreCommandListsSupported { get; }
+
+        /// <summary>
+        /// Gets the provider for predefined blend states.
+        /// </summary>
+        IPredefinedBlendStateProvider PredefinedBlendStates { get; }
+
+        /// <summary>
+        /// Gets the provider for predefined depthstencil states.
+        /// </summary>
+        IPredefinedDepthStencilStateProvider PredefinedDepthStencilStates { get; }
+
+        /// <summary>
+        /// Gets the provider for predefined rasterizer states.
+        /// </summary>
+        IPredefinedRasterizerStateProvider PredefinedRasterizerStates { get; }
+
+        /// <summary>
+        /// Gets the provider for predefined sampler states.
+        /// </summary>
+        IPredefinedSamplerStateProvider PredefinedSamplerStates { get; }
+
+        /// <summary>
+        /// Creates a deferred render context. A deferred context is a thread-safe context that can be used to record graphics commands on a different
+        /// thread other than the main rendering one.
+        /// </summary>
+        /// <returns>A newly created deferred render context.</returns>
+        IDeferredRenderContext CreateDeferredRenderContext();
+
+        /// <summary>
         /// Gets the implementation factory of the specified type.
         /// </summary>
         /// <typeparam name="T">Implementation factory type</typeparam>

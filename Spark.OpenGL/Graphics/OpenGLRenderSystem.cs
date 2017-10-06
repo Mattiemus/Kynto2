@@ -1,5 +1,6 @@
 ﻿namespace Spark.OpenGL.Graphics
 {
+    using System;
     using System.Threading;
     using System.Collections;
     using System.Collections.Generic;
@@ -32,6 +33,11 @@
         }
 
         /// <summary>
+        /// Gets the implementation of the immediate context
+        /// </summary>
+        internal OpenGLRenderContext OpenGLImmediateContext { get; }
+
+        /// <summary>
         /// Gets the name of the service.
         /// </summary>
         public string Name => "OpenGL Render System";
@@ -47,9 +53,70 @@
         public IRenderContext ImmediateContext => OpenGLImmediateContext;
 
         /// <summary>
-        /// Gets the implementation of the immediate context
+        /// Gets the graphics adapter the render system was created with.
         /// </summary>
-        internal OpenGLRenderContext OpenGLImmediateContext { get; }
+        public IGraphicsAdapter Adapter
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>
+        /// Gets if command lists are supported or not. If not, then creating deferred render contexts will fail.
+        /// </summary>
+        public bool AreCommandListsSupported
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>
+        /// Gets the provider for predefined blend states.
+        /// </summary>
+        public IPredefinedBlendStateProvider PredefinedBlendStates
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>
+        /// Gets the provider for predefined depthstencil states.
+        /// </summary>
+        public IPredefinedDepthStencilStateProvider PredefinedDepthStencilStates
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>
+        /// Gets the provider for predefined rasterizer states.
+        /// </summary>
+        public IPredefinedRasterizerStateProvider PredefinedRasterizerStates
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>
+        /// Gets the provider for predefined sampler states.
+        /// </summary>
+        public IPredefinedSamplerStateProvider PredefinedSamplerStates
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         /// <summary>
         /// Initializes the service. This is called by the engine when a service is newly registered.
@@ -58,6 +125,16 @@
         public void Initialize(Engine engine)
         {
             // No-op
+        }
+
+        /// <summary>
+        /// Creates a deferred render context. A deferred context is a thread-safe context that can be used to record graphics commands on a different
+        /// thread other than the main rendering one.
+        /// </summary>
+        /// <returns>A newly created deferred render context.</returns>
+        public IDeferredRenderContext CreateDeferredRenderContext()
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

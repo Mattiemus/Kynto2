@@ -499,7 +499,7 @@
         /// <param name="input">Savable reader</param>
         public void Read(ISavableReader input)
         {
-            IRenderSystem renderSystem = GraphicsHelpers.GetRenderSystem(input.ServiceProvider);
+            IRenderSystem renderSystem = GraphicsHelper.GetRenderSystem(input.ServiceProvider);
 
             string name = input.ReadString();
             int indexCount = input.ReadInt32();
