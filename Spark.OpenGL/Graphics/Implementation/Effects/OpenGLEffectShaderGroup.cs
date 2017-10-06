@@ -4,8 +4,6 @@
     using Spark.Graphics;
     using Spark.Graphics.Effects;
     
-    using OGL = OpenTK.Graphics.OpenGL;
-
     /// <summary>
     /// OpenGL implementation of a shader group
     /// </summary>

@@ -208,7 +208,6 @@
     <Compile Include="Graphics\PresentInterval.cs" />
     <Compile Include="Graphics\ProjectionMode.cs" />
     <Compile Include="Graphics\RasterizerState.cs" />
-    <Compile Include="Graphics\RenderContextExtensions.cs" />
     <Compile Include="Graphics\RenderState.cs" />
     <Compile Include="Graphics\RenderStateKey.cs" />
     <Compile Include="Graphics\RenderStateType.cs" />

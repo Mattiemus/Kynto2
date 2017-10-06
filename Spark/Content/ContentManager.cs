@@ -131,7 +131,6 @@
         /// <summary>
         /// Gets or sets the resource repository that the content manager resolves resources from.
         /// </summary>
-        /// <exception cref="ArgumentNullException">Thrown if the value is null.</exception>
         public IResourceRepository ResourceRepository
         {
             get => _repository;

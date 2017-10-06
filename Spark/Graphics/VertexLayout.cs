@@ -72,7 +72,6 @@
         /// </summary>
         /// <param name="index">Zero-based index of the element</param>
         /// <returns>The vertex element</returns>
-        /// <exception cref=" ArgumentOutOfRangeException">Thrown if the index is out of range.</exception>
         public VertexElement this[int index]
         {
             get

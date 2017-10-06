@@ -308,7 +308,6 @@
         /// </summary>
         /// <param name="i">Row index, must be between 0 and 2</param>
         /// <returns>Row vector of the rotation matrix</returns>
-        /// <exception cref="TeslaException">Throws an exception if index is not in range</exception>
         public Vector3 GetRotationVector(int i)
         {
             if (i > 2 || i < 0)

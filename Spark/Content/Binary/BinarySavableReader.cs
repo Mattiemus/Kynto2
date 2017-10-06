@@ -8,7 +8,7 @@
     using Utilities;
 
     /// <summary>
-    /// Savable reader that de-serializes content from the TEBO (Tesla Engine Binary Object) format.
+    /// Savable reader that de-serializes content from the SPBO (Spark Binary Object) format.
     /// </summary>
     public sealed class BinarySavableReader : BinaryPrimitiveReader, ISavableReader
     {

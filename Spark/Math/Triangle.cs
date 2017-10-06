@@ -163,7 +163,6 @@
         /// Gets or sets triangle vertices by a zero-based index, in the order of {A, B, C} where index 0 is Point A.
         /// </summary>
         /// <param name="index">Zero based index.</param>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if the index is out of range.</exception>
         public Vector3 this[int index]
         {
             get

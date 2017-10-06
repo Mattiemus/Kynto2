@@ -3,7 +3,7 @@
     using System.IO;
 
     /// <summary>
-    /// A resource importer that can load <see cref="ISavable"/> objects from the TEBO (Tesla Engine Binary Object) format.
+    /// A resource importer that can load <see cref="ISavable"/> objects from the SPBO (Spark Binary Object) format.
     /// </summary>
     public sealed class BinaryResourceImporter : ResourceImporter<ISavable>
     {

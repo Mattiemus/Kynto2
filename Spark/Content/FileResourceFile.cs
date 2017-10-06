@@ -163,7 +163,6 @@
         /// <summary>
         /// Permanently deletes the resource file.
         /// </summary>
-        /// <exception cref="TeslaContentException">Thrown if the parent repository is not opened or if there was an error in deleting the file.</exception> 
         public void Delete()
         {
             ThrowIfParentNotOpen();
@@ -182,7 +181,6 @@
         /// <summary>
         /// Refreshes information about the resource file.
         /// </summary>
-        /// <exception cref="TeslaContentException">Thrown if the parent repository is not opened or if there was an error in refreshing the file.</exception> 
         public void Refresh()
         {
             ThrowIfParentNotOpen();

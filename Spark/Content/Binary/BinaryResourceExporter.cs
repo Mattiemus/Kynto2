@@ -4,7 +4,7 @@
     using System.IO;
 
     /// <summary>
-    /// A resource exporter that can save <see cref="ISavable"/> objects to the TEBO (Tesla Engine Binary Object) format.
+    /// A resource exporter that can save <see cref="ISavable"/> objects to the SPBO (Spark Binary Object) format.
     /// </summary>
     public sealed class BinaryResourceExporter : ResourceExporter<ISavable>
     {

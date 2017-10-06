@@ -83,7 +83,6 @@
         /// </summary>
         /// <param name="index">Zero-based index.</param>
         /// <returns>The corresponding intersection record.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if the index is less than zero or equal to or greater than the intersection count.</exception>
         public LineIntersectionResult this[int index]
         {
             get

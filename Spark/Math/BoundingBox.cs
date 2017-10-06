@@ -835,8 +835,6 @@
         /// Computes the corners that represent the extremal points of this bounding volume.
         /// </summary>
         /// <param name="corners">Databuffer to contain the points, length equal to the corner count.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown if the corner buffer is null.</exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">Thrown if the corner buffer does not have enough space.</exception>
         protected override void ComputeCorners(IDataBuffer<Vector3> corners)
         {
             if (corners == null)

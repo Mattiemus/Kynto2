@@ -700,8 +700,6 @@
         /// </summary>
         /// <param name="input">Output stream.</param>
         /// <param name="settings">Optional writer settings, if null then default settings are created.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown if the output stream is null.</exception>
-        /// <exception cref="System.ArgumentException">Thrown if the output stream is read-only.</exception>
         protected void InitXmlWriterForStream(Stream output, XmlWriterSettings settings)
         {
             if (output == null)

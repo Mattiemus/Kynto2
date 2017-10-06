@@ -44,8 +44,6 @@
         /// Initializes a new instance of the <see cref="RasterizerState"/> class.
         /// </summary>
         /// <param name="renderSystem">Render system used to create the underlying implementation.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown if the render system is null.</exception>
-        /// <exception cref="TeslaGraphicsException">Thrown if creating the underlying implementation fails or is unsupported, see inner exception for a more detailed error.</exception>
         public RasterizerState(IRenderSystem renderSystem)
         {
             CreateImplementation(renderSystem);

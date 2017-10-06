@@ -9,7 +9,7 @@
     using Utilities;
 
     /// <summary>
-    /// Savable writer that serializes content into the TEBO (Tesla Engine Binary Object) format.
+    /// Savable writer that serializes content into the SPBO (Spark Binary Object) format.
     /// </summary>
     public sealed class BinarySavableWriter : BinaryPrimitiveWriter, ISavableWriter
     {

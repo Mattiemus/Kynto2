@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Graphics\Implementation\Effects\OpenGLEffectParameter.cs" />
     <Compile Include="Graphics\Implementation\Effects\OpenGLEffectShaderGroup.cs" />
     <Compile Include="Graphics\Implementation\Effects\OpenGLShader.cs" />
     <Compile Include="Graphics\Implementation\Effects\OpenGLShaderProgram.cs" />

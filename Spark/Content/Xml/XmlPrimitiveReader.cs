@@ -939,8 +939,6 @@
         /// </summary>
         /// <param name="input">Input stream.</param>
         /// <param name="settings">Optional reader settings, if null then default settings are created.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown if the input stream is null.</exception>
-        /// <exception cref="System.ArgumentException">Thrown if the input stream is write-only.</exception>
         protected void InitXmlReaderForStream(Stream input, XmlReaderSettings settings)
         {
             if (input == null)

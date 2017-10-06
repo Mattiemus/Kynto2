@@ -57,7 +57,6 @@
         /// A null resource cannot be opened.
         /// </summary>
         /// <returns>The resource stream.</returns>
-        /// <exception cref="IOException">Always gets thrown, because this is a null resource.</exception>
         public Stream Open()
         {
             return Open(ResourceFileMode.Open, ResourceFileAccess.Read, ResourceFileShare.Read);
@@ -68,7 +67,6 @@
         /// </summary>
         /// <param name="fileMode">Specifies the mode in which to open the file.</param>
         /// <returns>Resource stream</returns>
-        /// <exception cref="IOException">Always gets thrown, because this is a null resource.</exception>
         public Stream Open(ResourceFileMode fileMode)
         {
             return Open(fileMode, ResourceFileAccess.Read, ResourceFileShare.Read);
@@ -80,7 +78,6 @@
         /// <param name="fileMode">Specifies the mode in which to open the file.</param>
         /// <param name="accessMode">Specifies the read or write access of the file.</param>
         /// <returns>Resource stream</returns>
-        /// <exception cref="IOException">Always gets thrown, because this is a null resource.</exception>
         public Stream Open(ResourceFileMode fileMode, ResourceFileAccess accessMode)
         {
             return Open(fileMode, accessMode, ResourceFileShare.Read);
@@ -93,7 +90,6 @@
         /// <param name="accessMode">Specifies the read or write access of the file.</param>
         /// <param name="fileShare">Specifies how the same file should be shared with other resource streams</param>
         /// <returns>Resource stream</returns>
-        /// <exception cref="IOException">Always gets thrown, because this is a null resource.</exception>
         public Stream Open(ResourceFileMode fileMode, ResourceFileAccess accessMode, ResourceFileShare fileShare)
         {
             throw new IOException("File does not exist");
@@ -103,7 +99,6 @@
         /// A null resource cannot be opened.
         /// </summary>
         /// <returns>Resource stream</returns>
-        /// <exception cref="IOException">Always gets thrown, because this is a null resource.</exception>
         public Stream OpenWrite()
         {
             return Open(ResourceFileMode.Create, ResourceFileAccess.Write, ResourceFileShare.None);
@@ -113,7 +108,6 @@
         /// A null resource cannot be opened.
         /// </summary>
         /// <returns>Resource stream</returns>
-        /// <exception cref="IOException">Always gets thrown, because this is a null resource.</exception>
         public Stream OpenRead()
         {
             return Open(ResourceFileMode.Open, ResourceFileAccess.Read, ResourceFileShare.Read);
@@ -123,7 +117,6 @@
         /// A null resource cannot be opened.
         /// </summary>
         /// <returns>Resource stream</returns>
-        /// <exception cref="IOException">Always gets thrown, because this is a null resource.</exception>
         public Stream Create()
         {
             throw new IOException("File does not exist");
