@@ -5,7 +5,6 @@
     using System.Collections.Generic;
 
     using Math;
-    using Implementation.Effects;
     
     using OGL = OpenTK.Graphics.OpenGL;
     
@@ -13,7 +12,7 @@
     {
         private OGL.FrontFaceDirection _frontFace;
         private OGL.CullFaceMode? _cullFace;
-        private OpenGLShaderProgram _currentProgram;
+        private int _currentProgram;
         private readonly bool[] _enabledAttributes;
         private readonly Dictionary<OGL.EnableCap, bool> _capabilities = new Dictionary<OGL.EnableCap, bool>();
 
@@ -121,11 +120,11 @@
         /// </summary>
         /// <param name="program">Program to be used</param>
         /// <returns>True if the value needed to be set, false if it was already set</returns>
-        public bool UseProgram(OpenGLShaderProgram program)
+        public bool UseProgram(int program)
         {
             if (!ReferenceEquals(program, _currentProgram))
             {
-                OGL.GL.UseProgram(program.ProgramId);
+                OGL.GL.UseProgram(program);
                 _currentProgram = program;
                 return true;
             }

@@ -1,16 +1,23 @@
 ﻿namespace Spark.OpenGL.Graphics.Implementation.Effects
 {
+    using System.Text;
+    using System.Collections.Generic;
+
     using Spark.Utilities;
     using Spark.Graphics;
     using Spark.Graphics.Effects;
+
+    using OTK = OpenTK.Graphics;
+    using OGL = OpenTK.Graphics.OpenGL;
     
     /// <summary>
     /// OpenGL implementation of a shader group
     /// </summary>
     public sealed class OpenGLEffectShaderGroup : BaseDisposable, IEffectShaderGroup
     {
-        private readonly OpenGLShaderProgram _program;
         private readonly OpenGLEffectImplementation _implementation;
+        private readonly Dictionary<ShaderStage, int> _programShaders;
+        private int _program;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OpenGLEffectShaderGroup"/> class
@@ -20,15 +27,26 @@
         public OpenGLEffectShaderGroup(OpenGLEffectImplementation implementation, EffectData effectData)
         {
             _implementation = implementation;
-
+            _programShaders = new Dictionary<ShaderStage, int>();
+            
             Name = effectData.EffectName;
             ShaderGroupIndex = 0;
 
-            _program = new OpenGLShaderProgram();
-            _program.Attatch(new OpenGLShader(ShaderStage.PixelShader, effectData.PixelShader));
-            _program.Attatch(new OpenGLShader(ShaderStage.VertexShader, effectData.VertexShader));
-            _program.Compile();
+            Initialize(effectData);
+
+            Parameters = new EffectParameterCollection(EnumerateShaderParameters());
+            ConstantBuffers = new EffectConstantBufferCollection();
         }
+
+        /// <summary>
+        /// Gets the collection of parameters
+        /// </summary>
+        internal EffectParameterCollection Parameters { get; }
+
+        /// <summary>
+        /// Gets the collection of constant buffers
+        /// </summary>
+        internal EffectConstantBufferCollection ConstantBuffers { get; }
 
         /// <summary>
         /// Gets the name of the object.
@@ -72,9 +90,9 @@
         /// <returns>True if the group contains a shader that will be bound to the shader stage, false otherwise.</returns>
         public bool ContainsShader(ShaderStage shaderStage)
         {
-            return _program.ContainsShader(shaderStage);
+            return _programShaders.ContainsKey(shaderStage);
         }
-
+        
         /// <summary>
         /// Disposes the object instance
         /// </summary>
@@ -85,10 +103,100 @@
             {
                 return;
             }
+            
+            if (OTK.GraphicsContext.CurrentContext != null && !OTK.GraphicsContext.CurrentContext.IsDisposed)
+            {
+                OGL.GL.DeleteProgram(_program);
 
-            _program.Dispose();
-
+                foreach (KeyValuePair<ShaderStage, int> shaderStage in _programShaders)
+                {
+                    OGL.GL.DeleteShader(shaderStage.Value);
+                }
+                _programShaders.Clear();
+            }
+                        
             base.Dispose(isDisposing);
+        }
+
+        /// <summary>
+        /// Initializes the shader
+        /// </summary>
+        /// <param name="effectData">Effect data to be compiled</param>
+        private void Initialize(EffectData effectData)
+        {
+            _program = OGL.GL.CreateProgram();
+            
+            AttatchShader(ShaderStage.PixelShader, effectData.PixelShader);
+            AttatchShader(ShaderStage.VertexShader, effectData.VertexShader);
+            
+            CompileProgram();
+        }
+        
+        /// <summary>
+        /// Creates, compiles, and attatches a shader
+        /// </summary>
+        /// <param name="shaderStage">Shader stage</param>
+        /// <param name="shaderSource">Shader source</param>
+        /// <returns>Shader resource id</returns>
+        private void AttatchShader(ShaderStage shaderStage, string shaderSource)
+        {
+            int shaderId = OGL.GL.CreateShader(OpenGLHelper.ToNative(shaderStage));
+
+            OGL.GL.ShaderSource(shaderId, shaderSource);
+            OGL.GL.CompileShader(shaderId);
+
+            OGL.GL.GetShader(shaderId, OGL.ShaderParameter.CompileStatus, out int compileStatus);
+            if (compileStatus == 0)
+            {
+                throw new SparkGraphicsException("Could not compile shader");
+            }
+
+            string infoLog = OGL.GL.GetShaderInfoLog(shaderId);
+            if (!string.IsNullOrEmpty(infoLog))
+            {
+                throw new SparkGraphicsException(infoLog);
+            }
+
+            OGL.GL.AttachShader(_program, shaderId);
+            _programShaders.Add(shaderStage, shaderId);
+        }
+
+        /// <summary>
+        /// Compiles the shader program
+        /// </summary>
+        private void CompileProgram()
+        {
+            OGL.GL.LinkProgram(_program);
+            OGL.GL.GetProgram(_program, OGL.GetProgramParameterName.LinkStatus, out int linkStatus);
+            if (linkStatus == 0)
+            {
+                string infoLog = OGL.GL.GetProgramInfoLog(_program);
+                throw new SparkGraphicsException(infoLog);
+            }
+
+            OGL.GL.ValidateProgram(_program);
+            OGL.GL.GetProgram(_program, OGL.GetProgramParameterName.ValidateStatus, out int validationSuccess);
+            if (validationSuccess == 0)
+            {
+                throw new SparkGraphicsException("Could not validate shader program");
+            }
+        }
+
+        /// <summary>
+        /// Enumerates all shader parameters
+        /// </summary>
+        private IEnumerable<OpenGLEffectParameter> EnumerateShaderParameters()
+        {
+            OGL.GL.GetProgram(_program, OGL.GetProgramParameterName.ActiveUniforms, out int uniformCount);
+            OGL.GL.GetProgram(_program, OGL.GetProgramParameterName.ActiveUniformMaxLength, out int maxUniformNameLength);
+
+            for (int i = 0; i < uniformCount; i++)
+            {
+                StringBuilder uniformName = new StringBuilder(maxUniformNameLength);
+                OGL.GL.GetActiveUniform(_program, i, uniformName.Capacity, out int nameLength, out int uniformSize, out OGL.ActiveUniformType uniformType, uniformName);
+
+                yield return new OpenGLEffectParameter(_program, i, uniformSize, uniformType, uniformName.ToString());
+            }            
         }
     }
 }

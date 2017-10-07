@@ -9,7 +9,8 @@
     using Core;
     using Math;
     using Implementation;
-    
+
+    using OTK = OpenTK.Graphics;
     using OGL = OpenTK.Graphics.OpenGL;
 
     /// <summary>
@@ -17,7 +18,7 @@
     /// </summary>
     public sealed class OpenGLRenderContext : BaseDisposable, IRenderContext
     {
-        private readonly VertexArrayObject _vao;
+        private readonly int _vao;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OpenGLRenderContext"/> class.
@@ -29,8 +30,8 @@
 
             RenderSystem = renderSystem;
 
-            _vao = new VertexArrayObject();
-            OGL.GL.BindVertexArray(_vao.ResourceId);
+            _vao = OGL.GL.GenVertexArray();
+            OGL.GL.BindVertexArray(_vao);
         }
 
         /// <summary>
@@ -511,7 +512,10 @@
                 return;
             }
 
-            _vao.Dispose();
+            if (OTK.GraphicsContext.CurrentContext != null && !OTK.GraphicsContext.CurrentContext.IsDisposed)
+            {
+                OGL.GL.DeleteVertexArray(_vao);
+            }
 
             base.Dispose(isDisposing);
         }

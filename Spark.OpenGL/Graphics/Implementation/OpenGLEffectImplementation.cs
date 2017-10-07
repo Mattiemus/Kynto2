@@ -100,15 +100,15 @@
         /// <summary>
         /// Initializes the effect implementation
         /// </summary>
-        protected void Initialize()
+        private void Initialize()
         {
             SortKey = _renderSystem.GetNextUniqueEffectSortKey();
             
             OpenGLEffectShaderGroup shaderGroup = new OpenGLEffectShaderGroup(this, EffectData);
 
             ShaderGroups = new EffectShaderGroupCollection(new [] { shaderGroup });
-            Parameters = new EffectParameterCollection();
-            ConstantBuffers = new EffectConstantBufferCollection();
+            Parameters = new EffectParameterCollection(shaderGroup.Parameters);
+            ConstantBuffers = new EffectConstantBufferCollection(shaderGroup.ConstantBuffers);
         }
     }
 }

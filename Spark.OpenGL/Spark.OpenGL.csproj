@@ -46,18 +46,14 @@
   <ItemGroup>
     <Compile Include="Graphics\Implementation\Effects\OpenGLEffectParameter.cs" />
     <Compile Include="Graphics\Implementation\Effects\OpenGLEffectShaderGroup.cs" />
-    <Compile Include="Graphics\Implementation\Effects\OpenGLShader.cs" />
-    <Compile Include="Graphics\Implementation\Effects\OpenGLShaderProgram.cs" />
     <Compile Include="Graphics\Implementation\OpenGLEffectImplementation.cs" />
     <Compile Include="Graphics\Implementation\OpenGLEffectImplementationFactory.cs" />
     <Compile Include="Graphics\Implementation\OpenGLGraphicsResourceImplementation.cs" />
     <Compile Include="Graphics\Implementation\OpenGLGraphicsResourceImplementationFactory.cs" />
     <Compile Include="Graphics\Implementation\OpenGLVertexBufferImplementation.cs" />
     <Compile Include="Graphics\Implementation\OpenGLVertexBufferImplementationFactory.cs" />
-    <Compile Include="Graphics\Implementation\_OLD\OpenGLGraphicsResource.cs" />
     <Compile Include="Graphics\OpenGLRenderContext.cs" />
     <Compile Include="Graphics\OpenGLState.cs" />
-    <Compile Include="Graphics\Implementation\_OLD\VertexArrayObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Graphics\OpenGLRenderSystem.cs" />
     <Compile Include="Graphics\OpenGLHelper.cs" />

@@ -4,21 +4,40 @@
     using Spark.Graphics;
     using Spark.Math;
 
+    using OGL = OpenTK.Graphics.OpenGL;
+
     /// <summary>
     /// Implementation of a parameter within an OpenGL effect
     /// </summary>
     public sealed class OpenGLEffectParameter : IEffectParameter
     {
+        private readonly int _program;
+        private readonly int _location;
+        private readonly int _sizeInBytes;
+        private readonly OGL.ActiveUniformType _type;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OpenGLEffectParameter"/> class
+        /// </summary>
+        /// <param name="program">Shader program</param>
+        /// <param name="location">Uniform location</param>
+        /// <param name="sizeInBytes">Size of the uniform in bytes</param>
+        /// <param name="type">Type of the uniform</param>
+        /// <param name="name">Name of the uniform</param>
+        public OpenGLEffectParameter(int program, int location, int sizeInBytes, OGL.ActiveUniformType type, string name)
+        {
+            _program = program;
+            _location = location;
+            _sizeInBytes = sizeInBytes;
+            _type = type;
+
+            Name = name;
+        }
+
         /// <summary>
         /// Gets the name of the object.
         /// </summary>
-        public string Name
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public string Name { get; }
 
         /// <summary>
         /// Gets the containing constant buffer, if it exists. This will never exist for resource parameters.
@@ -302,7 +321,7 @@
         /// <param name="value">Matrix to set.</param>
         public void SetValue(Matrix4x4 value)
         {
-            throw new NotImplementedException();
+            SetValue(ref value);
         }
 
         /// <summary>
@@ -311,7 +330,18 @@
         /// <param name="value">Matrix to set.</param>
         public void SetValue(ref Matrix4x4 value)
         {
-            throw new NotImplementedException();
+            // TODO: add type checks
+            // TODO: optimise
+
+            float[] matrixValue = new float[]
+            {
+                value.M11, value.M21, value.M31, value.M41,
+                value.M12, value.M22, value.M32, value.M42,
+                value.M13, value.M23, value.M33, value.M43,
+                value.M14, value.M24, value.M34, value.M44
+            };
+
+            OGL.GL.ProgramUniformMatrix4(_program, _location, 1, false, matrixValue);
         }
 
         /// <summary>
@@ -330,7 +360,7 @@
         /// <param name="value">Matrix to set.</param>
         public void SetValueTranspose(Matrix4x4 value)
         {
-            throw new NotImplementedException();
+            SetValueTranspose(ref value);
         }
 
         /// <summary>
