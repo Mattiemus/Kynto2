@@ -45,6 +45,9 @@
             _shader = _contentManager.Load<Effect>("Content/BasicEffect.effect");
             _shader.CurrentShaderGroup = _shader.ShaderGroups.First();
             
+            Matrix4x4.FromScale(0.5f, out Matrix4x4 scaleMatrix);
+            _shader.Parameters["mvp"].SetValue(scaleMatrix);
+
             _vertexBuffer = new VertexBuffer(
                 _renderer,
                 new VertexLayout(new [] {
@@ -71,10 +74,7 @@
             context.Clear(Color.Indigo);
 
             _shader.CurrentShaderGroup.Apply(context);
-
-            Matrix4x4.FromScale(0.5f, out Matrix4x4 scaleMatrix);
-            _shader.Parameters["mvp"].SetValue(scaleMatrix);
-            
+                        
             context.SetVertexBuffer(_vertexBuffer);
             context.Draw(PrimitiveType.TriangleList, 0, 3);
                         
