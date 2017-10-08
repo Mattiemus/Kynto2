@@ -18,6 +18,31 @@
         int VertexCount { get; }
 
         /// <summary>
+        /// Gets the resource usage of the buffer.
+        /// </summary>
+        ResourceUsage ResourceUsage { get; }
+
+        /// <summary>
+        /// Reads interleaved vertex data from the vertexbuffer and stores it in an array of data buffers. Each data buffer represents
+        /// a single vertex element (in the order declared by the vertex declaration). All data is read from the vertex buffer starting
+        /// from the beginning of the vertex buffer and each data buffer to the length of each data buffer. Each data buffer must have the same length.
+        /// The data buffers must match the vertex declaration in format size and cannot exceed the length of the vertex buffer.
+        /// </summary>
+        /// <param name="data">Array of databuffers representing each vertex attribute that will contain data read from the vertex buffer.</param>
+        void GetInterleavedData(params IDataBuffer[] data);
+
+        /// <summary>
+        /// Writes interleaved vertex data from an array of data buffers into the vertex buffer. Each data buffer represents a single vertex
+        /// element (in the order declared by the vertex declaration). All data is written to the vertex buffer starting from the beginning of the
+        /// vertex buffer and each data buffer to the length of each data buffer. Each data buffer must have the same length. The data buffers 
+        /// must match the vertex declaration in format size and cannot exceed the length of the vertex buffer. For dynamic vertex buffers, this always
+        /// uses the <see cref="DataWriteOptions.Discard"/> flag.
+        /// </summary>
+        /// <param name="renderContext">The current render context.</param> 
+        /// <param name="data">Array of databuffers representing each vertex attribute whose data will be written to the vertex buffer.</param>
+        void SetInterleavedData(IRenderContext renderContext, params IReadOnlyDataBuffer[] data);
+
+        /// <summary>
         /// Reads data from the vertex buffer into the specified data buffer.
         /// </summary>
         /// <typeparam name="T">Type of data to read from the vertex buffer.</typeparam>
@@ -38,6 +63,7 @@
         /// <param name="elementCount">Number of elements to write.</param>
         /// <param name="offsetInBytes">Offset in bytes from the beginning of the vertex buffer to the data.</param>
         /// <param name="vertexStride">Size of an element in bytes.</param>
-        void SetData<T>(IRenderContext renderContext, IReadOnlyDataBuffer<T> data, int startIndex, int elementCount, int offsetInBytes, int vertexStride) where T : struct;
+        /// <param name="writeOptions">Writing options, valid only for dynamic vertex buffers.</param>
+        void SetData<T>(IRenderContext renderContext, IReadOnlyDataBuffer<T> data, int startIndex, int elementCount, int offsetInBytes, int vertexStride, DataWriteOptions writeOptions) where T : struct;
     }
 }

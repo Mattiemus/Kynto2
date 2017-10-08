@@ -44,9 +44,14 @@
         {
             _shader = _contentManager.Load<Effect>("Content/BasicEffect.effect");
             _shader.CurrentShaderGroup = _shader.ShaderGroups.First();
+
+            Camera cam = new Camera();
+            cam.SetProjection(45, 0.1f, 10.0f);
+            cam.Position = new Vector3(0, 0, 5);
+            cam.LookAt(Vector3.Zero, Vector3.Up);
+            cam.Update();
             
-            Matrix4x4.FromScale(0.5f, out Matrix4x4 scaleMatrix);
-            _shader.Parameters["mvp"].SetValue(scaleMatrix);
+            _shader.Parameters["mvp"].SetValue(cam.ViewProjectionMatrix);
 
             _vertexBuffer = new VertexBuffer(
                 _renderer,

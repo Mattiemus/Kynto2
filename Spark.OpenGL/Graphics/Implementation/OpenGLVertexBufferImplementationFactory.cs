@@ -23,22 +23,38 @@
         /// Creates a new implementation object instance.
         /// </summary>
         /// <param name="vertexLayout">The vertex layout that describes the data.</param>
-        /// <param name="vertexCount">Number of vertices the buffer will contain</param>
-        public IVertexBufferImplementation CreateImplementation(VertexLayout vertexLayout, int vertexCount)
+        /// <param name="vertexCount">The number of vertices the buffer will contain.</param>
+        /// <param name="resourceUsage">The resource usage specifying the type of memory the buffer should use.</param>
+        /// <returns>The buffer implementation.</returns>
+        public IVertexBufferImplementation CreateImplementation(VertexLayout vertexLayout, int vertexCount, ResourceUsage resourceUsage)
         {
-            return new OpenGLVertexBufferImplementation(OpenGLRenderSystem, vertexLayout, vertexCount);
+            return new OpenGLVertexBufferImplementation(OpenGLRenderSystem, vertexLayout, vertexCount, resourceUsage);
         }
 
         /// <summary>
         /// Creates a new implementation object instance.
         /// </summary>
         /// <param name="vertexLayout">The vertex layout that describes the data.</param>
-        /// <param name="data">The interleaved vertex data to initialize the vertex buffer with.</param>
-        public IVertexBufferImplementation CreateImplementation(VertexLayout vertexLayout, IReadOnlyDataBuffer data)
+        /// <param name="resourceUsage">The resource usage specifying the type of memory the buffer should use.</param>
+        /// <param name="data">The vertex data to initialize the vertex buffer with.</param>
+        /// <returns>The buffer implementation.</returns>
+        public IVertexBufferImplementation CreateImplementation(VertexLayout vertexLayout, ResourceUsage resourceUsage, IReadOnlyDataBuffer data)
         {
-            return new OpenGLVertexBufferImplementation(OpenGLRenderSystem, vertexLayout, data);
+            return new OpenGLVertexBufferImplementation(OpenGLRenderSystem, vertexLayout, resourceUsage, data);
         }
 
+        /// <summary>
+        /// Creates a new implementation object instance.
+        /// </summary>
+        /// <param name="vertexLayout">The vertex layout that describes the data.</param>
+        /// <param name="resourceUsage">The resource usage specifying the type of memory the buffer should use.</param>
+        /// <param name="data">Array of databuffers to initialize the vertex buffer with, each databuffer corresponds to a single vertex element.</param>
+        /// <returns>The buffer implementation.</returns>
+        public IVertexBufferImplementation CreateImplementation(VertexLayout vertexLayout, ResourceUsage resourceUsage, params IReadOnlyDataBuffer[] data)
+        {
+            return new OpenGLVertexBufferImplementation(OpenGLRenderSystem, vertexLayout, resourceUsage, data);
+        }
+        
         /// <summary>
         /// Initializes for the current render system, and registers the factory to the render system.
         /// </summary>

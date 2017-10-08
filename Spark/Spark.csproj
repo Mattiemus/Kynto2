@@ -102,7 +102,9 @@
     <Compile Include="Core\Collections\MultiKeyDictionary.cs" />
     <Compile Include="Core\Collections\ReadOnlyList.cs" />
     <Compile Include="Core\Collections\ReadOnlyNamedListFast.cs" />
+    <Compile Include="Core\Collections\TupleKey.cs" />
     <Compile Include="Core\DataBuffer.cs" />
+    <Compile Include="Core\DataBufferExtensions.cs" />
     <Compile Include="Core\Engine.cs" />
     <Compile Include="Core\EngineServiceEventArgs.cs" />
     <Compile Include="Core\EngineServiceRegistry.cs" />
@@ -133,6 +135,8 @@
     <Compile Include="Graphics\EnforcedRenderState.cs" />
     <Compile Include="Graphics\FillMode.cs" />
     <Compile Include="Graphics\Geometry\IndexData.cs" />
+    <Compile Include="Graphics\Geometry\MeshData.cs" />
+    <Compile Include="Graphics\Geometry\MeshDataRange.cs" />
     <Compile Include="Graphics\ICommandList.cs" />
     <Compile Include="Graphics\IDeferredRenderContext.cs" />
     <Compile Include="Graphics\IDepthStencilBuffer.cs" />
