@@ -69,13 +69,28 @@
         public OpenGLVertexBufferImplementation(OpenGLRenderSystem renderSystem, VertexLayout vertexLayout, ResourceUsage resourceUsage, IReadOnlyDataBuffer[] data)
             : base(renderSystem)
         {
-            throw new NotImplementedException();
+            if (data.Length != 1)
+            {
+                throw new NotImplementedException();
+            }
+
+            OpenGLBufferId = OGL.GL.GenBuffer();
+
+            VertexLayout = vertexLayout;
+            ResourceUsage = resourceUsage;
+            VertexCount = data[0].SizeInBytes / vertexLayout.VertexStride;
+
+            OGL.GL.BindBuffer(OGL.BufferTarget.ArrayBuffer, OpenGLBufferId);
+            using (MappedDataBuffer mappedData = data[0].Map())
+            {
+                OGL.GL.NamedBufferData(OpenGLBufferId, data[0].SizeInBytes, mappedData.Pointer, OGL.BufferUsageHint.StaticDraw);
+            }
         }
 
         /// <summary>
         /// Gets the OpenGL buffer id
         /// </summary>
-        public int OpenGLBufferId { get; }
+        internal int OpenGLBufferId { get; }
 
         /// <summary>
         /// Gets the vertex layout that describes the structure of vertex data contained in the buffer.

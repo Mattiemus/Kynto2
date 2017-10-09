@@ -248,6 +248,7 @@
         private void InitializeFactories()
         {
             new OpenGLVertexBufferImplementationFactory(this).Initialize();
+            new OpenGLIndexBufferImplementationFactory(this).Initialize();
             new OpenGLEffectImplementationFactory(this).Initialize();
         }
     }

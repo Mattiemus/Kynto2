@@ -295,7 +295,9 @@
         /// <param name="indexBuffer">Index buffer to bind.</param>
         public void SetIndexBuffer(IndexBuffer indexBuffer)
         {
-            throw new NotImplementedException();
+            OpenGLIndexBufferImplementation oglIndexBuffer = indexBuffer.Implementation as OpenGLIndexBufferImplementation;
+
+            OGL.GL.BindBuffer(OGL.BufferTarget.ElementArrayBuffer, oglIndexBuffer.OpenGLBufferId);
         }
 
         /// <summary>
@@ -442,7 +444,9 @@
         /// <param name="startVertexIndex">Starting index in a vertex buffer at which to read vertices from.</param>
         public void Draw(PrimitiveType primitiveType, int vertexCount, int startVertexIndex)
         {
-            OGL.GL.DrawArrays(OpenGLHelper.ToNative(primitiveType), vertexCount, startVertexIndex);
+            OGL.PrimitiveType oglPrimType = OpenGLHelper.ToNative(primitiveType);
+
+            OGL.GL.DrawArrays(oglPrimType, vertexCount, startVertexIndex);
         }
 
         /// <summary>
@@ -454,7 +458,11 @@
         /// <param name="baseVertexOffset">Offset to add to each index before reading a vertex from a vertex buffer.</param>
         public void DrawIndexed(PrimitiveType primitiveType, int indexCount, int startIndex, int baseVertexOffset)
         {
-            throw new NotImplementedException();
+            // TODO: fix this
+
+            OGL.PrimitiveType oglPrimType = OpenGLHelper.ToNative(primitiveType);
+
+            OGL.GL.DrawElements(oglPrimType, indexCount, OGL.DrawElementsType.UnsignedShort, IntPtr.Zero);
         }
 
         /// <summary>

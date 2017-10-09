@@ -600,7 +600,7 @@
 
             ValidateCreationParameters(indexCount);
             
-            if (!renderSystem.TryGetImplementationFactory(out IIndexBufferImplFactory factory))
+            if (!renderSystem.TryGetImplementationFactory(out IIndexBufferImplementationFactory factory))
             {
                 throw new SparkGraphicsException("Feature is not supported");
             }
@@ -631,7 +631,7 @@
 
             ValidateCreationParameters(indexFormat, data);
             
-            if (!renderSystem.TryGetImplementationFactory(out IIndexBufferImplFactory factory))
+            if (!renderSystem.TryGetImplementationFactory(out IIndexBufferImplementationFactory factory))
             {
                 throw new SparkGraphicsException("Feature is not supported");
             }
@@ -661,7 +661,7 @@
 
             ValidateCreationParameters(data);
             
-            if (!renderSystem.TryGetImplementationFactory(out IIndexBufferImplFactory factory))
+            if (!renderSystem.TryGetImplementationFactory(out IIndexBufferImplementationFactory factory))
             {
                 throw new SparkGraphicsException("Feature is not supported");
             }

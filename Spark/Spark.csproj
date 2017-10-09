@@ -134,6 +134,9 @@
     <Compile Include="Graphics\DisplayOrientation.cs" />
     <Compile Include="Graphics\EnforcedRenderState.cs" />
     <Compile Include="Graphics\FillMode.cs" />
+    <Compile Include="Graphics\Geometry\BoxGenerator.cs" />
+    <Compile Include="Graphics\Geometry\GenerateOptions.cs" />
+    <Compile Include="Graphics\Geometry\GeometryGenerator.cs" />
     <Compile Include="Graphics\Geometry\IndexData.cs" />
     <Compile Include="Graphics\Geometry\MeshData.cs" />
     <Compile Include="Graphics\Geometry\MeshDataRange.cs" />
@@ -241,6 +244,12 @@
     <Compile Include="Graphics\VertexElement.cs" />
     <Compile Include="Graphics\VertexFormat.cs" />
     <Compile Include="Graphics\VertexLayout.cs" />
+    <Compile Include="Graphics\VertexPosition.cs" />
+    <Compile Include="Graphics\VertexPositionColor.cs" />
+    <Compile Include="Graphics\VertexPositionColorTexture.cs" />
+    <Compile Include="Graphics\VertexPositionNormalColorTexture.cs" />
+    <Compile Include="Graphics\VertexPositionNormalTexture.cs" />
+    <Compile Include="Graphics\VertexPositionTexture.cs" />
     <Compile Include="Graphics\VertexSemantic.cs" />
     <Compile Include="Graphics\VertexWinding.cs" />
     <Compile Include="Graphics\Viewport.cs" />

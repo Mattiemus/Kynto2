@@ -6,7 +6,7 @@
     /// <summary>
     /// Defines a factory that creates platform-specific implementations of type <see cref="IIndexBufferImplementation"/>.
     /// </summary>
-    public interface IIndexBufferImplFactory : IGraphicsResourceImplementationFactory
+    public interface IIndexBufferImplementationFactory : IGraphicsResourceImplementationFactory
     {
         /// <summary>
         /// Creates a new implementation object instance.

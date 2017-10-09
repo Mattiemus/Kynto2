@@ -185,16 +185,13 @@
             ColorBuffer.ClearValue = Color.Black;
             DepthBuffer.ClearValue = 1.0f;
             StencilBuffer.ClearValue = 0;
-
-            // TODO: remove
-            return;
-
+            
             // Depth testing
             Enable(OGL.EnableCap.DepthTest);
             //depthBuffer.setFunc(LessEqualDepth);
             
             // Backface culling
-            FrontFace = OGL.FrontFaceDirection.Ccw;
+            FrontFace = OGL.FrontFaceDirection.Cw;
             CullFace = OGL.CullFaceMode.Back;
             Enable(OGL.EnableCap.CullFace);
 
