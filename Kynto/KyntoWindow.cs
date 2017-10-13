@@ -6,6 +6,8 @@
     using Spark.Core;
     using Spark.Content;
     using Spark.Graphics;
+    using Spark.Graphics.Renderer;
+    using Spark.Graphics.Materials;
     using Spark.Graphics.Geometry;
     using Spark.Math;
 
@@ -21,8 +23,7 @@
         private readonly IRenderSystem _renderer;
         private readonly ContentManager _contentManager;
         private double _totalTime;
-        private Camera _cam;
-        private Effect _shader;
+        private Material _material;
         private MeshData _meshData;
 
         /// <summary>
@@ -45,21 +46,35 @@
         /// <param name="e">Event arguments</param>
         protected override void OnLoad(EventArgs e)
         {
-            _cam = new Camera();
-            _cam.Viewport = new Viewport(0, 0, Width, Height);
-            _cam.SetProjection(45, 1, 10000);            
-            _cam.Position = new Vector3(0, 15, 15);
-            _cam.LookAt(Vector3.Zero, Vector3.Up);
+            _renderer.ImmediateContext.Camera = new Camera();
+            _renderer.ImmediateContext.Camera.Viewport = new Viewport(0, 0, Width, Height);
+            _renderer.ImmediateContext.Camera.SetProjection(45, 1, 10000);
+            _renderer.ImmediateContext.Camera.Position = new Vector3(0, 10, 15);
+            _renderer.ImmediateContext.Camera.LookAt(Vector3.Zero, Vector3.Up);
 
-            _shader = _contentManager.Load<Effect>("Content/BasicEffect.effect");
-            _shader.CurrentShaderGroup = _shader.ShaderGroups.First();
-
+            Effect shader = _contentManager.Load<Effect>("Content/BasicEffect.effect");
+            _material = new Material(shader);
+            _material.Passes.Add("Pass0", shader.ShaderGroups.First());
+            _material.SetParameterBinding("mvp", MaterialParameter.ViewProjectionMatrix);
+            
             _meshData = new MeshData();
             BoxGenerator boxGen = new BoxGenerator(Vector3.One);
             boxGen.BuildMeshData(_meshData, GenerateOptions.Positions);
             _meshData.Compile();
 
             base.OnLoad(e);
+        }
+
+        /// <summary>
+        /// Called when the window is resized
+        /// </summary>
+        /// <param name="e">Event arguments</param>
+        protected override void OnResize(EventArgs e)
+        {
+            _renderer.ImmediateContext.Camera.Viewport = new Viewport(0, 0, Width, Height);
+            _renderer.ImmediateContext.Camera.SetProjection(45, 1, 10000);
+
+            base.OnResize(e);
         }
 
         /// <summary>
@@ -72,10 +87,10 @@
 
             context.Clear(Color.Indigo);
 
-            _shader.CurrentShaderGroup.Apply(context);
+            _renderer.ImmediateContext.Camera.Update();
 
-            _cam.Update();
-            _shader.Parameters["mvp"].SetValue(Matrix4x4.FromRotationY((Angle)_totalTime) * _cam.ViewProjectionMatrix);
+            _material.Passes[0].Apply(context);
+            _material.ApplyMaterial(context, new RenderPropertyCollection());
 
             context.SetIndexBuffer(_meshData.IndexBuffer);
             context.SetVertexBuffer(_meshData.VertexBuffer);

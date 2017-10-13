@@ -144,6 +144,8 @@
     <Compile Include="Graphics\IDeferredRenderContext.cs" />
     <Compile Include="Graphics\IDepthStencilBuffer.cs" />
     <Compile Include="Graphics\IGraphicsAdapter.cs" />
+    <Compile Include="Graphics\Implementation\BlendStateImplementation.cs" />
+    <Compile Include="Graphics\Implementation\DepthStencilStateImplementation.cs" />
     <Compile Include="Graphics\Implementation\IBlendStateImplementation.cs" />
     <Compile Include="Graphics\Implementation\IBlendStateImplementationFactory.cs" />
     <Compile Include="Graphics\Implementation\IDepthStencilStateImplementation.cs" />
@@ -156,6 +158,8 @@
     <Compile Include="Graphics\Implementation\IStreamOutputBufferImplementationFactory.cs" />
     <Compile Include="Graphics\Implementation\ISwapChainImplementation.cs" />
     <Compile Include="Graphics\Implementation\ISwapChainImplementationFactory.cs" />
+    <Compile Include="Graphics\Implementation\RasterizerStateImplementation.cs" />
+    <Compile Include="Graphics\Implementation\SamplerStateImplementation.cs" />
     <Compile Include="Graphics\IndexFormat.cs" />
     <Compile Include="Core\Interop\MemoryHelper.cs" />
     <Compile Include="Core\Interop\NativeMethods.cs" />
@@ -208,13 +212,31 @@
     <Compile Include="Graphics\IShaderStage.cs" />
     <Compile Include="Graphics\IStandardLibraryContent.cs" />
     <Compile Include="Graphics\IVertexType.cs" />
+    <Compile Include="Graphics\Materials\BaseMatrix4x4ParameterBindingProvider.cs" />
+    <Compile Include="Graphics\Materials\BaseParameterBindingProvider.cs" />
+    <Compile Include="Graphics\Materials\IParameterBindingProvider.cs" />
+    <Compile Include="Graphics\Materials\Material.cs" />
+    <Compile Include="Graphics\Materials\MaterialParameter.cs" />
+    <Compile Include="Graphics\Materials\MaterialParameterBinding.cs" />
+    <Compile Include="Graphics\Materials\MaterialPass.cs" />
+    <Compile Include="Graphics\Materials\MaterialPassCollection.cs" />
+    <Compile Include="Graphics\Materials\ViewProjectionMatrixParameterBindingProvider.cs" />
     <Compile Include="Graphics\MSAADescription.cs" />
     <Compile Include="Graphics\Output.cs" />
     <Compile Include="Graphics\OutputCollection.cs" />
+    <Compile Include="Graphics\PredefinedRenderStateProvider.cs" />
     <Compile Include="Graphics\PresentationParameters.cs" />
     <Compile Include="Graphics\PresentInterval.cs" />
     <Compile Include="Graphics\ProjectionMode.cs" />
     <Compile Include="Graphics\RasterizerState.cs" />
+    <Compile Include="Graphics\Renderer\RenderProperty.cs" />
+    <Compile Include="Graphics\Renderer\RenderPropertyAccessor.cs" />
+    <Compile Include="Graphics\Renderer\RenderPropertyCollection.cs" />
+    <Compile Include="Graphics\Renderer\RenderPropertyId.cs" />
+    <Compile Include="Graphics\Renderer\RenderPropertyIdEqualityComparer.cs" />
+    <Compile Include="Graphics\Renderer\RenderPropertyIdHolder.cs" />
+    <Compile Include="Graphics\Renderer\ShadowMode.cs" />
+    <Compile Include="Graphics\Renderer\TransparencyMode.cs" />
     <Compile Include="Graphics\RenderState.cs" />
     <Compile Include="Graphics\RenderStateKey.cs" />
     <Compile Include="Graphics\RenderStateType.cs" />
@@ -334,8 +356,6 @@
   <ItemGroup>
     <Folder Include="Application\Implementation\" />
     <Folder Include="Graphics\Lights\" />
-    <Folder Include="Graphics\Materials\" />
-    <Folder Include="Graphics\Renderer\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

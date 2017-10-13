@@ -18,6 +18,15 @@
     /// </summary>
     public sealed class OpenGLRenderContext : BaseDisposable, IRenderContext
     {
+        private BlendState _blendState;
+        private RasterizerState _rasterizerState;
+        private DepthStencilState _depthStencilState;
+        private Rectangle _scissorRectangle;
+        private Color _blendFactor;
+        private int _referenceStencil;
+        private int _blendSampleMask;
+        private Camera _camera;
+
         private readonly int _vao;
 
         /// <summary>
@@ -26,12 +35,13 @@
         /// <param name="renderSystem">Parent render context</param>
         public OpenGLRenderContext(OpenGLRenderSystem renderSystem)
         {
+            OpenGLRenderSystem = renderSystem;
             OpenGLState = new OpenGLState();
-
-            RenderSystem = renderSystem;
 
             _vao = OGL.GL.GenVertexArray();
             OGL.GL.BindVertexArray(_vao);
+
+            SetDefaultRenderStates();
         }
 
         /// <summary>
@@ -40,7 +50,7 @@
         internal OpenGLRenderSystem OpenGLRenderSystem { get; }
 
         /// <summary>
-        /// Gets the state manager instance
+        /// Gets the OpenGL state manager for this context
         /// </summary>
         internal OpenGLState OpenGLState { get; }
 
@@ -57,20 +67,43 @@
         /// <summary>
         /// Gets the render system that this context belongs to.
         /// </summary>
-        public IRenderSystem RenderSystem { get; }
-        
+        public IRenderSystem RenderSystem => OpenGLRenderSystem;
+
         /// <summary>
         /// Gets or sets the blend state. By default, this is <see cref="Spark.Graphics.BlendState.Opaque"/>.
         /// </summary>
         public BlendState BlendState
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get => _blendState;
             set
             {
-                throw new NotImplementedException();
+                // If enforced, filter out
+                if (EnforcedRenderState.HasFlag(EnforcedRenderState.BlendState))
+                {
+                    return;
+                }
+
+                // If null, set default state
+                if (value == null)
+                {
+                    value = OpenGLRenderSystem.PredefinedBlendStates.Opaque;
+                }
+
+                // If a new state, apply it
+                if (!value.IsSameState(_blendState))
+                {
+                    if (!value.IsBound)
+                    {
+                        value.BindRenderState();
+                    }
+
+                    _blendState = value;
+                    _blendFactor = value.BlendFactor;
+                    _blendSampleMask = value.MultiSampleMask;
+                                        
+                    OpenGLBlendStateImplementation nativeState = value.Implementation as OpenGLBlendStateImplementation;
+                    nativeState.ApplyState(this);
+                }
             }
         }
 
@@ -79,13 +112,34 @@
         /// </summary>
         public RasterizerState RasterizerState
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get => _rasterizerState;
             set
             {
-                throw new NotImplementedException();
+                // If enforced, filter out
+                if (EnforcedRenderState.HasFlag(EnforcedRenderState.RasterizerState))
+                {
+                    return;
+                }
+
+                // If null, set default state
+                if (value == null)
+                {
+                    value = OpenGLRenderSystem.PredefinedRasterizerStates.CullBackClockwiseFront;
+                }
+
+                // If a new state, apply it
+                if (!value.IsSameState(_rasterizerState))
+                {
+                    if (!value.IsBound)
+                    {
+                        value.BindRenderState();
+                    }
+
+                    _rasterizerState = value;
+
+                    OpenGLRasterizerStateImplementation nativeState = value.Implementation as OpenGLRasterizerStateImplementation;
+                    nativeState.ApplyState(this);
+                }
             }
         }
 
@@ -94,13 +148,35 @@
         /// </summary>
         public DepthStencilState DepthStencilState
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get => _depthStencilState;
             set
             {
-                throw new NotImplementedException();
+                // If enforced, filter out
+                if (EnforcedRenderState.HasFlag(EnforcedRenderState.DepthStencilState))
+                {
+                    return;
+                }
+
+                // If null, set default state
+                if (value == null)
+                {
+                    value = OpenGLRenderSystem.PredefinedDepthStencilStates.Default;
+                }
+
+                // If a new state, apply it
+                if (!value.IsSameState(_depthStencilState))
+                {
+                    if (!value.IsBound)
+                    {
+                        value.BindRenderState();
+                    }
+
+                    _depthStencilState = value;
+                    _referenceStencil = _depthStencilState.ReferenceStencil;
+
+                    OpenGLDepthStencilStateImplementation nativeState = value.Implementation as OpenGLDepthStencilStateImplementation;
+                    nativeState.ApplyState(this);
+                }
             }
         }
 
@@ -108,30 +184,23 @@
         /// Gets or sets the currently enforced render state. If a state is enforced, then the currently active one is preserved and subsequent state setting
         /// is filtered.
         /// </summary>
-        public EnforcedRenderState EnforcedRenderState
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public EnforcedRenderState EnforcedRenderState { get; set; }
 
         /// <summary>
         /// Gets or sets the rectangle used for scissor testing, if it is enabled.
         /// </summary>
         public Rectangle ScissorRectangle
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get => _scissorRectangle;
             set
             {
-                throw new NotImplementedException();
+                if (value.Equals(ref _scissorRectangle))
+                {
+                    return;
+                }
+
+                _scissorRectangle = value;
+                OGL.GL.Scissor(_scissorRectangle.X, _scissorRectangle.Y, _scissorRectangle.Width, _scissorRectangle.Height);
             }
         }
 
@@ -141,13 +210,18 @@
         /// </summary>
         public Color BlendFactor
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get => _blendFactor;
             set
             {
-                throw new NotImplementedException();
+                if (value.Equals(ref _blendFactor))
+                {
+                    return;
+                }
+
+                _blendFactor = value;
+
+                Vector4 blendColor = value.ToVector4();
+                OGL.GL.BlendColor(blendColor.X, blendColor.Y, blendColor.Z, blendColor.W);
             }
         }
 
@@ -157,13 +231,17 @@
         /// </summary>
         public int BlendSampleMask
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get => _blendSampleMask;
             set
             {
-                throw new NotImplementedException();
+                if (value == _blendSampleMask)
+                {
+                    return;
+                }
+
+                _blendSampleMask = value;
+
+                OGL.GL.SampleMask(0, value);
             }
         }
 
@@ -173,13 +251,17 @@
         /// </summary>
         public int ReferenceStencil
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get => _referenceStencil;
             set
             {
-                throw new NotImplementedException();
+                if (value == _referenceStencil)
+                {
+                    return;
+                }
+
+                _referenceStencil = value;
+
+                OGL.GL.StencilMask(_referenceStencil);
             }
         }
 
@@ -189,13 +271,19 @@
         /// </summary>
         public Camera Camera
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get => _camera;
             set
             {
-                throw new NotImplementedException();
+                if (_camera == value)
+                {
+                    return;
+                }
+
+                StopCameraEvents();
+
+                _camera = value;
+
+                StartCameraEvents();
             }
         }
 
@@ -430,10 +518,13 @@
         /// <param name="stencil">Stencil value to clear to</param>
         public void Clear(ClearOptions options, Color color, float depth, int stencil)
         {
-            OpenGLState.ColorBuffer.ClearValue = color;
-            OpenGLState.DepthBuffer.ClearValue = depth;
-            OpenGLState.StencilBuffer.ClearValue = stencil;
-            OGL.GL.Clear(OpenGLHelper.ToNative(options));
+            OGL.ClearBufferMask nativeClearMask = OpenGLHelper.ToNative(options);
+            Vector4 clearColor = color.ToVector4();
+
+            OGL.GL.ClearColor(clearColor.X, clearColor.Y, clearColor.Z, clearColor.W);
+            OGL.GL.ClearDepth(depth);
+            OGL.GL.ClearStencil(stencil);
+            OGL.GL.Clear(nativeClearMask);
         }
 
         /// <summary>
@@ -444,9 +535,8 @@
         /// <param name="startVertexIndex">Starting index in a vertex buffer at which to read vertices from.</param>
         public void Draw(PrimitiveType primitiveType, int vertexCount, int startVertexIndex)
         {
-            OGL.PrimitiveType oglPrimType = OpenGLHelper.ToNative(primitiveType);
-
-            OGL.GL.DrawArrays(oglPrimType, vertexCount, startVertexIndex);
+            OGL.PrimitiveType nativePrimType = OpenGLHelper.ToNative(primitiveType);
+            OGL.GL.DrawArrays(nativePrimType, vertexCount, startVertexIndex);
         }
 
         /// <summary>
@@ -458,11 +548,8 @@
         /// <param name="baseVertexOffset">Offset to add to each index before reading a vertex from a vertex buffer.</param>
         public void DrawIndexed(PrimitiveType primitiveType, int indexCount, int startIndex, int baseVertexOffset)
         {
-            // TODO: fix this
-
-            OGL.PrimitiveType oglPrimType = OpenGLHelper.ToNative(primitiveType);
-
-            OGL.GL.DrawElements(oglPrimType, indexCount, OGL.DrawElementsType.UnsignedShort, IntPtr.Zero);
+            OGL.PrimitiveType nativePrimType = OpenGLHelper.ToNative(primitiveType);
+            OGL.GL.DrawElementsBaseVertex(nativePrimType, indexCount, OGL.DrawElementsType.UnsignedShort, new IntPtr(startIndex), baseVertexOffset);
         }
 
         /// <summary>
@@ -508,7 +595,7 @@
         {
             throw new NotImplementedException();
         }
-                
+                        
         /// <summary>
         /// Disposes the object instance
         /// </summary>
@@ -526,6 +613,62 @@
             }
 
             base.Dispose(isDisposing);
+        }
+
+        /// <summary>
+        /// Sets all render states back to defaults
+        /// </summary>
+        private void SetDefaultRenderStates()
+        {
+            EnforcedRenderState = EnforcedRenderState.None;
+            _blendState = null;
+            _rasterizerState = null;
+            _depthStencilState = null;
+
+            BlendState = OpenGLRenderSystem.PredefinedBlendStates.Opaque;
+            RasterizerState = OpenGLRenderSystem.PredefinedRasterizerStates.CullBackClockwiseFront;
+            DepthStencilState = OpenGLRenderSystem.PredefinedDepthStencilStates.Default;
+
+            _scissorRectangle = new Rectangle(0, 0, 0, 0);
+        }
+
+        /// <summary>
+        /// Starts listening for camera events
+        /// </summary>
+        private void StartCameraEvents()
+        {
+            if (_camera != null)
+            {
+                // Apply the viewport
+                Viewport vp = _camera.Viewport;
+                OGL.GL.Viewport(vp.X, vp.Y, vp.Width, vp.Height);
+                OGL.GL.DepthRange(vp.MinDepth, vp.MaxDepth);
+
+                _camera.ViewportChanged += CameraViewportChanged;
+            }
+        }
+
+        /// <summary>
+        /// Stops listening for camera events
+        /// </summary>
+        private void StopCameraEvents()
+        {
+            if (_camera != null)
+            {
+                _camera.ViewportChanged -= CameraViewportChanged;
+            }
+        }
+
+        /// <summary>
+        /// Invoked when the camera viewport changes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CameraViewportChanged(Camera sender, EventArgs e)
+        {
+            Viewport vp = sender.Viewport;
+            OGL.GL.Viewport(vp.X, vp.Y, vp.Width, vp.Height);
+            OGL.GL.DepthRange(vp.MinDepth, vp.MaxDepth);
         }
     }
 }

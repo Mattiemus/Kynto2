@@ -79,8 +79,9 @@
         /// <param name="renderContext">Render context to apply to.</param>
         public void Apply(IRenderContext renderContext)
         {
-            OpenGLRenderContext oglContext = (OpenGLRenderContext)renderContext;
-            oglContext.OpenGLState.UseProgram(_program);
+            OpenGLRenderContext oglContext = renderContext as OpenGLRenderContext;
+
+            OGL.GL.UseProgram(_program);
         }
 
         /// <summary>

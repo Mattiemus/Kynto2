@@ -9,7 +9,7 @@
     using Effects;
 
     /// <summary>
-    /// Effect underlying implementation
+    /// OpenGL implementation for <see cref="Effect"/>
     /// </summary>
     public sealed class OpenGLEffectImplementation : OpenGLGraphicsResourceImplementation, IEffectImplementation
     {

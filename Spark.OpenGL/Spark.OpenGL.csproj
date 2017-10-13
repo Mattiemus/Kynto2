@@ -46,12 +46,20 @@
   <ItemGroup>
     <Compile Include="Graphics\Implementation\Effects\OpenGLEffectParameter.cs" />
     <Compile Include="Graphics\Implementation\Effects\OpenGLEffectShaderGroup.cs" />
+    <Compile Include="Graphics\Implementation\OpenGLBlendStateImplementation.cs" />
+    <Compile Include="Graphics\Implementation\OpenGLBlendStateImplementationFactory.cs" />
+    <Compile Include="Graphics\Implementation\OpenGLDepthStencilStateImplementation.cs" />
+    <Compile Include="Graphics\Implementation\OpenGLDepthStencilStateImplementationFactory.cs" />
     <Compile Include="Graphics\Implementation\OpenGLIndexBufferImplementation.cs" />
     <Compile Include="Graphics\Implementation\OpenGLEffectImplementation.cs" />
     <Compile Include="Graphics\Implementation\OpenGLEffectImplementationFactory.cs" />
     <Compile Include="Graphics\Implementation\OpenGLGraphicsResourceImplementation.cs" />
     <Compile Include="Graphics\Implementation\OpenGLGraphicsResourceImplementationFactory.cs" />
     <Compile Include="Graphics\Implementation\OpenGLIndexBufferImplementationFactory.cs" />
+    <Compile Include="Graphics\Implementation\OpenGLRasterizerStateImplementation.cs" />
+    <Compile Include="Graphics\Implementation\OpenGLRasterizerStateImplementationFactory.cs" />
+    <Compile Include="Graphics\Implementation\OpenGLSamplerStateImplementation.cs" />
+    <Compile Include="Graphics\Implementation\OpenGLSamplerStateImplementationFactory.cs" />
     <Compile Include="Graphics\Implementation\OpenGLVertexBufferImplementation.cs" />
     <Compile Include="Graphics\Implementation\OpenGLVertexBufferImplementationFactory.cs" />
     <Compile Include="Graphics\OpenGLRenderContext.cs" />

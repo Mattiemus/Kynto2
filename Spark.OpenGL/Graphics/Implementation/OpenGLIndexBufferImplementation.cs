@@ -12,7 +12,7 @@
     using OGL = OpenTK.Graphics.OpenGL;
 
     /// <summary>
-    /// Index buffer underlying implementation
+    /// OpenGL implementation for <see cref="IndexBuffer"/>
     /// </summary>
     public sealed class OpenGLIndexBufferImplementation  : OpenGLGraphicsResourceImplementation, IIndexBufferImplementation
     {

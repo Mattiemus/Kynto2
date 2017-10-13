@@ -11,7 +11,7 @@
     using OGL = OpenTK.Graphics.OpenGL;
 
     /// <summary>
-    /// Vertex buffer underlying implementation
+    /// OpenGL implementation for <see cref="VertexBuffer"/>
     /// </summary>
     public sealed class OpenGLVertexBufferImplementation : OpenGLGraphicsResourceImplementation, IVertexBufferImplementation
     {

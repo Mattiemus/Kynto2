@@ -11,15 +11,18 @@
 
     using Core;
     using Implementation;
-    
+
+    using OGL = OpenTK.Graphics.OpenGL;
+
     /// <summary>
     /// OpenGL render system implementation
     /// </summary>
     public sealed class OpenGLRenderSystem : BaseDisposable, IRenderSystem
     {
         private readonly ImplementationFactoryCollection _implementationFactories;
-        private int _currentEffectSortKey = 0;
-        private int _currentResourceId = 0;
+        private readonly PredefinedRenderStateProvider _prebuiltRenderStates;
+        private int _currentEffectSortKey;
+        private int _currentResourceId;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OpenGLRenderSystem"/> class
@@ -27,8 +30,13 @@
         public OpenGLRenderSystem()
         {
             _implementationFactories = new ImplementationFactoryCollection();
-            InitializeFactories();
+            _currentEffectSortKey = 0;
+            _currentResourceId = 0;
 
+            InitializeFactories();
+            
+            _prebuiltRenderStates = new PredefinedRenderStateProvider(this);
+            
             OpenGLImmediateContext = new OpenGLRenderContext(this);
         }
 
@@ -77,46 +85,22 @@
         /// <summary>
         /// Gets the provider for predefined blend states.
         /// </summary>
-        public IPredefinedBlendStateProvider PredefinedBlendStates
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public IPredefinedBlendStateProvider PredefinedBlendStates => _prebuiltRenderStates;
 
         /// <summary>
         /// Gets the provider for predefined depthstencil states.
         /// </summary>
-        public IPredefinedDepthStencilStateProvider PredefinedDepthStencilStates
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public IPredefinedDepthStencilStateProvider PredefinedDepthStencilStates => _prebuiltRenderStates;
 
         /// <summary>
         /// Gets the provider for predefined rasterizer states.
         /// </summary>
-        public IPredefinedRasterizerStateProvider PredefinedRasterizerStates
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public IPredefinedRasterizerStateProvider PredefinedRasterizerStates => _prebuiltRenderStates;
 
         /// <summary>
         /// Gets the provider for predefined sampler states.
         /// </summary>
-        public IPredefinedSamplerStateProvider PredefinedSamplerStates
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public IPredefinedSamplerStateProvider PredefinedSamplerStates => _prebuiltRenderStates;
 
         /// <summary>
         /// Initializes the service. This is called by the engine when a service is newly registered.
@@ -241,14 +225,23 @@
 
             base.Dispose(isDisposing);
         }
-
+        
         /// <summary>
         /// Initializes the various graphics resource creation factories
         /// </summary>
         private void InitializeFactories()
         {
-            new OpenGLVertexBufferImplementationFactory(this).Initialize();
+            // Render state objects
+            new OpenGLBlendStateImplementationFactory(this).Initialize();
+            new OpenGLDepthStencilStateImplementationFactory(this).Initialize();
+            new OpenGLRasterizerStateImplementationFactory(this).Initialize();
+            new OpenGLSamplerStateImplementationFactory(this).Initialize();
+
+            // Buffer objects
             new OpenGLIndexBufferImplementationFactory(this).Initialize();
+            new OpenGLVertexBufferImplementationFactory(this).Initialize();
+
+            // Effects
             new OpenGLEffectImplementationFactory(this).Initialize();
         }
     }
