@@ -1,36 +1,57 @@
 ﻿namespace Spark.Graphics.Materials
 {
     using System;
-    using System.Collections.Generic;
-    
-    public static class MaterialParameter
+
+    /// <summary>
+    /// Parameter in a <see cref="Material"/>
+    /// </summary>
+    public sealed class MaterialParameter
     {
-        private static Dictionary<String, IParameterBindingProvider> _providers;
-        
-        static MaterialParameter()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MaterialParameter"/> class.
+        /// </summary>
+        /// <param name="name">Name of parameter to bind.</param>
+        /// <param name="parameter">Effect parameter instance.</param>
+        public MaterialParameter(string name, IEffectParameter parameter)
         {
-            _providers = new Dictionary<String, IParameterBindingProvider>();
+            Name = name;
+            Parameter = parameter;
+            DataType = null;
 
-            ViewProjectionMatrix = new ViewProjectionMatrixParameterBindingProvider();
-            Register(ViewProjectionMatrix);
+            Validate();
         }
-        
-        public static IParameterBindingProvider ViewProjectionMatrix { get; private set; }
-        
-        public static bool Register(IParameterBindingProvider provider)
+
+        /// <summary>
+        /// Gets the parameter name that is being bound.
+        /// </summary>
+        public string Name { get; }
+
+        /// <summary>
+        /// Gets the effect parameter instance.
+        /// </summary>
+        public IEffectParameter Parameter { get; }
+
+        /// <summary>
+        /// Gets if the binding is valid.
+        /// </summary>
+        public bool IsValid { get; private set; }
+
+        /// <summary>
+        /// Gets the bound data type. This might be different than the default type of the effect parameter.
+        /// </summary>
+        public Type DataType { get; internal set; }
+
+        /// <summary>
+        /// Validates the parameter
+        /// </summary>
+        private void Validate()
         {
-            if (provider == null)
-            {
-                return false;
-            }
+            IsValid = Parameter != null && !string.IsNullOrEmpty(Name) && Parameter.Name.Equals(Name);
 
-            if (_providers.ContainsKey(provider.ParameterName))
+            if (IsValid)
             {
-                return false;
+                DataType = Parameter.DefaultNetType;
             }
-
-            _providers.Add(provider.ParameterName, provider);
-            return true;
         }
     }
 }

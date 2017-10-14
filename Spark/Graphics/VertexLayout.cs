@@ -26,7 +26,7 @@
         /// </summary>
         /// <param name="elements">Vertex elements that define the vertex layout.</param>
         public VertexLayout(params VertexElement[] elements)
-            : this(CalculateOffsetsAndGetVertexStride(elements), elements)
+            : this(GetVertexStride(elements), elements)
         {
         }
 
@@ -90,7 +90,7 @@
         /// </summary>
         /// <param name="elements">Vertex elements of the layout.</param>
         /// <returns>Vertex stride of the layout.</returns>
-        public static int CalculateOffsetsAndGetVertexStride(params VertexElement[] elements)
+        public static int GetVertexStride(params VertexElement[] elements)
         {
             int stride = 0;
 

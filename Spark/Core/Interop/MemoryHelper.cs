@@ -122,7 +122,7 @@
         /// <param name="value">Value to set</param>
         public static void ClearMemory(IntPtr pDest, int count, byte value)
         {
-            NativeMethods.ClearMemory(pDest, new IntPtr(count), value);
+            NativeMethods.ClearMemory(pDest, new IntPtr(count), value);            
         }
 
         /// <summary>

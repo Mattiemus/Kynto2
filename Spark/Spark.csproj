@@ -137,9 +137,11 @@
     <Compile Include="Graphics\Geometry\BoxGenerator.cs" />
     <Compile Include="Graphics\Geometry\GenerateOptions.cs" />
     <Compile Include="Graphics\Geometry\GeometryGenerator.cs" />
+    <Compile Include="Graphics\Geometry\IMeshDataContainer.cs" />
     <Compile Include="Graphics\Geometry\IndexData.cs" />
     <Compile Include="Graphics\Geometry\MeshData.cs" />
     <Compile Include="Graphics\Geometry\MeshDataRange.cs" />
+    <Compile Include="Graphics\Geometry\SubMeshRange.cs" />
     <Compile Include="Graphics\ICommandList.cs" />
     <Compile Include="Graphics\IDeferredRenderContext.cs" />
     <Compile Include="Graphics\IDepthStencilBuffer.cs" />
@@ -216,11 +218,11 @@
     <Compile Include="Graphics\Materials\BaseParameterBindingProvider.cs" />
     <Compile Include="Graphics\Materials\IParameterBindingProvider.cs" />
     <Compile Include="Graphics\Materials\Material.cs" />
+    <Compile Include="Graphics\Materials\MaterialBinding.cs" />
     <Compile Include="Graphics\Materials\MaterialParameter.cs" />
     <Compile Include="Graphics\Materials\MaterialParameterBinding.cs" />
     <Compile Include="Graphics\Materials\MaterialPass.cs" />
     <Compile Include="Graphics\Materials\MaterialPassCollection.cs" />
-    <Compile Include="Graphics\Materials\ViewProjectionMatrixParameterBindingProvider.cs" />
     <Compile Include="Graphics\MSAADescription.cs" />
     <Compile Include="Graphics\Output.cs" />
     <Compile Include="Graphics\OutputCollection.cs" />

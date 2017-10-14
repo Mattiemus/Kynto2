@@ -6,7 +6,6 @@
     using Spark.Core;
     using Spark.Content;
     using Spark.Graphics;
-    using Spark.Graphics.Renderer;
     using Spark.Graphics.Materials;
     using Spark.Graphics.Geometry;
     using Spark.Math;
@@ -55,7 +54,7 @@
             Effect shader = _contentManager.Load<Effect>("Content/BasicEffect.effect");
             _material = new Material(shader);
             _material.Passes.Add("Pass0", shader.ShaderGroups.First());
-            _material.SetParameterBinding("mvp", MaterialParameter.ViewProjectionMatrix);
+            _material.SetParameterBinding("mvp", MaterialBinding.ViewProjectionMatrix);
             
             _meshData = new MeshData();
             BoxGenerator boxGen = new BoxGenerator(Vector3.One);
@@ -90,7 +89,7 @@
             _renderer.ImmediateContext.Camera.Update();
 
             _material.Passes[0].Apply(context);
-            _material.ApplyMaterial(context, new RenderPropertyCollection());
+            _material.ApplyMaterial(context, null);
 
             context.SetIndexBuffer(_meshData.IndexBuffer);
             context.SetVertexBuffer(_meshData.VertexBuffer);
