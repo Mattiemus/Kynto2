@@ -9,6 +9,6 @@
         /// <summary>
         /// Unique id for the render property type
         /// </summary>
-        public static readonly RenderPropertyId Id = RenderPropertyId.GenerateNewUniqueID();
+        public static readonly RenderPropertyId Id = RenderPropertyId.GenerateNewUniqueId();
     }
 }

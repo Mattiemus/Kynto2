@@ -418,7 +418,7 @@
         /// </summary>
         private class StandardContentComparer : IEqualityComparer<ISavable>
         {
-            private readonly IEqualityComparer<ISavable> m_comparer;
+            private readonly IEqualityComparer<ISavable> _comparer;
 
             /// <summary>
             /// 
@@ -426,7 +426,7 @@
             /// <param name="comparer"></param>
             public StandardContentComparer(IEqualityComparer<ISavable> comparer)
             {
-                m_comparer = comparer;
+                _comparer = comparer;
             }
 
             /// <summary>
@@ -437,7 +437,7 @@
             /// <returns></returns>
             public bool Equals(ISavable x, ISavable y)
             {
-                return m_comparer.Equals(x, y);
+                return _comparer.Equals(x, y);
             }
 
             /// <summary>

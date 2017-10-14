@@ -8,6 +8,8 @@
     using Spark.Graphics;
     using Spark.Graphics.Materials;
     using Spark.Graphics.Geometry;
+    using Spark.Graphics.Renderer;
+    using Spark.Graphics.Renderer.Forward;
     using Spark.Math;
 
     using Spark.Effects.Importer;
@@ -20,8 +22,8 @@
     public sealed class KyntoWindow : OTK.GameWindow
     {
         private readonly IRenderSystem _renderer;
+        private readonly ForwardRenderer _forwardRenderer;
         private readonly ContentManager _contentManager;
-        private double _totalTime;
         private Material _material;
         private MeshData _meshData;
 
@@ -34,6 +36,8 @@
             Engine.Initialize(Platforms.GeneralCrossPlatformInitializer);
             
             _renderer = Engine.Instance.Services.GetService<IRenderSystem>();
+
+            _forwardRenderer = new ForwardRenderer(_renderer.ImmediateContext);
 
             _contentManager = new ContentManager(Engine.Instance.Services);
             _contentManager.ResourceImporters.Add(new EffectImporter());
@@ -95,11 +99,11 @@
             context.SetVertexBuffer(_meshData.VertexBuffer);
             
             context.DrawIndexed(PrimitiveType.TriangleList, _meshData.IndexCount, 0, 0);
-                        
+
+            _forwardRenderer.Render();
+            
             SwapBuffers();
-
-            _totalTime += e.Time;
-
+            
             base.OnRenderFrame(e);
         }
     }

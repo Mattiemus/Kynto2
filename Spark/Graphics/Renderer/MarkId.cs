@@ -5,19 +5,19 @@
     using System.Threading;
 
     /// <summary>
-    /// Represents a unique value for identifying render properties to allow for fast lookup.
+    /// Represents a unique value for marking renderables in a render queue.
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential, Size = 4)]
-    public struct RenderPropertyId : IEquatable<RenderPropertyId>, IComparable<RenderPropertyId>
+    public struct MarkId : IEquatable<MarkId>, IComparable<MarkId>
     {
         private static int _globalCurrentId = -1;
         
         /// <summary>
-        /// Initializes a new instance of the <see cref="RenderPropertyId"/> struct.
+        /// Initializes a new instance of the <see cref="MarkId"/> struct.
         /// </summary>
         /// <param name="idValue">The integer ID value.</param>
-        public RenderPropertyId(int idValue)
+        public MarkId(int idValue)
         {
             if (idValue < 0)
             {
@@ -28,14 +28,14 @@
         }
 
         /// <summary>
-        /// Gets the invalid render property ID value.
+        /// Gets the invalid mark ID value.
         /// </summary>
-        public static RenderPropertyId Invalid => new RenderPropertyId(-1);
+        public static MarkId Invalid => new MarkId(-1);
 
         /// <summary>
         /// Gets the integer value of the ID.
         /// </summary>
-        public int Value { get; private set; }
+        public int Value { get; }
 
         /// <summary>
         /// Gets if the ID is valid (greater than or equal to zero).
@@ -45,10 +45,10 @@
         /// <summary>
         /// Generates a new unique ID. This is only unique for the current session and is thread safe.
         /// </summary>
-        /// <returns>The new render property ID.</returns>
-        public static RenderPropertyId GenerateNewUniqueId()
+        /// <returns>The new mark ID.</returns>
+        public static MarkId GenerateNewUniqueId()
         {
-            return new RenderPropertyId(Interlocked.Increment(ref _globalCurrentId));
+            return new MarkId(Interlocked.Increment(ref _globalCurrentId));
         }
 
         /// <summary>
@@ -64,11 +64,26 @@
         }
 
         /// <summary>
+        /// Determines whether the specified <see cref="object" />, is equal to this instance.
+        /// </summary>
+        /// <param name="obj">The <see cref="object" /> to compare with this instance.</param>
+        /// <returns><c>True</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
+        public override bool Equals(object obj)
+        {
+            if (obj is MarkId)
+            {
+                return Equals((MarkId)obj);
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Compares the current object with another object of the same type.
         /// </summary>
         /// <param name="other">An object to compare with this object.</param>
         /// <returns>A value that indicates the relative order of the objects being compared. The return value has the following meanings: Value Meaning Less than zero This object is less than the <paramref name="other" /> parameter.Zero This object is equal to <paramref name="other" />. Greater than zero This object is greater than <paramref name="other" />.</returns>
-        public int CompareTo(RenderPropertyId other)
+        public int CompareTo(MarkId other)
         {
             if (Value < other.Value)
             {
@@ -84,70 +99,55 @@
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="object" />, is equal to this instance.
-        /// </summary>
-        /// <param name="obj">The <see cref="object" /> to compare with this instance.</param>
-        /// <returns><c>True</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
-        {
-            if (obj is RenderPropertyId)
-            {
-                return Equals((RenderPropertyId)obj);
-            }
-
-            return false;
-        }
-
-        /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
         /// <param name="other">An object to compare with this object.</param>
         /// <returns>True if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.</returns>
-        public bool Equals(RenderPropertyId other)
+        public bool Equals(MarkId other)
         {
             return other.Value == Value;
         }
 
         /// <summary>
-        /// Implicitly converts the render property ID to an integer value.
+        /// Implicitly converts the mark ID to an integer value.
         /// </summary>
         /// <param name="id">Render property ID.</param>
         /// <returns>Integer value.</returns>
-        public static implicit operator int(RenderPropertyId id)
+        public static implicit operator int(MarkId id)
         {
             return id.Value;
         }
 
         /// <summary>
-        /// Implicitly converts the integer value to a render property ID.
+        /// Implicitly converts the integer value to a mark ID.
         /// </summary>
         /// <param name="idValue">Integer value.</param>
         /// <returns>Render property ID.</returns>
-        public static implicit operator RenderPropertyId(int idValue)
+        public static implicit operator MarkId(int idValue)
         {
-            return new RenderPropertyId(idValue);
+            return new MarkId(idValue);
         }
 
         /// <summary>
-        /// Checks equality between two render property IDs.
-        /// </summary>
-        /// <param name="a">First ID.</param>
-        /// <param name="b">Second ID.</param>
-        /// <returns>True if the two values are the same, false otherwise.</returns>
-        public static bool operator ==(RenderPropertyId a, RenderPropertyId b)
-        {
-            return a.Value == b.Value;
-        }
-
-        /// <summary>
-        /// Checks inequality between two render property IDs.
+        /// Checks inequality between two mark IDs.
         /// </summary>
         /// <param name="a">First ID.</param>
         /// <param name="b">Second ID.</param>
         /// <returns>True if the two values are not the same, false otherwise.</returns>
-        public static bool operator !=(RenderPropertyId a, RenderPropertyId b)
+        public static bool operator !=(MarkId a, MarkId b)
         {
             return a.Value != b.Value;
+        }
+
+        /// <summary>
+        /// Checks equality between two mark IDs.
+        /// </summary>
+        /// <param name="a">First ID.</param>
+        /// <param name="b">Second ID.</param>
+        /// <returns>True if the two values are the same, false otherwise.</returns>
+        public static bool operator ==(MarkId a, MarkId b)
+        {
+            return a.Value == b.Value;
         }
 
         /// <summary>

@@ -699,6 +699,44 @@
         }
 
         /// <summary>
+        /// Reads the array block header and returns the number of elements, if the next object is an array. Every begin must be paired with an end.
+        /// </summary>
+        /// <returns>Non-zero if the next object is an array with elements, zero if it is null.</returns>
+        public int BeginReadGroup()
+        {
+            ThrowIfDisposed();
+
+            ReadToStartOfNextElement();
+            int count = 0;
+            ReadCountAttribute(out count); // Tries to read, if not there then will just be zero
+
+            if (!UnderlyingXmlReader.IsEmptyElement)
+            {
+                UnderlyingXmlReader.ReadStartElement();
+            }
+
+            return count;
+        }
+
+        /// <summary>
+        /// Finishes reading the array block.
+        /// </summary>
+        public void EndReadGroup()
+        {
+            ThrowIfDisposed();
+
+            // If group was empty, then we didn't read the start element, so just skip, otherwise make sure we read the end element
+            if (UnderlyingXmlReader.IsEmptyElement)
+            {
+                UnderlyingXmlReader.Skip();
+            }
+            else
+            {
+                UnderlyingXmlReader.ReadEndElement();
+            }
+        }
+
+        /// <summary>
         /// Disposes the object instance
         /// </summary>
         /// <param name="isDisposing">True if called from dispose, false if called from the finalizer</param>

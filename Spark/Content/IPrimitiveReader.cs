@@ -195,6 +195,17 @@
         int PeekArrayCount();
 
         /// <summary>
+        /// Reads the group header and returns the number of elements, if the next object is a group. After reading each element, be sure to call <see cref="EndReadGroup"/>. Every begin must be paired with an end.
+        /// </summary>
+        /// <returns>Non-zero if the next object is an array with elements, zero if it is null.</returns>
+        int BeginReadGroup();
+
+        /// <summary>
+        /// Finishes reading the group. Every begin must be paired with an end.
+        /// </summary>
+        void EndReadGroup();
+
+        /// <summary>
         /// Reads an array of elements into the data buffer at the current position of the data buffer. The buffer
         /// must have enough position to read the entire array object.
         /// </summary>

@@ -583,6 +583,42 @@
         }
 
         /// <summary>
+        /// Writes an array block header. Subsequent calls fill the contents of the array, be sure to call <see cref="EndWriteGroup" /> when done writing the array elements.
+        /// </summary>
+        /// <param name="name">Name of the value</param>
+        public void BeginWriteGroup(string name)
+        {
+            ThrowIfDisposed();
+
+            UnderlyingXmlWriter.WriteStartElement(name);
+        }
+
+        /// <summary>
+        /// Writes an array block header representing a collection. Subsequent calls fill the contents of the array, be sure to call <see cref="EndWriteGroup" /> when done writing the array elements.
+        /// </summary>
+        /// <param name="name">Name of the value</param>
+        /// <param name="count">Number of elements in the array.</param>
+        public void BeginWriteGroup(string name, int count)
+        {
+            ThrowIfDisposed();
+            UnderlyingXmlWriter.WriteStartElement(name);
+
+            if (count > 0)
+            {
+                UnderlyingXmlWriter.WriteAttributeString("Count", XmlConvert.ToString(count));
+            }
+        }
+
+        /// <summary>
+        /// Ends an array block. Every begin must be paired with an end.
+        /// </summary>
+        public void EndWriteGroup()
+        {
+            ThrowIfDisposed();
+            UnderlyingXmlWriter.WriteEndElement();
+        }
+
+        /// <summary>
         /// Disposes the object instance
         /// </summary>
         /// <param name="isDisposing">True if called from dispose, false if called from the finalizer</param>

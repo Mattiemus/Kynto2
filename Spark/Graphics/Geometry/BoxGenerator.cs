@@ -8,9 +8,9 @@
         private const int MaxIndices = 36;
         private const int MaxVertices = 24;
 
-        private Triad m_axes;
-        private Vector3 m_center;
-        private Vector3 m_extents;
+        private Triad _axes;
+        private Vector3 _center;
+        private Vector3 _extents;
 
         public BoxGenerator() 
             : this(Triad.UnitAxes, Vector3.Zero, Vector3.One, false)
@@ -39,9 +39,9 @@
 
         public BoxGenerator(Triad axes, Vector3 center, Vector3 extents, bool insideOut)
         {
-            m_axes = axes;
-            m_center = center;
-            m_extents = extents;
+            _axes = axes;
+            _center = center;
+            _extents = extents;
             InsideOut = insideOut;
         }
 
@@ -49,11 +49,11 @@
         {
             get
             {
-                return m_axes;
+                return _axes;
             }
             set
             {
-                m_axes = value;
+                _axes = value;
             }
         }
 
@@ -61,11 +61,11 @@
         {
             get
             {
-                return m_center;
+                return _center;
             }
             set
             {
-                m_center = value;
+                _center = value;
             }
         }
 
@@ -73,11 +73,11 @@
         {
             get
             {
-                return m_extents;
+                return _extents;
             }
             set
             {
-                m_extents = value;
+                _extents = value;
             }
         }
 
@@ -94,7 +94,7 @@
                 vertices = new DataBuffer<VertexPositionNormalTexture>(MaxVertices);
             }
 
-            GenerateData(vertices, ref m_axes, ref m_center, ref m_extents, InsideOut);
+            GenerateData(vertices, ref _axes, ref _center, ref _extents, InsideOut);
 
             if (!indices.IsValid)
             {
@@ -122,7 +122,7 @@
                     positions = new DataBuffer<Vector3>(MaxVertices);
                 }
 
-                GeneratePositionData(positions, ref m_axes, ref m_center, ref m_extents);
+                GeneratePositionData(positions, ref _axes, ref _center, ref _extents);
             }
 
             if ((options & GenerateOptions.Normals) == GenerateOptions.Normals)

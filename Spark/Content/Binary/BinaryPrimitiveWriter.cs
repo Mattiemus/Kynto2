@@ -576,6 +576,50 @@
         }
 
         /// <summary>
+        /// Writes a group header. Subsequent calls fill the contents of the group, be sure to call <see cref="EndWriteGroup"/> when done writing the grouped elements.
+        /// </summary>
+        /// <param name="name">Name of the group</param>
+        public void BeginWriteGroup(string name)
+        {
+            ThrowIfDisposed();
+
+            _binaryWriter.Write(BinaryConstants.GROUP_HEADER_NOARRAY);
+        }
+
+        /// <summary>
+        /// Writes a group header that represents a collection. Subsequent calls fill the contents of the group, be sure to call <see cref="EndWriteGroup" /> when done writing the grouped elements.
+        /// </summary>
+        /// <param name="name">Name of the group</param>
+        /// <param name="count">Number of elements in the group.</param>
+        public void BeginWriteGroup(string name, int count)
+        {
+            ThrowIfDisposed();
+
+            // Non-zero means null group
+            if (count <= 0)
+            {
+                _binaryWriter.Write(BinaryConstants.NULL_OBJECT);
+                return;
+            }
+            else
+            {
+                _binaryWriter.Write(BinaryConstants.A_OK);
+            }
+
+            _binaryWriter.Write(count);
+        }
+
+        /// <summary>
+        /// Ends a grouping. Every begin must be paired with an end.
+        /// </summary>
+        public void EndWriteGroup()
+        {
+            ThrowIfDisposed();
+
+            // No-op
+        }
+
+        /// <summary>
         /// Writes an array of values to the 
         /// </summary>
         /// <typeparam name="T">Type of values to write</typeparam>

@@ -134,6 +134,39 @@
         public TransparencyMode TransparencyMode { get; set; }
 
         /// <summary>
+        /// Creates a copy of the material
+        /// </summary>
+        /// <returns>Copy of the material</returns>
+        public Material Clone()
+        {
+            Material clone = new Material(Name, Effect.Clone());
+
+            clone.ScriptFileName = ScriptFileName;
+            clone.ShadowMode = ShadowMode;
+            clone.TransparencyMode = TransparencyMode;
+
+            // Copy over passes
+            Passes.CopyPassesOver(clone.Passes);
+
+            // Just copy contents of each collection to the clone, everything should already be valid
+            foreach (KeyValuePair<string, MaterialParameterBinding> kv in _parameterBindings)
+            {
+                MaterialParameterBinding oldBinding = kv.Value;
+                MaterialParameterBinding newBinding = new MaterialParameterBinding(oldBinding.Name, oldBinding.Provider, clone.Effect.Parameters[oldBinding.Name]);
+                clone._parameterBindings.Add(newBinding.Name, newBinding);
+            }
+
+            foreach (KeyValuePair<string, MaterialParameter> kv in _parameters)
+            {
+                MaterialParameter oldBinding = kv.Value;
+                MaterialParameter newBinding = new MaterialParameter(oldBinding.Name, clone.Effect.Parameters[oldBinding.Name]);
+                clone._parameters.Add(newBinding.Name, newBinding);
+            }
+
+            return clone;
+        }
+
+        /// <summary>
         /// Gets the binding for a parameter
         /// </summary>
         /// <param name="parameterName">Parameter name to get the binding for</param>

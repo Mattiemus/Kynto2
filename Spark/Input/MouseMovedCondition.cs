@@ -8,7 +8,7 @@
     /// </summary>
     public sealed class MouseMovedCondition : InputCondition
     {
-        private Int2 m_pos;
+        private Int2 _pos;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MouseMovedCondition"/> class.
@@ -24,7 +24,7 @@
         /// <param name="moveDir">Move direction to check.</param>
         public MouseMovedCondition(MoveDirection moveDir)
         {
-            m_pos = Mouse.GetMouseState().PositionInt;
+            _pos = Mouse.GetMouseState().PositionInt;
             Direction = moveDir;
         }
 
@@ -42,9 +42,9 @@
         {
             MouseState currState = Mouse.GetMouseState();
 
-            bool hasMoved = (m_pos.X != currState.X && Direction != MoveDirection.YOnly) || (m_pos.Y != currState.Y && Direction != MoveDirection.XOnly);
-            m_pos.X = currState.X;
-            m_pos.Y = currState.Y;
+            bool hasMoved = (_pos.X != currState.X && Direction != MoveDirection.YOnly) || (_pos.Y != currState.Y && Direction != MoveDirection.XOnly);
+            _pos.X = currState.X;
+            _pos.Y = currState.Y;
 
             return hasMoved;
         }

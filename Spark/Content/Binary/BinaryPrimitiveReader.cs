@@ -563,7 +563,38 @@
                     throw new InvalidOperationException("Enum typecode not valid");
             }
         }
-        
+
+        /// <summary>
+        /// Reads the group header and returns the number of elements, if the next object is a group. After reading each element, be sure to call <see cref="EndReadGroup" />. Every begin must be paired with an end.
+        /// </summary>
+        /// <returns>Non-zero if the next object is an array with elements, zero if it is null.</returns>
+        public int BeginReadGroup()
+        {
+            ThrowIfDisposed();
+
+            sbyte code = UnderlyingBinaryReader.ReadSByte();
+
+            switch (code)
+            {
+                case BinaryConstants.A_OK:
+                    return UnderlyingBinaryReader.ReadInt32();
+                case BinaryConstants.GROUP_HEADER_NOARRAY:
+                case BinaryConstants.NULL_OBJECT:
+                default:
+                    return 0;
+            }
+        }
+
+        /// <summary>
+        /// Finishes reading the group. Every begin must be paired with an end.
+        /// </summary>
+        public void EndReadGroup()
+        {
+            ThrowIfDisposed();
+
+            //No-op
+        }
+
         /// <summary>
         /// Read an array of values from the underlying buffer
         /// </summary>

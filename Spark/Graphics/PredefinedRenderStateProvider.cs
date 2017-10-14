@@ -10,7 +10,7 @@
     /// </summary>
     public sealed class PredefinedRenderStateProvider : BaseDisposable, IPredefinedBlendStateProvider, IPredefinedDepthStencilStateProvider, IPredefinedRasterizerStateProvider, IPredefinedSamplerStateProvider, IDisposable
     {
-        private readonly Dictionary<string, RenderState> m_namesToStates;
+        private readonly Dictionary<string, RenderState> _namesToStates;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PredefinedRenderStateProvider"/> class.
@@ -25,7 +25,7 @@
             }
 
             RenderSystem = renderSystem;
-            m_namesToStates = new Dictionary<string, RenderState>();
+            _namesToStates = new Dictionary<string, RenderState>();
 
             CreateBlendStates();
             CreateDepthStencilStates();
@@ -155,7 +155,7 @@
         /// <returns>The render state, or null if it was not found.</returns>
         public T GetRenderStateByName<T>(string name) where T : RenderState
         {
-            if (m_namesToStates.TryGetValue(name, out RenderState rs))
+            if (_namesToStates.TryGetValue(name, out RenderState rs))
             {
                 return rs as T;
             }
@@ -216,7 +216,7 @@
             
             if (isDisposing)
             {
-                m_namesToStates.Clear();
+                _namesToStates.Clear();
 
                 DestroyBlendStates();
                 DestroyDepthStencilStates();
@@ -433,7 +433,7 @@
             rs._predefinedStateName = name;
             rs.Name = name;
 
-            m_namesToStates.Add(name, rs);
+            _namesToStates.Add(name, rs);
         }
 
         /// <summary>
