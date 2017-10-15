@@ -31,11 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OpenTK, Version=2.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenTK.2.0.0\lib\net20\OpenTK.dll</HintPath>
+    <Reference Include="OpenTK, Version=3.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenTK.3.0.0-pre\lib\net20\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,6 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Application\Implementation\OpenGLApplicationHostImplementation.cs" />
+    <Compile Include="Application\OpenGLApplicationSystem.cs" />
+    <Compile Include="Application\OpenGLWindow.cs" />
     <Compile Include="Graphics\Implementation\Effects\OpenGLEffectParameter.cs" />
     <Compile Include="Graphics\Implementation\Effects\OpenGLEffectShaderGroup.cs" />
     <Compile Include="Graphics\Implementation\OpenGLBlendStateImplementation.cs" />
@@ -60,8 +64,11 @@
     <Compile Include="Graphics\Implementation\OpenGLRasterizerStateImplementationFactory.cs" />
     <Compile Include="Graphics\Implementation\OpenGLSamplerStateImplementation.cs" />
     <Compile Include="Graphics\Implementation\OpenGLSamplerStateImplementationFactory.cs" />
+    <Compile Include="Graphics\Implementation\OpenGLSwapChainImplementation.cs" />
+    <Compile Include="Graphics\Implementation\OpenGLSwapChainImplementationFactory.cs" />
     <Compile Include="Graphics\Implementation\OpenGLVertexBufferImplementation.cs" />
     <Compile Include="Graphics\Implementation\OpenGLVertexBufferImplementationFactory.cs" />
+    <Compile Include="Graphics\OpenGLGraphicsAdapter.cs" />
     <Compile Include="Graphics\OpenGLRenderContext.cs" />
     <Compile Include="Graphics\OpenGLState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -72,7 +79,6 @@
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Spark\Spark.csproj">
       <Project>{9059028c-0b79-48ef-8e76-bdb59aa424d7}</Project>

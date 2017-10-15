@@ -96,7 +96,6 @@
                                      desc.WriteChannels.HasFlag(ColorWriteChannels.Green),
                                      desc.WriteChannels.HasFlag(ColorWriteChannels.Blue),
                                      desc.WriteChannels.HasFlag(ColorWriteChannels.Alpha));
-
                 }
             }
         }

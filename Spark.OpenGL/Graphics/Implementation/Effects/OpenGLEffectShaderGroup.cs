@@ -142,7 +142,7 @@
         private void AttatchShader(ShaderStage shaderStage, string shaderSource)
         {
             int shaderId = OGL.GL.CreateShader(OpenGLHelper.ToNative(shaderStage));
-
+            
             OGL.GL.ShaderSource(shaderId, shaderSource);
             OGL.GL.CompileShader(shaderId);
 

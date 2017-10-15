@@ -42,8 +42,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Application\ApplicationHost.cs" />
+    <Compile Include="Application\ApplicationMode.cs" />
+    <Compile Include="Application\IApplicationSystem.cs" />
+    <Compile Include="Application\Implementation\IApplicationHostImplementation.cs" />
     <Compile Include="Application\IWindow.cs" />
+    <Compile Include="Application\KeyboardStateEventArgs.cs" />
+    <Compile Include="Application\MouseStateEventArgs.cs" />
+    <Compile Include="Application\SparkApplication.cs" />
     <Compile Include="Application\SparkApplicationException.cs" />
+    <Compile Include="Application\WindowCollection.cs" />
     <Compile Include="Content\Binary\BinaryConstants.cs" />
     <Compile Include="Content\Binary\BinaryExternalWriter.cs" />
     <Compile Include="Content\Binary\BinaryPrimitiveReader.cs" />
@@ -377,7 +385,6 @@
     <Compile Include="Utilities\SmartActivator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Application\Implementation\" />
     <Folder Include="Graphics\Lights\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

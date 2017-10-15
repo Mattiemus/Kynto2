@@ -1,5 +1,7 @@
 ﻿namespace Spark.OpenGL.Graphics.Implementation
 {
+    using System;
+
     using Spark.Graphics.Implementation;
 
     /// <summary>
@@ -14,12 +16,17 @@
         protected OpenGLGraphicsResourceImplementation(OpenGLRenderSystem renderSystem)
             : base(renderSystem, renderSystem.GetNextUniqueResourceId())
         {
-            RenderSystem = renderSystem;
+            if (renderSystem == null)
+            {
+                throw new ArgumentNullException(nameof(renderSystem), "Render system cannot be null");
+            }
+
+            OpenGLRenderSystem = renderSystem;
         }
 
         /// <summary>
         /// Gets the parent render system
         /// </summary>
-        protected OpenGLRenderSystem RenderSystem { get; }
+        protected OpenGLRenderSystem OpenGLRenderSystem { get; }
     }
 }

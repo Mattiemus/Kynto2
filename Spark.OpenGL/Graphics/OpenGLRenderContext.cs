@@ -298,7 +298,7 @@
             }
             set
             {
-                throw new NotImplementedException();
+                // TODO
             }
         }
 
@@ -441,7 +441,7 @@
         /// <param name="renderTarget">Render target to bind.</param>
         public void SetRenderTarget(SetTargetOptions options, IRenderTarget renderTarget)
         {
-            throw new NotImplementedException();
+            // TODO
         }
 
         /// <summary>
@@ -593,7 +593,7 @@
         /// </summary>
         public void Flush()
         {
-            throw new NotImplementedException();
+            OGL.GL.Flush();
         }
                         
         /// <summary>

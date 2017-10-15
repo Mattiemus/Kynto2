@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
 
+    using Core;
     using Math;
     using Graphics.Renderer;
     
@@ -23,6 +24,11 @@
             ViewProjectionMatrix = new ViewProjectionMatrixParameterBindingProvider();
             Register(ViewProjectionMatrix);
         }
+
+        /// <summary>
+        /// Gets or sets the current game time
+        /// </summary>
+        public static IGameTime GameTime { get; set; }
         
         /// <summary>
         /// Gets the camera view projection matrix parameter provider

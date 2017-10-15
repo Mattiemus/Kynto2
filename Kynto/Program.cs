@@ -11,10 +11,8 @@
         /// <param name="args">Application arguments</param>
         public static void Main(string[] args)
         {
-            using (KyntoWindow window = new KyntoWindow())
-            {
-                window.Run();
-            }
+            KyntoApplication window = new KyntoApplication();
+            window.Run();
         }
     }
 }

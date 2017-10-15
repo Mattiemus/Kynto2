@@ -305,8 +305,7 @@
             }
 
             ValidateCreationParameters(renderSystem.Adapter, windowHandle, ref preferredPresentParams);
-
-
+            
             if (!renderSystem.TryGetImplementationFactory(out ISwapChainImplementationFactory factory))
             {
                 throw new SparkGraphicsException("Feature is not supported");

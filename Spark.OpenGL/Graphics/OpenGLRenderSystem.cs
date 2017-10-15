@@ -12,7 +12,7 @@
     using Core;
     using Implementation;
 
-    using OGL = OpenTK.Graphics.OpenGL;
+    using OTK = OpenTK.Graphics;
 
     /// <summary>
     /// OpenGL render system implementation
@@ -29,9 +29,13 @@
         /// </summary>
         public OpenGLRenderSystem()
         {
+            CreateOpenGLContext();
+            
             _implementationFactories = new ImplementationFactoryCollection();
             _currentEffectSortKey = 0;
             _currentResourceId = 0;
+
+            Adapter = new OpenGLGraphicsAdapter();
 
             InitializeFactories();
             
@@ -39,12 +43,12 @@
             
             OpenGLImmediateContext = new OpenGLRenderContext(this);
         }
-
+        
         /// <summary>
         /// Gets the implementation of the immediate context
         /// </summary>
         internal OpenGLRenderContext OpenGLImmediateContext { get; }
-
+        
         /// <summary>
         /// Gets the name of the service.
         /// </summary>
@@ -63,13 +67,7 @@
         /// <summary>
         /// Gets the graphics adapter the render system was created with.
         /// </summary>
-        public IGraphicsAdapter Adapter
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public IGraphicsAdapter Adapter { get; }
 
         /// <summary>
         /// Gets if command lists are supported or not. If not, then creating deferred render contexts will fail.
@@ -225,7 +223,25 @@
 
             base.Dispose(isDisposing);
         }
-        
+
+        public static OpenTK.NativeWindow window;
+        public static OTK.GraphicsContext context;
+
+        /// <summary>
+        /// Creates the OpenGL context if it has not already been created
+        /// </summary>
+        private void CreateOpenGLContext()
+        {
+            if (OTK.GraphicsContext.CurrentContext == null)
+            {
+                window = new OpenTK.NativeWindow(1024, 768, "Test", OpenTK.GameWindowFlags.Default, OTK.GraphicsMode.Default, OpenTK.DisplayDevice.Default);
+
+                context = new OTK.GraphicsContext(OTK.GraphicsMode.Default, window.WindowInfo, 3, 3, OTK.GraphicsContextFlags.Default);
+                context.MakeCurrent(window.WindowInfo);
+                (context as OpenTK.Graphics.IGraphicsContextInternal).LoadAll();
+            }
+        }
+
         /// <summary>
         /// Initializes the various graphics resource creation factories
         /// </summary>
@@ -240,6 +256,9 @@
             // Buffer objects
             new OpenGLIndexBufferImplementationFactory(this).Initialize();
             new OpenGLVertexBufferImplementationFactory(this).Initialize();
+
+            // Swap chain
+            new OpenGLSwapChainImplementationFactory(this).Initialize();
 
             // Effects
             new OpenGLEffectImplementationFactory(this).Initialize();
