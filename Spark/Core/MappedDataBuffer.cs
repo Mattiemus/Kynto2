@@ -140,10 +140,10 @@
         /// Returns the fully qualified type name of this instance.
         /// </summary>
         /// <returns>A <see cref="T:System.String" /> containing a fully qualified type name.</returns>
-        public override String ToString()
+        public override string ToString()
         {
             ThrowIfDisposed();
-            return String.Format(CultureInfo.CurrentCulture, "IsValid: {0}, Pointer: {1}, SizeInBytes: {2}", IsValid.ToString(), Pointer.ToString(), SizeInBytes.ToString());
+            return string.Format(CultureInfo.CurrentCulture, "IsValid: {0}, Pointer: {1}, SizeInBytes: {2}", IsValid.ToString(), Pointer.ToString(), SizeInBytes.ToString());
         }
         
         /// <summary>

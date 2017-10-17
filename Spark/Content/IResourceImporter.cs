@@ -14,7 +14,7 @@
         /// <summary>
         /// Gets the format extensions that this importer supports.
         /// </summary>
-        IEnumerable<String> Extensions { get; }
+        IEnumerable<string> Extensions { get; }
 
         /// <summary>
         /// Gets the content target type this importer serves.

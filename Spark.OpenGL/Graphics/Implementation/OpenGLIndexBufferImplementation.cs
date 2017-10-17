@@ -95,7 +95,6 @@
         /// <param name="startIndex">Starting index in the data buffer to start writing to.</param>
         /// <param name="elementCount">Number of elements to read.</param>
         /// <param name="offsetInBytes">Offset from the start of the index buffer at which to start copying from</param>
-        /// <remarks>See implementors for details on specific exceptions that can be thrown.</remarks>
         public void GetData<T>(IDataBuffer<T> data, int startIndex, int elementCount, int offsetInBytes) where T : struct
         {
             throw new NotImplementedException();
@@ -111,7 +110,6 @@
         /// <param name="elementCount">Number of elements to write.</param>
         /// <param name="offsetInBytes">Offset from the start of the index buffer at which to start writing at</param>
         /// <param name="writeOptions">Writing options, valid only for dynamic index buffers.</param>
-        /// <remarks>See implementors for details on specific exceptions that can be thrown.</remarks>
         public void SetData<T>(IRenderContext renderContext, IReadOnlyDataBuffer<T> data, int startIndex, int elementCount, int offsetInBytes, DataWriteOptions writeOptions) where T : struct
         {
             throw new NotImplementedException();

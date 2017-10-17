@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C3BAA3D0-59F3-4ED1-9368-EA169477F378}</ProjectGuid>
+    <ProjectGuid>{F51647B9-C264-4A39-BBF2-5D8B6A72BE76}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Spark.Effects.Importer</RootNamespace>
-    <AssemblyName>Spark.Effects.Importer</AssemblyName>
+    <RootNamespace>Spark.Windows</RootNamespace>
+    <AssemblyName>Spark.Windows</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,6 +34,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,15 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CompileFlags.cs" />
-    <Compile Include="DefaultIncludeHandler.cs" />
-    <Compile Include="EffectCompiler.cs" />
-    <Compile Include="EffectCompilerResult.cs" />
-    <Compile Include="EffectImporter.cs" />
-    <Compile Include="Parser\EffectNodeType.cs" />
-    <Compile Include="Parser\EffectParser.cs" />
-    <Compile Include="Parser\EffectScanner.cs" />
-    <Compile Include="Parser\EffectTokenType.cs" />
+    <Compile Include="Core\NativeMethods.cs" />
+    <Compile Include="Input\Win32KeyboardInputSystem.cs" />
+    <Compile Include="Input\Win32MouseInputSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -58,5 +54,6 @@
       <Name>Spark</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

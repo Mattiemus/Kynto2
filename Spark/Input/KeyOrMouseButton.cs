@@ -172,9 +172,9 @@
         /// <param name="onRelease">True if the condition should be on released, false if on pressed.</param>
         /// <param name="allowRepeats">True if the condition should allow repeats, false otherwise. Only valid if the condition is on pressed.</param>
         /// <returns>Input condition.</returns>
-        public static InputCondition CreateInputCondition(IReadOnlyDictionary<String, KeyOrMouseButton[]> keyBindings, String bindingName, KeyOrMouseButton defaultKey, bool onRelease, bool allowRepeats)
+        public static InputCondition CreateInputCondition(IReadOnlyDictionary<string, KeyOrMouseButton[]> keyBindings, string bindingName, KeyOrMouseButton defaultKey, bool onRelease, bool allowRepeats)
         {
-            if (keyBindings == null || String.IsNullOrEmpty(bindingName))
+            if (keyBindings == null || string.IsNullOrEmpty(bindingName))
             {
                 return CreateInputCondition(defaultKey, onRelease, allowRepeats);
             }

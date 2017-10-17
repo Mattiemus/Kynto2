@@ -30,7 +30,7 @@
         /// <summary>
         /// Gets the format extensions that this importer supports.
         /// </summary>
-        public IEnumerable<String> Extensions => _extensions;
+        public IEnumerable<string> Extensions => _extensions;
 
         /// <summary>
         /// Gets the content target type this importer serves.

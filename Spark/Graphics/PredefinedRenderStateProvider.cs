@@ -16,7 +16,6 @@
         /// Initializes a new instance of the <see cref="PredefinedRenderStateProvider"/> class.
         /// </summary>
         /// <param name="renderSystem">The render system used to create the renderstates.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown if the rendersystem is null.</exception>
         public PredefinedRenderStateProvider(IRenderSystem renderSystem)
         {
             if (renderSystem == null)

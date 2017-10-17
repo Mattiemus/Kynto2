@@ -12,14 +12,14 @@
     /// </summary>
     public static class MaterialBinding
     {
-        private static Dictionary<String, IParameterBindingProvider> _providers;
+        private static Dictionary<string, IParameterBindingProvider> _providers;
 
         /// <summary>
         /// Static initializer for the <see cref="MaterialBinding"/> class.
         /// </summary>
         static MaterialBinding()
         {
-            _providers = new Dictionary<String, IParameterBindingProvider>();
+            _providers = new Dictionary<string, IParameterBindingProvider>();
 
             ViewProjectionMatrix = new ViewProjectionMatrixParameterBindingProvider();
             Register(ViewProjectionMatrix);

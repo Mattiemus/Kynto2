@@ -15,14 +15,21 @@
 
     public sealed class OpenGLWindow : BaseDisposable, IWindow
     {
+        private readonly PresentationParameters _initPresentParams;
+        private bool _inSuspended;
+
         public OpenGLWindow(IRenderSystem renderSystem, PresentationParameters presentParams)
         {
-            //OpenGLNativeWindow = new OTK.NativeWindow(presentParams.BackBufferWidth, presentParams.BackBufferHeight, "Spark Window", OTK.GameWindowFlags.Default, OTKG.GraphicsMode.Default, OTK.DisplayDevice.Default);
+            _initPresentParams = presentParams;
+
+            //OpenGLNativeWindow = new OTK.NativeWindow(presentParams.BackBufferWidth, presentParams.BackBufferHeight, "Spark Window", OTK.GameWindowFlags.FixedWindow, OTKG.GraphicsMode.Default, OTK.DisplayDevice.Default);
             OpenGLNativeWindow = OpenGLRenderSystem.window;
             OpenGLNativeWindow.Visible = true;
             
+            StartEvents();
+
             SwapChain = new SwapChain(renderSystem, Handle, presentParams);
-        }
+        } 
 
         public event TypedEventHandler<IWindow> ClientSizeChanged;
         public event TypedEventHandler<IWindow> OrientationChanged;
@@ -140,10 +147,114 @@
 
             if (isDisposing)
             {
+                StopEvents();
+                
                 OpenGLNativeWindow.Dispose();
+
+                if (SwapChain != null)
+                {
+                    SwapChain.Dispose();
+                }
             }
 
             base.Dispose(isDisposing);
+        }
+
+        private void StartEvents()
+        {
+            //OpenGLNativeWindow.GotFocus += OnGotFocus;
+            //OpenGLNativeWindow.LostFocus += OnLostFocus;
+            //OpenGLNativeWindow.ResumeRendering += OnResumeRendering;
+            //OpenGLNativeWindow.SuspendRendering += OnSuspendRendering;
+            //OpenGLNativeWindow.Render += OnPaint;
+            OpenGLNativeWindow.Resize += OnResize;
+            OpenGLNativeWindow.Closed += OnClosed;
+            OpenGLNativeWindow.Disposed += OnDisposed;
+            //OpenGLNativeWindow.KeyDown += OnKeyDown;
+            //OpenGLNativeWindow.KeyPress += OnKeyPress;
+            //OpenGLNativeWindow.KeyUp += OnKeyUp;
+            //OpenGLNativeWindow.MouseClick += OnMouseClick;
+            //OpenGLNativeWindow.MouseDoubleClick += OnMouseDoubleClick;
+            //OpenGLNativeWindow.MouseDown += OnMouseDown;
+            //OpenGLNativeWindow.MouseUp += OnMouseUp;
+            //OpenGLNativeWindow.MouseEnter += OnMouseEnter;
+            //OpenGLNativeWindow.MouseHover += OnMouseHover;
+            //OpenGLNativeWindow.MouseLeave += OnMouseLeave;
+            //OpenGLNativeWindow.MouseMove += OnMouseMove;
+            //OpenGLNativeWindow.MouseWheel += OnMouseWheel;
+        }
+
+        private void StopEvents()
+        {
+            //OpenGLNativeWindow.GotFocus -= OnGotFocus;
+            //OpenGLNativeWindow.LostFocus -= OnLostFocus;
+            //OpenGLNativeWindow.ResumeRendering -= OnResumeRendering;
+            //OpenGLNativeWindow.SuspendRendering -= OnSuspendRendering;
+            //OpenGLNativeWindow.Render -= OnPaint;
+            OpenGLNativeWindow.Resize -= OnResize;
+            OpenGLNativeWindow.Closed -= OnClosed;
+            OpenGLNativeWindow.Disposed -= OnDisposed;
+            //OpenGLNativeWindow.KeyDown -= OnKeyDown;
+            //OpenGLNativeWindow.KeyPress -= OnKeyPress;
+            //OpenGLNativeWindow.KeyUp -= OnKeyUp;
+            //OpenGLNativeWindow.MouseClick -= OnMouseClick;
+            //OpenGLNativeWindow.MouseDoubleClick -= OnMouseDoubleClick;
+            //OpenGLNativeWindow.MouseDown -= OnMouseDown;
+            //OpenGLNativeWindow.MouseUp -= OnMouseUp;
+            //OpenGLNativeWindow.MouseEnter -= OnMouseEnter;
+            //OpenGLNativeWindow.MouseHover -= OnMouseHover;
+            //OpenGLNativeWindow.MouseLeave -= OnMouseLeave;
+            //OpenGLNativeWindow.MouseMove -= OnMouseMove;
+            //OpenGLNativeWindow.MouseWheel -= OnMouseWheel;
+        }
+
+        /// <summary>
+        /// Invoked when the native window is resized
+        /// </summary>
+        /// <param name="sender">Event sender</param>
+        /// <param name="e">Event arguments</param>
+        private void OnResize(object sender, EventArgs e)
+        {
+            bool isNotSuspended = EnableResizeRedraw || !_inSuspended;
+            if (!IsMinimized && isNotSuspended)
+            {
+                if (SwapChain != null)
+                {
+                    if (SwapChain.IsFullScreen)
+                    {
+                        SwapChain.Resize(_initPresentParams.BackBufferWidth, _initPresentParams.BackBufferHeight);
+                    }
+                    else
+                    { 
+                        SwapChain.Resize(OpenGLNativeWindow.ClientSize.Width, OpenGLNativeWindow.ClientSize.Height);
+                    }
+                }
+
+                ClientSizeChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
+        /// Invoked when the native window is closed
+        /// </summary>
+        /// <param name="sender">Event sender</param>
+        /// <param name="e">Event arguments</param>
+        private void OnClosed(object sender, EventArgs e)
+        {
+            Closed?.Invoke(this, EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Invoked when the native window is disposed
+        /// </summary>
+        /// <param name="sender">Event sender</param>
+        /// <param name="e">Event arguments</param>
+        private void OnDisposed(object sender, EventArgs e)
+        {
+            if (!IsDisposed)
+            {
+                Dispose();
+            }
         }
     }
 }

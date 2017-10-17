@@ -10,15 +10,18 @@
     using Spark.Graphics.Geometry;
     using Spark.Graphics.Renderer;
     using Spark.Graphics.Renderer.Forward;
-    using Spark.Math;
-
     using Spark.Effects.Importer;
+    using Spark.Math;
+    using Spark.Input;
+
+    using Input;
         
     /// <summary>
     /// Main application window
     /// </summary>
     public sealed class KyntoApplication : SparkApplication
     {
+        private OrbitCameraController _orbitCamera;
         private ForwardRenderer _forwardRenderer;
         private BoxMesh _mesh;
 
@@ -26,7 +29,7 @@
         /// Initializes a new instance of the <see cref="KyntoApplication"/> class.
         /// </summary>
         public KyntoApplication()
-            : base(Platforms.OpenGLPlatformInitializer)
+            : base(Platforms.WindowsOpenGLBasicInputNoSound)
         {
         }
 
@@ -37,8 +40,13 @@
             RenderSystem.ImmediateContext.Camera = new Camera();
             RenderSystem.ImmediateContext.Camera.Viewport = new Viewport(0, 0, GameWindow.ClientBounds.Width, GameWindow.ClientBounds.Height);
             RenderSystem.ImmediateContext.Camera.SetProjection(45, 1, 10000);
-            RenderSystem.ImmediateContext.Camera.Position = new Vector3(0, 10, 15);
+            RenderSystem.ImmediateContext.Camera.Position = new Vector3(0, 0, 1000);
             RenderSystem.ImmediateContext.Camera.LookAt(Vector3.Zero, Vector3.Up);
+
+            _orbitCamera = new OrbitCameraController(RenderSystem.ImmediateContext.Camera, Vector3.Zero);
+            _orbitCamera.MapControls(null);
+
+            Mouse.WindowHandle = GameWindow.Handle;
 
             base.OnInitialize(engine);
         }
@@ -62,6 +70,7 @@
 
         protected override void Update(IGameTime time)
         {
+            _orbitCamera.Update(time, true);
         }
 
         protected override void Render(IRenderContext context, IGameTime time)
@@ -95,7 +104,7 @@
 
             _meshData = new MeshData();
 
-            BoxGenerator boxGen = new BoxGenerator(Vector3.One);
+            BoxGenerator boxGen = new BoxGenerator(new Vector3(100, 100, 100));
             boxGen.BuildMeshData(_meshData, GenerateOptions.Positions);
 
             _meshData.Compile();

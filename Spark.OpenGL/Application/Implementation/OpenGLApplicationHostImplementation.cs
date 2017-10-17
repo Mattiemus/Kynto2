@@ -20,7 +20,7 @@
         private readonly OpenGLApplicationSystem _applicationSystem;
         private OpenGLWindow _mainWindow;
         private readonly List<IWindow> _windowList;
-        private ConcurrentQueue<InvokeOperation> _invokeQueue;
+        private readonly ConcurrentQueue<InvokeOperation> _invokeQueue;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OpenGLApplicationHostImplementation"/> class.

@@ -415,7 +415,7 @@
                 while (_sharedQueue.Count > 0)
                 {
                     ISavable savable = _sharedQueue.Dequeue();
-                    if (_sharedIndices.TryGetValue(savable, out Tuple<String, int> id))
+                    if (_sharedIndices.TryGetValue(savable, out Tuple<string, int> id))
                     {
                         finalCount++;
 
@@ -466,7 +466,7 @@
             {
                 UnderlyingXmlWriter.WriteStartElement("ExternalReference");
 
-                Tuple<String, ExternalReference> extRef = _externalRefs[i];
+                Tuple<string, ExternalReference> extRef = _externalRefs[i];
 
                 UnderlyingXmlWriter.WriteAttributeString("Id", extRef.Item1);
                 UnderlyingXmlWriter.WriteAttributeString("TargetType", SmartActivator.GetAssemblyQualifiedName(extRef.Item2.TargetType));

@@ -369,7 +369,7 @@
         {
             IRenderSystem renderSystem = GraphicsHelper.GetRenderSystem(input.ServiceProvider);
 
-            String name = input.ReadString();
+            string name = input.ReadString();
             VertexLayout decl = input.ReadSavable<VertexLayout>();
             int vertexCount = input.ReadInt32();
             ResourceUsage usage = input.ReadEnum<ResourceUsage>();

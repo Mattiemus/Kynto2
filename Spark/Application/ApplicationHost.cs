@@ -20,7 +20,6 @@
         /// Initializes a new instance of the <see cref="ApplicationHost"/> class.
         /// </summary>
         /// <param name="appSystem">The application system used to create the underlying implementation.</param>
-        /// <exception cref="TeslaApplicationException">Thrown if creating the underlying implementation fails or is unsupported, see inner exception for a more detailed error.</exception>
         public ApplicationHost(IApplicationSystem appSystem)
         {
             CreateImplementation(appSystem);
@@ -246,8 +245,6 @@
         /// <typeparam name="TResult">Type of result to return</typeparam>
         /// <param name="action">Action that returns a result</param>
         /// <returns>Task representing the asynchronous operation.</returns>
-        /// <exception cref="TeslaApplicationException">Thrown if an error occurs while invoking the action, see inner exception for a more detailed error.</exception>
-        /// <remarks>See implementors for details on specific exceptions that can be thrown.</remarks>
         public Task<TResult> Invoke<TResult>(Func<TResult> action)
         {
             ThrowIfDisposed();

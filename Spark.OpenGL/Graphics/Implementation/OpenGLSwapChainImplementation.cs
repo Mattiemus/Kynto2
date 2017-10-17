@@ -104,7 +104,7 @@
         /// <param name="height">Height of the backbuffer.</param>
         public void Resize(int width, int height)
         {
-            throw new NotImplementedException();
+            // TODO
         }
 
         /// <summary>

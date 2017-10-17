@@ -282,14 +282,14 @@
         /// Writes a group header. Subsequent calls fill the contents of the group, be sure to call <see cref="EndWriteGroup"/> when done writing the grouped elements.
         /// </summary>
         /// <param name="name">Name of the group</param>
-        void BeginWriteGroup(String name);
+        void BeginWriteGroup(string name);
 
         /// <summary>
         /// Writes a group header that represents a collection. Subsequent calls fill the contents of the group, be sure to call <see cref="EndWriteGroup"/> when done writing the grouped elements.
         /// </summary>
         /// <param name="name">Name of the group</param>
         /// <param name="count">Number of elements in the group.</param>
-        void BeginWriteGroup(String name, int count);
+        void BeginWriteGroup(string name, int count);
         
         /// <summary>
         /// Ends a grouping. Every begin must be paired with an end.

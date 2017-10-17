@@ -274,7 +274,7 @@
 
             for (int i = 0; i < count; i++)
             {
-                String bucketName = input.ReadString();
+                string bucketName = input.ReadString();
                 Material mat = input.ReadSavable<Material>();
 
                 _materials.Add(RenderBucketId.QueryId(bucketName), mat);

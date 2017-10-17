@@ -25,7 +25,7 @@
             }
 
             _list = new List<T>(elements);
-            _fastLookUpIndices = new Dictionary<String, int>();
+            _fastLookUpIndices = new Dictionary<string, int>();
 
             PopulateFastLookupTable();
         }
@@ -42,7 +42,7 @@
             }
 
             _list = new List<T>(elements);
-            _fastLookUpIndices = new Dictionary<String, int>();
+            _fastLookUpIndices = new Dictionary<string, int>();
 
             PopulateFastLookupTable();
         }
@@ -61,7 +61,7 @@
         protected ReadOnlyNamedListFast(int initialCapacity)
         {
             _list = new List<T>(initialCapacity);
-            _fastLookUpIndices = new Dictionary<String, int>();
+            _fastLookUpIndices = new Dictionary<string, int>();
         }
 
         /// <summary>
