@@ -21,14 +21,14 @@
         private readonly InputConditionDelegate _condition;
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="InputCondition"/> class.
+        /// Initializes a newinstance of the <see cref="InputCondition"/> class.
         /// </summary>
         protected InputCondition()
         {
         }
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="InputCondition"/> class with the specified condition delegate.
+        /// Initializes a new instance of the <see cref="InputCondition"/> class with the specified condition delegate.
         /// </summary>
         /// <param name="condition">Input condition delegate</param>
         public InputCondition(InputConditionDelegate condition)

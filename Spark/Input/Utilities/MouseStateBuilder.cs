@@ -67,7 +67,7 @@
         public int WheelValue { get; set; }
 
         /// <summary>
-        /// Constructs a new <see cref="MouseState"/> from the state the builder is maintaining.
+        /// Initializes a new <see cref="MouseState"/> from the state the builder is maintaining.
         /// </summary>
         /// <returns>Mouse state</returns>
         public MouseState ConstructState()
@@ -81,7 +81,7 @@
         }
 
         /// <summary>
-        /// Constructs a new <see cref="MouseState"/> from the state the builder is maintaining.
+        /// Initializes a new <see cref="MouseState"/> from the state the builder is maintaining.
         /// </summary>
         /// <param name="state">Mouse state</param>
         public void ConstructState(out MouseState state)

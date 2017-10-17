@@ -64,7 +64,7 @@
         }
 
         /// <summary>
-        /// Constructs a new <see cref="KeyboardState"/> from the state the builder is maintaining.
+        /// Initializes a new <see cref="KeyboardState"/> from the state the builder is maintaining.
         /// </summary>
         /// <returns>Keyboard state</returns>
         public KeyboardState ConstructState()
@@ -80,7 +80,7 @@
         }
 
         /// <summary>
-        /// Constructs a new <see cref="KeyboardState"/> from the state the builder is maintaining.
+        /// Initializes a new <see cref="KeyboardState"/> from the state the builder is maintaining.
         /// </summary>
         /// <param name="state">Keyboard state</param>
         public void ConstructState(out KeyboardState state)

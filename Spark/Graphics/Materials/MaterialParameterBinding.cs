@@ -8,7 +8,7 @@
     public sealed class MaterialParameterBinding : INamed
     {
         /// <summary>
-        /// Constructs a new instance of the <see cref="MaterialParameterBinding"/> class.
+        /// Initializes a new instance of the <see cref="MaterialParameterBinding"/> class.
         /// </summary>
         /// <param name="name">Name of parameter to bind.</param>
         /// <param name="provider">Computed parameter provider.</param>

@@ -32,7 +32,7 @@
         private int _version;
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="RenderQueue"/> class.
+        /// Initializes a new instance of the <see cref="RenderQueue"/> class.
         /// </summary>
         public RenderQueue()
         {
