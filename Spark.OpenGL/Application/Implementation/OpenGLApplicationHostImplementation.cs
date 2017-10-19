@@ -140,7 +140,7 @@
                 {
                     InvokeCallbackQueue();
                     runCallback();
-                }
+                }                
             }
 
             StopDisposeEvent();

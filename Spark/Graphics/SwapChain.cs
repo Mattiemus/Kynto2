@@ -197,7 +197,6 @@
         /// <summary>
         /// Presents the contents of the backbuffer to the screen and flips the front/back buffers.
         /// </summary>
-        /// <remarks>See implementors for details on specific exceptions that can be thrown.</remarks> 
         public void Present()
         {
             SwapChainImpl.Present();

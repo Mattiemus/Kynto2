@@ -39,7 +39,7 @@
 
             RenderSystem.ImmediateContext.Camera = new Camera();
             RenderSystem.ImmediateContext.Camera.Viewport = new Viewport(0, 0, GameWindow.ClientBounds.Width, GameWindow.ClientBounds.Height);
-            RenderSystem.ImmediateContext.Camera.SetProjection(45, 1, 10000);
+            RenderSystem.ImmediateContext.Camera.SetProjection(45, 1, 100000);
             RenderSystem.ImmediateContext.Camera.Position = new Vector3(0, 0, 1000);
             RenderSystem.ImmediateContext.Camera.LookAt(Vector3.Zero, Vector3.Up);
 

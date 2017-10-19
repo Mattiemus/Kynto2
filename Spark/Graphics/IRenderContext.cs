@@ -5,6 +5,7 @@
 
     using Core;
     using Math;
+    using Extensions;
 
     /// <summary>
     /// Defines a render context which is responsible for generating draw commands for the GPU. A render context contains all the functionality to configure

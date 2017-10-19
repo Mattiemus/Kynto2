@@ -4,6 +4,7 @@
     using System.Collections.Generic;
 
     using Spark.Graphics;
+    using Spark.Graphics.Extensions;
     using Spark.Utilities;
 
     using Core;
