@@ -1,6 +1,7 @@
 ﻿namespace Kynto
 {
     using System.Linq;
+    using System.Collections.Generic;
 
     using Spark.Core;
     using Spark.Application;
@@ -23,7 +24,7 @@
     {
         private OrbitCameraController _orbitCamera;
         private ForwardRenderer _forwardRenderer;
-        private BoxMesh _mesh;
+        private List<BoxMesh> _meshes;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="KyntoApplication"/> class.
@@ -63,8 +64,36 @@
         {
             content.ResourceImporters.Add(new EffectImporter());
 
-            _mesh = new BoxMesh(content);
+            Effect effect = Content.Load<Effect>("Content/BasicEffect.effect");
 
+            Material material = new Material(effect);
+            material.Passes.Add("Pass0", effect.ShaderGroups.First());
+            material.SetParameterBinding("mvp", MaterialBinding.WorldViewProjectionMatrix);
+
+            MeshData meshData = new MeshData();
+
+            BoxGenerator boxGen = new BoxGenerator(new Vector3(100, 100, 100));
+            boxGen.BuildMeshData(meshData, GenerateOptions.Positions);
+
+            meshData.Compile();
+
+            _meshes = new List<BoxMesh>();
+
+            int dimension = 8;
+            for (int x = -dimension; x <= dimension; x++)
+            {
+                for (int y = -dimension; y <= dimension; y++)
+                {
+                    for (int z = -dimension; z <= dimension; z++)
+                    {
+                        BoxMesh mesh = new BoxMesh(meshData, material);
+                        mesh.WorldTransform.SetTranslation(x * 500.0f, y * 500.0f, z * 500.0f);
+
+                        _meshes.Add(mesh);
+                    }
+                }
+            }
+            
             base.LoadContent(content);
         }
 
@@ -79,7 +108,11 @@
 
             context.Camera.Update();
 
-            _forwardRenderer.Process(_mesh);
+            foreach (BoxMesh mesh in _meshes)
+            {
+                _forwardRenderer.Process(mesh);
+            }
+
             _forwardRenderer.Render();
         }
     }
@@ -88,28 +121,18 @@
     {
         private readonly MeshData _meshData;
 
-        public BoxMesh(ContentManager contentManager)
+        public BoxMesh(MeshData mesh, Material material)
         {
             MaterialDefinition = new MaterialDefinition();
             WorldTransform = new Transform();
             RenderProperties = new RenderPropertyCollection();
-
-            Effect effect = contentManager.Load<Effect>("Content/BasicEffect.effect");
-
-            Material material = new Material(effect);
-            material.Passes.Add("Pass0", effect.ShaderGroups.First());
-            material.SetParameterBinding("mvp", MaterialBinding.WorldViewProjectionMatrix);
-
-            MaterialDefinition.Add(RenderBucketId.Ortho, material);
-
-            _meshData = new MeshData();
-
-            BoxGenerator boxGen = new BoxGenerator(new Vector3(100, 100, 100));
-            boxGen.BuildMeshData(_meshData, GenerateOptions.Positions);
-
-            _meshData.Compile();
             
+            _meshData = mesh;
+
+            MaterialDefinition.Add(RenderBucketId.Opaque, material);
+
             RenderProperties.Add(new WorldTransformProperty(WorldTransform));
+            RenderProperties.Add(new OrthoOrderProperty(0));
         }
 
         public MaterialDefinition MaterialDefinition { get; }

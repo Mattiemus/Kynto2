@@ -364,9 +364,10 @@
             bool addedOne = false;
             foreach (KeyValuePair<RenderBucketId, Material> kv in renderable.MaterialDefinition)
             {
-                RenderBucket bucket;
-                if (kv.Key.IsValid && _renderBuckets.TryGetValue(kv.Key, out bucket))
+                if (kv.Key.IsValid && _renderBuckets.TryGetValue(kv.Key, out RenderBucket bucket))
+                {
                     addedOne |= bucket.Add(renderable, kv.Value);
+                }
             }
 
             return addedOne;

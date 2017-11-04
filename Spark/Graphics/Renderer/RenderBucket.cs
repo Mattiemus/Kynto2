@@ -13,7 +13,13 @@
     /// or to minimize overdraw and state switching.
     /// </summary>
     public sealed class RenderBucket : IReadOnlyList<RenderBucketEntry>
-    {        
+    {
+        /// <summary>
+        /// Threshold at which to stop using insertion sort, and start using merge sort
+        /// </summary>
+        private const int INSERTION_SORT_THRESHOLD = 7;
+
+        private RenderBucketEntry[] _tempList;
         private RenderBucketEntry[] _renderables;
         private int _count;
         private int _version;
@@ -89,7 +95,7 @@
             }
 
             EnsureCapacity(_count + 1);
-
+            
             _renderables[_count++] = new RenderBucketEntry(material, renderable);
             _version++;
             return true;
@@ -170,11 +176,29 @@
         /// </summary>
         public void Sort()
         {
-            if (_count > 1)
-            {                
-                _renderables = _renderables.OrderBy(k => k, BucketComparer).ToArray();
-                _version++;
+            if (_count <= 1)
+            {
+                return;
             }
+
+            // If null or not the same length, then need to resize/create a new array
+            if (_tempList == null || _tempList.Length < _renderables.Length)
+            {
+                _tempList = _renderables.Clone() as RenderBucketEntry[];
+            }
+            else
+            {
+                // Otherwise copy up to the count
+                Array.Copy(_renderables, _tempList, _count);
+            }
+
+            // Merge sort
+            MergeInsertionSort(_tempList, _renderables, 0, _count, BucketComparer);
+
+            // Clear temp list
+            Array.Clear(_tempList, 0, _count);
+
+            _version++;
         }
 
         /// <summary>
@@ -338,6 +362,62 @@
         IEnumerator IEnumerable.GetEnumerator()
         {
             return new RenderBucketEnumerator(this);
+        }
+
+        /// <summary>
+        /// Merge sorts an array using a comparer
+        /// </summary>
+        /// <typeparam name="T">Type of array elements</typeparam>
+        /// <param name="aux">Auxhillary array</param>
+        /// <param name="data">Array of elements to sort</param>
+        /// <param name="low">Starting point to sort from</param>
+        /// <param name="high">End point to sort to</param>
+        /// <param name="comp">Comparer</param>
+        private static void MergeInsertionSort<T>(T[] aux, T[] data, int low, int high, IComparer<T> comp)
+        {
+            // Use insertion sort on small arrays
+            int length = high - low;
+            if (length < INSERTION_SORT_THRESHOLD)
+            {
+                for (int i = low; i < high; i++)
+                {
+                    for (int j = i; j > low && comp.Compare(data[j - 1], data[j]) > 0; j--)
+                    {
+                        T temp = data[j];
+                        data[j] = data[j - 1];
+                        data[j - 1] = temp;
+                    }
+                }
+
+                return;
+            }
+
+            // Merge sort: Recursively sort each half of dest into src
+            int destLow = low;
+            int destHight = high;
+
+            int mid = (low + high) >> 1;
+            MergeInsertionSort(data, aux, low, mid, comp);
+            MergeInsertionSort(data, aux, mid, high, comp);
+
+            // If list is already sorted, copy from src to dest
+            if (comp.Compare(aux[mid - 1], aux[mid]) <= 0)
+            {
+                Array.Copy(aux, low, data, destLow, length);
+            }
+
+            // Merge sorted halves (now in src) into dest
+            for (int i = destLow, p = low, q = mid; i < destHight; i++)
+            {
+                if (q >= high || p < mid && comp.Compare(aux[p], aux[q]) <= 0)
+                {
+                    data[i] = aux[p++];
+                }
+                else
+                {
+                    data[i] = aux[q++];
+                }
+            }
         }
 
         /// <summary>
