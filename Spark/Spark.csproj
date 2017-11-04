@@ -337,6 +337,7 @@
     <Compile Include="Graphics\VertexSemantic.cs" />
     <Compile Include="Graphics\VertexWinding.cs" />
     <Compile Include="Graphics\Viewport.cs" />
+    <Compile Include="Graphics\WorldTransformProperty.cs" />
     <Compile Include="Input\ButtonState.cs" />
     <Compile Include="Input\CompositeInputAction.cs" />
     <Compile Include="Input\CompositeInputCondition.cs" />

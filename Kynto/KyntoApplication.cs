@@ -44,7 +44,7 @@
             RenderSystem.ImmediateContext.Camera.LookAt(Vector3.Zero, Vector3.Up);
 
             _orbitCamera = new OrbitCameraController(RenderSystem.ImmediateContext.Camera, Vector3.Zero);
-            _orbitCamera.MapControls(null);
+            _orbitCamera.MapControls(null); 
 
             Mouse.WindowHandle = GameWindow.Handle;
 
@@ -98,7 +98,7 @@
 
             Material material = new Material(effect);
             material.Passes.Add("Pass0", effect.ShaderGroups.First());
-            material.SetParameterBinding("mvp", MaterialBinding.ViewProjectionMatrix);
+            material.SetParameterBinding("mvp", MaterialBinding.WorldViewProjectionMatrix);
 
             MaterialDefinition.Add(RenderBucketId.Ortho, material);
 
@@ -108,6 +108,10 @@
             boxGen.BuildMeshData(_meshData, GenerateOptions.Positions);
 
             _meshData.Compile();
+
+            Transform worldTrans = new Transform();
+            worldTrans.SetScale(2.0f);
+            RenderProperties.Add(new WorldTransformProperty(worldTrans));
         }
 
         public MaterialDefinition MaterialDefinition { get; }
