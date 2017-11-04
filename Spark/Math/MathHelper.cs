@@ -231,5 +231,44 @@
 
             return true;
         }
+
+        /// <summary>
+        /// Solves the quadratic where a is the quadratic term, b the linear term, and c the constant term. A*x^2 + B*X + C = 0.
+        /// </summary>
+        /// <param name="a">Quadratic term</param>
+        /// <param name="b">Linear term</param>
+        /// <param name="c">Constant term</param>
+        /// <param name="result1">First solution</param>
+        /// <param name="result2">Second solution</param>
+        /// <returns>True if a real solution was found, false if imaginary.</returns>
+        public static bool SolveQuadratic(float a, float b, float c, out float result1, out float result2)
+        {
+            float sqrtpart = b * b - 4 * a * c;
+
+            if (sqrtpart > 0)
+            {
+                // Two real solutions
+                result1 = (-b + (float)Math.Sqrt(sqrtpart)) / (2 * a);
+                result2 = (-b - (float)Math.Sqrt(sqrtpart)) / (2 * a);
+
+                return true;
+            }
+            else if (sqrtpart < 0)
+            {
+                // Two imaginary solutions
+                result1 = result2 = 0;
+                result2 = result1;
+
+                return false;
+            }
+            else
+            {
+                //One real solution
+                result1 = (-b + (float)Math.Sqrt(sqrtpart)) / (2 * a);
+                result2 = result1;
+
+                return true;
+            }
+        }
     }
 }

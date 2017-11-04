@@ -117,7 +117,7 @@
     <Compile Include="Core\EngineServiceEventArgs.cs" />
     <Compile Include="Core\EngineServiceRegistry.cs" />
     <Compile Include="Core\EngineServiceReplacedEventArgs.cs" />
-    <Compile Include="Core\Events.cs" />
+    <Compile Include="Core\TypedEventHandler.cs" />
     <Compile Include="Core\GameTime.cs" />
     <Compile Include="Core\GameTimer.cs" />
     <Compile Include="Core\IDataBuffer.cs" />
@@ -242,6 +242,13 @@
     <Compile Include="Graphics\IShaderStage.cs" />
     <Compile Include="Graphics\IStandardLibraryContent.cs" />
     <Compile Include="Graphics\IVertexType.cs" />
+    <Compile Include="Graphics\Lights\DirectionalLight.cs" />
+    <Compile Include="Graphics\Lights\Light.cs" />
+    <Compile Include="Graphics\Lights\LightCollection.cs" />
+    <Compile Include="Graphics\Lights\LightCollectionProperty.cs" />
+    <Compile Include="Graphics\Lights\LightType.cs" />
+    <Compile Include="Graphics\Lights\PointLight.cs" />
+    <Compile Include="Graphics\Lights\SpotLight.cs" />
     <Compile Include="Graphics\Materials\IParameterBindingProvider.cs" />
     <Compile Include="Graphics\Materials\Material.cs" />
     <Compile Include="Graphics\Materials\MaterialBinding.cs" />
@@ -391,6 +398,9 @@
     <Compile Include="Math\Matrix3x3.cs" />
     <Compile Include="Math\Matrix4x4.cs" />
     <Compile Include="Math\OrientedBoundingBox.cs" />
+    <Compile Include="Math\PickingOptions.cs" />
+    <Compile Include="Math\PickQuery.cs" />
+    <Compile Include="Math\PickResult.cs" />
     <Compile Include="Math\Plane.cs" />
     <Compile Include="Math\PlaneIntersectionType.cs" />
     <Compile Include="Math\Ray.cs" />
@@ -417,7 +427,7 @@
     <Compile Include="Utilities\SmartActivator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Graphics\Lights\" />
+    <Folder Include="Scene\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

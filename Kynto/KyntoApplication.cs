@@ -108,10 +108,8 @@
             boxGen.BuildMeshData(_meshData, GenerateOptions.Positions);
 
             _meshData.Compile();
-
-            Transform worldTrans = new Transform();
-            worldTrans.SetScale(2.0f);
-            RenderProperties.Add(new WorldTransformProperty(worldTrans));
+            
+            RenderProperties.Add(new WorldTransformProperty(WorldTransform));
         }
 
         public MaterialDefinition MaterialDefinition { get; }
