@@ -40,7 +40,7 @@
 
             RenderSystem.ImmediateContext.Camera = new Camera();
             RenderSystem.ImmediateContext.Camera.Viewport = new Viewport(0, 0, GameWindow.ClientBounds.Width, GameWindow.ClientBounds.Height);
-            RenderSystem.ImmediateContext.Camera.SetProjection(45, 1, 100000);
+            RenderSystem.ImmediateContext.Camera.SetProjection(45, 1, 10000000);
             RenderSystem.ImmediateContext.Camera.Position = new Vector3(0, 0, 1000);
             RenderSystem.ImmediateContext.Camera.LookAt(Vector3.Zero, Vector3.Up);
 
@@ -55,7 +55,7 @@
         protected override void OnViewportResized(IWindow gameWindow)
         {
             RenderSystem.ImmediateContext.Camera.Viewport = new Viewport(0, 0, GameWindow.ClientBounds.Width, GameWindow.ClientBounds.Height);
-            RenderSystem.ImmediateContext.Camera.SetProjection(45, 1, 10000);
+            RenderSystem.ImmediateContext.Camera.SetProjection(45, 1, 1000000);
 
             base.OnViewportResized(gameWindow);
         }
@@ -79,7 +79,7 @@
 
             _meshes = new List<BoxMesh>();
 
-            int dimension = 8;
+            int dimension = 4;
             for (int x = -dimension; x <= dimension; x++)
             {
                 for (int y = -dimension; y <= dimension; y++)
