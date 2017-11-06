@@ -97,7 +97,7 @@
         /// <param name="offsetInBytes">Offset from the start of the index buffer at which to start copying from</param>
         public void GetData<T>(IDataBuffer<T> data, int startIndex, int elementCount, int offsetInBytes) where T : struct
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException();           
         }
 
         /// <summary>

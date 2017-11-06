@@ -11,27 +11,47 @@
     /// </summary>
     public sealed class OpenGLEffectParameter : IEffectParameter
     {
+        private readonly OpenGLEffectImplementation _implementation;
         private readonly int _program;
         private readonly int _location;
-        private readonly int _sizeInBytes;
-        private readonly OGL.ActiveUniformType _type;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OpenGLEffectParameter"/> class
         /// </summary>
+        /// <param name="implementation">Effect implementation</param>
         /// <param name="program">Shader program</param>
         /// <param name="location">Uniform location</param>
         /// <param name="sizeInBytes">Size of the uniform in bytes</param>
         /// <param name="type">Type of the uniform</param>
         /// <param name="name">Name of the uniform</param>
-        public OpenGLEffectParameter(int program, int location, int sizeInBytes, OGL.ActiveUniformType type, string name)
+        public OpenGLEffectParameter(OpenGLEffectImplementation implementation, int program, int location, int sizeInBytes, OGL.ActiveUniformType type, string name)
         {
+            _implementation = implementation;
             _program = program;
             _location = location;
-            _sizeInBytes = sizeInBytes;
-            _type = type;
 
             Name = name;
+            SizeInBytes = sizeInBytes;
+
+            Initialize(type);
+        }
+
+        private void Initialize(OGL.ActiveUniformType type)
+        {
+            switch (type)
+            {
+                case OGL.ActiveUniformType.Int:
+                    ParameterClass = EffectParameterClass.Scalar;
+                    ParameterType = EffectParameterType.Int32;
+                    DefaultNetType = typeof(int);
+                    break;
+
+                case OGL.ActiveUniformType.FloatMat4:
+                    ParameterClass = EffectParameterClass.MatrixRows;
+                    ParameterType = EffectParameterType.Single;
+                    DefaultNetType = typeof(Matrix4x4);
+                    break;
+            }
         }
 
         /// <summary>
@@ -75,35 +95,17 @@
         /// <summary>
         /// Gets the class of the parameter (e.g. scalar, vector, matrix, object and so on).
         /// </summary>
-        public EffectParameterClass ParameterClass
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public EffectParameterClass ParameterClass { get; private set; }
 
         /// <summary>
         /// Gets the data type of the parameter (e.g. int, float, texture2d and so on).
         /// </summary>
-        public EffectParameterType ParameterType
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public EffectParameterType ParameterType { get; private set; }
 
         /// <summary>
         /// Gets the .NET data type of the parameter, may be null (e.g. parameter is a structure).
         /// </summary>
-        public Type DefaultNetType
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public Type DefaultNetType { get; private set; }
 
         /// <summary>
         /// Gets the number of columns if the parameter class is not an object. E.g. a Matrix4x4 would have 4 rows and 4 columns.
@@ -130,13 +132,7 @@
         /// <summary>
         /// Gets the parameter's size in bytes.
         /// </summary>
-        public int SizeInBytes
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public int SizeInBytes { get; }
 
         /// <summary>
         /// Gets the parameter's starting offset in its containing buffer, in bytes.
@@ -222,7 +218,12 @@
         /// <returns>True if the effect is the parent of this part, false otherwise.</returns>
         public bool IsPartOf(Effect effect)
         {
-            throw new NotImplementedException();
+            if (effect == null)
+            {
+                return false;
+            }
+
+            return ReferenceEquals(effect.Implementation, _implementation);
         }
 
         /// <summary>

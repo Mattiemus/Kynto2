@@ -196,7 +196,7 @@
                 StringBuilder uniformName = new StringBuilder(maxUniformNameLength);
                 OGL.GL.GetActiveUniform(_program, i, uniformName.Capacity, out int nameLength, out int uniformSize, out OGL.ActiveUniformType uniformType, uniformName);
 
-                yield return new OpenGLEffectParameter(_program, i, uniformSize, uniformType, uniformName.ToString());
+                yield return new OpenGLEffectParameter(_implementation, _program, i, uniformSize, uniformType, uniformName.ToString());
             }            
         }
     }

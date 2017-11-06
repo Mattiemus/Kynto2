@@ -98,6 +98,8 @@
     <Compile Include="Content\SavableWriteFlags.cs" />
     <Compile Include="Content\SparkContentException.cs" />
     <Compile Include="Content\ReaderWriterExtensions.cs" />
+    <Compile Include="Content\TextureConversionFormat.cs" />
+    <Compile Include="Content\TextureImporterParameters.cs" />
     <Compile Include="Content\Xml\XmlConstants.cs" />
     <Compile Include="Content\Xml\XmlExternalWriter.cs" />
     <Compile Include="Content\Xml\XmlPrimitiveReader.cs" />
