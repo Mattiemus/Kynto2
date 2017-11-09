@@ -408,7 +408,9 @@
     <Compile Include="Math\PlaneIntersectionType.cs" />
     <Compile Include="Math\Ray.cs" />
     <Compile Include="Math\Rectangle.cs" />
+    <Compile Include="Math\RectangleF.cs" />
     <Compile Include="Math\Segment.cs" />
+    <Compile Include="Math\Size.cs" />
     <Compile Include="Math\SubMeshRange.cs" />
     <Compile Include="Math\Transform.cs" />
     <Compile Include="Math\Triad.cs" />

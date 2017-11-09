@@ -41,12 +41,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\UpdateSourceTrigger.cs" />
+    <Compile Include="FrameworkElement.cs" />
+    <Compile Include="FrameworkPropertyMetadata.cs" />
+    <Compile Include="FrameworkPropertyMetadataOptions.cs" />
+    <Compile Include="HorizontalAlignment.cs" />
+    <Compile Include="Thickness.cs" />
+    <Compile Include="UIElement.cs" />
     <Compile Include="DependencyObject.cs" />
     <Compile Include="DependencyProperty.cs" />
     <Compile Include="DependencyPropertyChangedEventArgs.cs" />
+    <Compile Include="DependencyPropertyKey.cs" />
+    <Compile Include="Media\Visual.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyChangedCallback.cs" />
     <Compile Include="PropertyMetadata.cs" />
+    <Compile Include="VerticalAlignment.cs" />
+    <Compile Include="Visibility.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Spark\Spark.csproj">
+      <Project>{9059028c-0b79-48ef-8e76-bdb59aa424d7}</Project>
+      <Name>Spark</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

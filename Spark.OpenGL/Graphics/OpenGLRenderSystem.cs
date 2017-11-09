@@ -236,7 +236,7 @@
             {
                 window = new OpenTK.NativeWindow(1024, 768, "Test", OpenTK.GameWindowFlags.Default, OTK.GraphicsMode.Default, OpenTK.DisplayDevice.Default);
                 
-                context = new OTK.GraphicsContext(OTK.GraphicsMode.Default, window.WindowInfo, 3, 3, OTK.GraphicsContextFlags.Default);
+                context = new OTK.GraphicsContext(OTK.GraphicsMode.Default, window.WindowInfo, 4, 5, OTK.GraphicsContextFlags.Default);
                 context.MakeCurrent(window.WindowInfo);
                 context.LoadAll();
             }
