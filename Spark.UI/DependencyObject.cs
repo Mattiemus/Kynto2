@@ -51,16 +51,26 @@
             return currentValue;
         }
 
+        public void SetValue(DependencyPropertyKey propertyKey, object value)
+        {
+            FrameworkElement frameworkElement = this as FrameworkElement;
+            bool setAsAssigned = frameworkElement != null && !frameworkElement.IsInitialized;
+            
+            SetValue(propertyKey.DependencyProperty, value, setAsAssigned);
+        }
+
         public void SetValue(DependencyProperty property, object value)
         {
             FrameworkElement frameworkElement = this as FrameworkElement;
             bool setAsAssigned = frameworkElement != null && !frameworkElement.IsInitialized;
-
+            
             SetValue(property, value, setAsAssigned);
         }
 
         protected void SetValue(DependencyProperty property, object value, bool setAsAssigned)
         {
+            // TODO: throw exception if read onlys
+
             if (_properties == null)
             {
                 _properties = new Dictionary<DependencyProperty, object>();

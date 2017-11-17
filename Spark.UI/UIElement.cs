@@ -7,13 +7,30 @@
     {
         private Size _desiredSize;
 
+        public static readonly DependencyProperty ParentProperty 
+            = DependencyProperty.Register(nameof(Parent), typeof(UIElement), typeof(UIElement), new PropertyMetadata(OnParentChanged));
+
+        internal static readonly DependencyPropertyKey IsVisiblePropertyKey
+            = DependencyProperty.RegisterReadOnly(nameof(IsVisible), typeof(bool), typeof(UIElement), new PropertyMetadata(OnIsVisibleChanged));
+        public static readonly DependencyProperty IsVisibleProperty = IsVisiblePropertyKey.DependencyProperty;
+
         public static readonly DependencyProperty VisibilityProperty 
-            = DependencyProperty.Register(nameof(Visibility), typeof(bool), typeof(UIElement), new PropertyMetadata(Visibility.Visible));
+            = DependencyProperty.Register(nameof(Visibility), typeof(bool), typeof(UIElement), new PropertyMetadata(Visibility.Visible, OnVisibilityChanged));
 
         public UIElement()
         {
             _desiredSize = Size.Empty;
         }
+        
+        public event DependencyPropertyChangedEventHandler IsVisibleChanged;
+
+        public UIElement Parent
+        {
+            get => (UIElement)GetValue(ParentProperty);
+            set => SetValue(ParentProperty, value);
+        }
+
+        public bool IsVisible => (bool)GetValue(IsVisibleProperty);
 
         public Visibility Visibility
         {
@@ -37,7 +54,34 @@
                 return _desiredSize;
             }
         }
-        
+
+
+        private static void OnVisibilityChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            ((UIElement)sender).UpdateIsVisible();
+        }
+
+        private static void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            var uie = sender as UIElement;
+            uie.IsVisibleChanged?.Invoke(uie, e);
+        }
+
+        private static void OnParentChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (sender is UIElement uie && e.NewValue != null)
+            {
+                uie.UpdateIsVisible();
+
+                UIElement parent = e.NewValue as UIElement;
+                parent.IsVisibleChanged += 
+                    (s, ea) => 
+                    {
+                        uie.UpdateIsVisible();
+                    };
+            }
+        }
+
         public void UpdateLayout()
         {
             InvalidateMeasure();
@@ -95,6 +139,11 @@
             }
 
             base.OnPropertyChanged(dp, oldValue, newValue);
+        }
+
+        private void UpdateIsVisible()
+        {
+            SetValue(IsVisiblePropertyKey, Visibility == Visibility.Visible && (Parent == null || Parent.IsVisible));
         }
     }
 }

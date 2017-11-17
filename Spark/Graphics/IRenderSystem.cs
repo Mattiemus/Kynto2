@@ -53,6 +53,11 @@
         IPredefinedSamplerStateProvider PredefinedSamplerStates { get; }
 
         /// <summary>
+        /// Gets the standard effect library for the render system.
+        /// </summary>
+        StandardEffectLibrary StandardEffects { get; }
+
+        /// <summary>
         /// Creates a deferred render context. A deferred context is a thread-safe context that can be used to record graphics commands on a different
         /// thread other than the main rendering one.
         /// </summary>

@@ -87,6 +87,7 @@
     <Compile Include="Content\ISavable.cs" />
     <Compile Include="Content\ISavableReader.cs" />
     <Compile Include="Content\ISavableWriter.cs" />
+    <Compile Include="Content\IStandardLibraryContent.cs" />
     <Compile Include="Content\MissingContentHandlerCollection.cs" />
     <Compile Include="Content\NullResource.cs" />
     <Compile Include="Content\ResourceExporter.cs" />
@@ -155,10 +156,15 @@
     <Compile Include="Graphics\Geometry\IndexData.cs" />
     <Compile Include="Graphics\Geometry\MeshData.cs" />
     <Compile Include="Graphics\Geometry\MeshDataRange.cs" />
+    <Compile Include="Graphics\Geometry\SpriteBatch.cs" />
+    <Compile Include="Graphics\Geometry\SpriteFlipEffect.cs" />
+    <Compile Include="Graphics\Geometry\SpriteFont.cs" />
+    <Compile Include="Graphics\Geometry\SpriteSortMode.cs" />
     <Compile Include="Graphics\Geometry\SubMeshRange.cs" />
     <Compile Include="Graphics\ICommandList.cs" />
     <Compile Include="Graphics\IDeferredRenderContext.cs" />
     <Compile Include="Graphics\IDepthStencilBuffer.cs" />
+    <Compile Include="Graphics\IEffectByteCodeProvider.cs" />
     <Compile Include="Graphics\IGraphicsAdapter.cs" />
     <Compile Include="Graphics\Implementation\BlendStateImplementation.cs" />
     <Compile Include="Graphics\Implementation\DepthStencilStateImplementation.cs" />
@@ -317,6 +323,7 @@
     <Compile Include="Graphics\ShaderStage.cs" />
     <Compile Include="Graphics\SparkGraphicsException.cs" />
     <Compile Include="Graphics\PrimitiveType.cs" />
+    <Compile Include="Graphics\StandardEffectLibrary.cs" />
     <Compile Include="Graphics\StencilOperation.cs" />
     <Compile Include="Graphics\StreamOutputBuffer.cs" />
     <Compile Include="Graphics\StreamOutputBufferBinding.cs" />

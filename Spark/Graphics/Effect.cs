@@ -10,7 +10,7 @@
     /// Represents an effect that is used to render an object. This completely describes how to configure the graphics pipeline - what render states, resources,
     /// and shaders are bound to the GPU. An effect is necessary to render any object.
     /// </summary>
-    public sealed class Effect : GraphicsResource, ISavable
+    public sealed class Effect : GraphicsResource, ISavable, IStandardLibraryContent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Effect"/> class.
@@ -25,7 +25,18 @@
         /// <param name="renderSystem">Render system used to create the underlying implementation.</param>
         /// <param name="effectData">Compiled effect data that represents this effect.</param>
         public Effect(IRenderSystem renderSystem, EffectData effectData)
+            : this(renderSystem, effectData, string.Empty)
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Effect"/> class.
+        /// </summary>
+        /// <param name="renderSystem">Render system used to create the underlying implementation.</param>
+        /// <param name="effectData">Compiled effect data that represents this effect.</param>v
+        public Effect(IRenderSystem renderSystem, EffectData effectData, string standardContentName)
+        {
+            StandardContentName = (standardContentName == null) ? string.Empty : standardContentName;
             CreateImplementation(renderSystem, effectData);
         }
 
@@ -80,7 +91,17 @@
         /// Gets all constant buffers that contain all value type parameters used by all passes.
         /// </summary>
         public EffectConstantBufferCollection ConstantBuffers => EffectImplementation.ConstantBuffers;
-        
+
+        /// <summary>
+        /// Gets the name of the content this instance represents. If <see cref="IsStandardContent" /> is false, then this returns an empty string.
+        /// </summary>
+        public string StandardContentName { get; }
+
+        /// <summary>
+        /// Gets if the instance represents standard library content or not.
+        /// </summary>
+        public bool IsStandardContent => !string.IsNullOrEmpty(StandardContentName);
+
         /// <summary>
         /// Gets the effect implementation
         /// </summary>
@@ -129,6 +150,17 @@
 
             EffectImplementation.CurrentShaderGroup = shaderGroup;
             return true;
+        }
+
+        /// <summary>
+        /// Gets a consistent hash code that identifies the content item. If it is not standard content, each instance should have a unique hash, if the instance is
+        /// standard content, each instance should have the same hash code. This might differ from .NET's hash code and is only used to identify two instances that
+        /// represent the same data (there may be situations where we want to differentiate the two instances, so we don't rely on the .NET's get hash code function).
+        /// </summary>
+        /// <returns>32-bit hash code.</returns>
+        public int GetContentHashCode()
+        {
+            return SortKey;
         }
 
         /// <summary>

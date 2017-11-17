@@ -1,6 +1,10 @@
 ﻿namespace Spark.Graphics.Effects
 {
+    using System.IO;
+
+    using Core;
     using Content;
+    using Content.Binary;
 
     /// <summary>
     /// Effect data object
@@ -21,6 +25,24 @@
         /// Gets or sets the pixel shader portion of the effect
         /// </summary>
         public string PixelShader { get; set; }
+        
+        /// <summary>
+        /// Reads an effect data instance from a byte array
+        /// </summary>
+        /// <param name="bytes">Bytes to read from</param>
+        /// <returns>Parsed effect data</returns>
+        public static EffectData FromBytes(byte[] bytes)
+        {
+            using (MemoryStream stream = new MemoryStream(bytes))
+            {
+                using (BinarySavableReader reader = new BinarySavableReader(Engine.Instance.Services, null))
+                {
+                    EffectData data = new EffectData();
+                    data.Read(reader);
+                    return data;
+                }
+            }
+        }
         
         /// <summary>
         /// Reads the object data from the input.

@@ -88,6 +88,10 @@
       <Project>{c407b6d2-3fbc-4517-bc6a-ad8232c307cc}</Project>
       <Name>Spark.OpenGL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Spark.UI\Spark.UI.csproj">
+      <Project>{4f2a0c2b-15e4-4032-9b4d-4c10fc50d2f8}</Project>
+      <Name>Spark.UI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Spark\Spark.csproj">
       <Project>{9059028c-0b79-48ef-8e76-bdb59aa424d7}</Project>
       <Name>Spark</Name>

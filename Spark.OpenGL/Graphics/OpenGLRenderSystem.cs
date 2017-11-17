@@ -40,7 +40,8 @@
             InitializeFactories();
             
             _prebuiltRenderStates = new PredefinedRenderStateProvider(this);
-            
+            StandardEffects = new StandardEffectLibrary(this);
+
             OpenGLImmediateContext = new OpenGLRenderContext(this);
         }
         
@@ -99,6 +100,11 @@
         /// Gets the provider for predefined sampler states.
         /// </summary>
         public IPredefinedSamplerStateProvider PredefinedSamplerStates => _prebuiltRenderStates;
+
+        /// <summary>
+        /// Gets the standard effect library for the render system.
+        /// </summary>
+        public StandardEffectLibrary StandardEffects { get; }
 
         /// <summary>
         /// Initializes the service. This is called by the engine when a service is newly registered.
