@@ -288,14 +288,14 @@
         /// </summary>
         public abstract class BaseProvider : IEffectByteCodeProvider
         {
-            private readonly string m_folderPath;
-            private readonly Dictionary<string, byte[]> m_effectByteCodes;
+            private readonly string _folderPath;
+            private readonly Dictionary<string, byte[]> _effectByteCodes;
 
             /// <summary>
             /// Gets the folder path where the effect shader files of this provider reside in. The Engine's default effect shader files are in the topmost folder (e.g.
             /// <see cref="string.Empty" /> would be the value).
             /// </summary>
-            public string FolderPath => m_folderPath;
+            public string FolderPath => _folderPath;
 
             /// <summary>
             /// Constructs a new instance of the <see cref="BaseProvider"/> class.
@@ -308,10 +308,10 @@
                     throw new ArgumentNullException(nameof(folderPath));
                 }
 
-                m_folderPath = folderPath;
-                m_effectByteCodes = new Dictionary<string, byte[]>();
+                _folderPath = folderPath;
+                _effectByteCodes = new Dictionary<string, byte[]>();
 
-                Preload(m_effectByteCodes);
+                Preload(_effectByteCodes);
             }
 
             /// <summary>
@@ -326,7 +326,7 @@
                     return null;
                 }
                 
-                if (!m_effectByteCodes.TryGetValue(name, out byte[] byteCode))
+                if (!_effectByteCodes.TryGetValue(name, out byte[] byteCode))
                 {
                     byteCode = null;
                 }

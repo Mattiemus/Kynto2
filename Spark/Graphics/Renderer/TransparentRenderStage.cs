@@ -7,11 +7,11 @@
     /// </summary>
     public sealed class TransparentRenderStage : IRenderStage
     {
-        private RasterizerState m_pass1RS;
-        private DepthStencilState m_pass1DSS;
-        private RasterizerState m_pass2RS;
+        private RasterizerState _pass1RS;
+        private DepthStencilState _pass1DSS;
+        private RasterizerState _pass2RS;
 
-        private RasterizerState m_defaultPass1RS;
+        private RasterizerState _defaultPass1RS;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TransparentRenderStage"/> class.
@@ -45,13 +45,13 @@
         /// </summary>
         public RasterizerState BackPassRasterizerState
         {
-            get => m_pass1RS;
+            get => _pass1RS;
             set
             {
-                m_pass1RS = value;
+                _pass1RS = value;
                 if (value == null)
                 {
-                    m_pass1RS = m_defaultPass1RS;
+                    _pass1RS = _defaultPass1RS;
                 }
             }
         }
@@ -62,13 +62,13 @@
         /// </summary>
         public DepthStencilState BackPassDepthStencilState
         {
-            get => m_pass1DSS;
+            get => _pass1DSS;
             set
             {
-                m_pass1DSS = value;
+                _pass1DSS = value;
                 if (value == null)
                 {
-                    m_pass1DSS = DepthStencilState.DepthWriteOff;
+                    _pass1DSS = DepthStencilState.DepthWriteOff;
                 }
             }
         }
@@ -79,13 +79,13 @@
         /// </summary>
         public RasterizerState FrontPassRasterizerState
         {
-            get => m_pass2RS;
+            get => _pass2RS;
             set
             {
-                m_pass2RS = value;
+                _pass2RS = value;
                 if (value == null)
                 {
-                    m_pass2RS = RasterizerState.CullBackClockwiseFront;
+                    _pass2RS = RasterizerState.CullBackClockwiseFront;
                 }
             }
         }
@@ -138,15 +138,15 @@
                     // Do two pass rendering
 
                     // Enforce first pass states (back rendering)
-                    renderContext.RasterizerState = m_pass1RS;
-                    renderContext.DepthStencilState = m_pass1DSS;
+                    renderContext.RasterizerState = _pass1RS;
+                    renderContext.DepthStencilState = _pass1DSS;
                     renderContext.EnforcedRenderState |= EnforcedRenderState.DepthStencilState | EnforcedRenderState.RasterizerState;
 
                     DrawRenderable(renderContext, renderable, material);
 
                     // Enforce second pass states (front rendering)
                     renderContext.EnforcedRenderState &= ~EnforcedRenderState.DepthStencilState;
-                    renderContext.RasterizerState = m_pass2RS;
+                    renderContext.RasterizerState = _pass2RS;
 
                     DrawRenderable(renderContext, renderable, material);
 
@@ -249,14 +249,14 @@
         /// <param name="renderSystem">Render system</param>
         private void InitRenderStates(IRenderSystem renderSystem)
         {
-            m_pass1RS = m_defaultPass1RS = new RasterizerState(renderSystem);
-            m_pass1RS.Cull = CullMode.Front;
-            m_pass1RS.VertexWinding = VertexWinding.CounterClockwise;
-            m_pass1RS.BindRenderState();
+            _pass1RS = _defaultPass1RS = new RasterizerState(renderSystem);
+            _pass1RS.Cull = CullMode.Front;
+            _pass1RS.VertexWinding = VertexWinding.CounterClockwise;
+            _pass1RS.BindRenderState();
 
-            m_pass1DSS = DepthStencilState.DepthWriteOff;
+            _pass1DSS = DepthStencilState.DepthWriteOff;
 
-            m_pass2RS = RasterizerState.CullBackClockwiseFront;
+            _pass2RS = RasterizerState.CullBackClockwiseFront;
         }
     }
 }

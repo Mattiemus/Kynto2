@@ -121,6 +121,8 @@
     <Compile Include="Core\EngineServiceEventArgs.cs" />
     <Compile Include="Core\EngineServiceRegistry.cs" />
     <Compile Include="Core\EngineServiceReplacedEventArgs.cs" />
+    <Compile Include="Core\ExtendedPropertiesCollection.cs" />
+    <Compile Include="Core\IExtendedProperties.cs" />
     <Compile Include="Core\TypedEventHandler.cs" />
     <Compile Include="Core\GameTime.cs" />
     <Compile Include="Core\GameTimer.cs" />
@@ -166,6 +168,7 @@
     <Compile Include="Graphics\IDepthStencilBuffer.cs" />
     <Compile Include="Graphics\IEffectByteCodeProvider.cs" />
     <Compile Include="Graphics\IGraphicsAdapter.cs" />
+    <Compile Include="Graphics\IInstanceDataProvider.cs" />
     <Compile Include="Graphics\Implementation\BlendStateImplementation.cs" />
     <Compile Include="Graphics\Implementation\DepthStencilStateImplementation.cs" />
     <Compile Include="Graphics\Implementation\IBlendStateImplementation.cs" />
@@ -240,6 +243,7 @@
     <Compile Include="Graphics\Implementation\IVertexBufferImplementation.cs" />
     <Compile Include="Graphics\Implementation\IVertexBufferImplementationFactory.cs" />
     <Compile Include="Graphics\IndexBuffer.cs" />
+    <Compile Include="Graphics\InstanceDefinition.cs" />
     <Compile Include="Graphics\IPredefinedBlendStateProvider.cs" />
     <Compile Include="Graphics\IPredefinedDepthStencilStateProvider.cs" />
     <Compile Include="Graphics\IPredefinedRasterizerStateProvider.cs" />
@@ -276,6 +280,7 @@
     <Compile Include="Graphics\RasterizerState.cs" />
     <Compile Include="Graphics\Renderer\BaseRenderer.cs" />
     <Compile Include="Graphics\Renderer\Forward\ForwardRenderer.cs" />
+    <Compile Include="Graphics\Renderer\IInstancedRenderable.cs" />
     <Compile Include="Graphics\Renderer\IMarkedRenderable.cs" />
     <Compile Include="Graphics\Renderer\IRenderable.cs" />
     <Compile Include="Graphics\Renderer\IRenderBucketEntryComparer.cs" />
@@ -418,7 +423,6 @@
     <Compile Include="Math\RectangleF.cs" />
     <Compile Include="Math\Segment.cs" />
     <Compile Include="Math\Size.cs" />
-    <Compile Include="Math\SubMeshRange.cs" />
     <Compile Include="Math\Transform.cs" />
     <Compile Include="Math\Triad.cs" />
     <Compile Include="Math\Triangle.cs" />
@@ -427,6 +431,19 @@
     <Compile Include="Math\Quaternion.cs" />
     <Compile Include="Math\Vector4.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scene\BoundingCombineHint.cs" />
+    <Compile Include="Scene\CopyContext.cs" />
+    <Compile Include="Scene\CullHint.cs" />
+    <Compile Include="Scene\DirtyMark.cs" />
+    <Compile Include="Scene\IHintable.cs" />
+    <Compile Include="Scene\ISpatial.cs" />
+    <Compile Include="Scene\ISpatialVisitor.cs" />
+    <Compile Include="Scene\LightCombineHint.cs" />
+    <Compile Include="Scene\Node.cs" />
+    <Compile Include="Scene\NodeChildrenCollection.cs" />
+    <Compile Include="Scene\PickingHint.cs" />
+    <Compile Include="Scene\SceneHints.cs" />
+    <Compile Include="Scene\Spatial.cs" />
     <Compile Include="Utilities\BaseDisposable.cs" />
     <Compile Include="Utilities\CyclicReferenceDetector.cs" />
     <Compile Include="Utilities\Parsing\ParseNode.cs" />
@@ -437,10 +454,10 @@
     <Compile Include="Utilities\Parsing\Token.cs" />
     <Compile Include="Utilities\ReferenceEqualityComparer.cs" />
     <Compile Include="Utilities\SmartActivator.cs" />
+    <Compile Include="Utilities\VisitLock.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\" />
-    <Folder Include="Scene\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
