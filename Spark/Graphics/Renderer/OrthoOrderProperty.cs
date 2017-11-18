@@ -1,4 +1,4 @@
-﻿namespace Spark.Graphics.Renderer
+﻿namespace Spark.Graphics
 {
     /// <summary>
     /// Render property to determine the order of renderables when rendered in orthographic.

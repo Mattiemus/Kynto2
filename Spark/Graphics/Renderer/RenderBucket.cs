@@ -1,13 +1,11 @@
-﻿namespace Spark.Graphics.Renderer
+﻿namespace Spark.Graphics
 {
     using System;
     using System.Linq;
     using System.Collections;
     using System.Collections.Generic;
     using System.Runtime.InteropServices;
-
-    using Graphics.Materials;
-
+    
     /// <summary>
     /// A render bucket is a collection of renderables that are to be drawn, generally sorted in some order to achieve a rendering effect
     /// or to minimize overdraw and state switching.

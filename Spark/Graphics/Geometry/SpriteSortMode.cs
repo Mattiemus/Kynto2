@@ -1,4 +1,4 @@
-﻿namespace Spark.Graphics.Geometry
+﻿namespace Spark.Graphics
 {
     /// <summary>
     /// Sprite sort mode enumeration.

@@ -1,5 +1,5 @@
-﻿namespace Spark.Graphics.Renderer.Forward
-{
+﻿namespace Spark.Graphics
+{ 
     /// <summary>
     /// Simple forward renderer.
     /// </summary>

@@ -1,7 +1,5 @@
 ﻿namespace Spark.Input
 {
-    using Core;
-
     /// <summary>
     /// Defines a service that polls a keyboard device and maintains the current device's state.
     /// </summary>

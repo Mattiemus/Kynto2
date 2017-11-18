@@ -1,13 +1,10 @@
 ﻿namespace Spark.Scene
 {
     using System;
-
-    using Core;
+    
     using Math;
     using Content;
     using Graphics;
-    using Graphics.Renderer;
-    using Graphics.Materials;
 
     public class Node : Spatial
     {

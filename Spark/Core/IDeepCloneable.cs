@@ -1,4 +1,4 @@
-﻿namespace Spark.Core
+﻿namespace Spark
 {
     /// <summary>
     /// Interface for objects that can have their data cloned deeply.

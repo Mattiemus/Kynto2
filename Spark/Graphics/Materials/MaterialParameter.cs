@@ -1,4 +1,4 @@
-﻿namespace Spark.Graphics.Materials
+﻿namespace Spark.Graphics
 {
     using System;
 

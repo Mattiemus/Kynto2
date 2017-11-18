@@ -1,9 +1,7 @@
 ﻿namespace Spark.Input
 {
     using System.Collections.Generic;
-
-    using Core;
-
+    
     /// <summary>
     /// Checks if a series of input bindings have been pressed since the last update. It can also account for key repeats,
     /// where the keys or buttons are continually pressed between multiple updates.

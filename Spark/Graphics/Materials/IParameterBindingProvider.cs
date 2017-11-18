@@ -1,7 +1,5 @@
-﻿namespace Spark.Graphics.Materials
+﻿namespace Spark.Graphics
 {
-    using Graphics.Renderer;
-
     /// <summary>
     /// Defines logic that provides computed parameters to effect parameter instances.
     /// </summary>

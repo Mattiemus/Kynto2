@@ -2,9 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-
-    using Core;
-
+    
     /// <summary>
     /// Represents a composite input condition where all conditions must be satisfied by some input. If the condition is true,
     /// then the action can be performed. This is paired with an InputAction inside an InputTrigger. Actions and conditions can 

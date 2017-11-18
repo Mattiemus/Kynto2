@@ -4,10 +4,9 @@
     using System.Globalization;
     using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
-
-    using Core;
+    
     using Content;
-    using Graphics.Geometry;
+    using Graphics;
 
     /// <summary>
     /// Represents a Bounding Box with arbitrary orientation defined by three axes. The box is defined by extents from its center along the three axes.

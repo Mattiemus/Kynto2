@@ -1,4 +1,4 @@
-﻿namespace Spark.Core
+﻿namespace Spark
 {
     /// <summary>
     /// Enumerates possible engine service event types.

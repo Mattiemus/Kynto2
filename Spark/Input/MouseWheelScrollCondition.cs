@@ -1,7 +1,5 @@
 ﻿namespace Spark.Input
 {
-    using Core;
-
     /// <summary>
     /// Checks if the mouse wheel has scrolled since the last update.
     /// </summary>

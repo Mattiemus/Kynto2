@@ -1,7 +1,5 @@
-﻿namespace Spark.Graphics.Renderer
+﻿namespace Spark.Graphics
 {
-    using Graphics.Materials;
-
     /// <summary>
     /// Defines logic for rendering transparent objects.
     /// </summary>

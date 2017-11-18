@@ -4,7 +4,6 @@
     using System.IO;
     
     using Graphics;
-    using Graphics.Effects;
     using Parser;
     using Utilities.Parsing;
 

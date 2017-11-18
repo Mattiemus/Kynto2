@@ -1,4 +1,4 @@
-﻿namespace Spark.Graphics.Renderer
+﻿namespace Spark.Graphics
 {
     /// <summary>
     /// Defines a renderable that will be notified by a render queue when marks are cleared.

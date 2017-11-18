@@ -1,7 +1,5 @@
 ﻿namespace Spark.Input
 {
-    using Core;
-
     /// <summary>
     /// Checks if a key has been pressed since the last update, that is, moved from an up to down state. It can also account for
     /// key repeats, where the key is continually down between multiple updates.

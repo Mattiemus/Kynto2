@@ -1,6 +1,5 @@
 ﻿namespace Spark.Application
 {
-    using Core;
     using Implementation;
 
     /// <summary>

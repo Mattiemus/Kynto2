@@ -1,7 +1,5 @@
 ﻿namespace Spark.Graphics.Implementation
 {
-    using Effects;
-
     /// <summary>
     /// Defines a callback when an effect shader group is applied to execute any pre-apply logic.
     /// </summary>

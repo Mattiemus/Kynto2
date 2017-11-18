@@ -3,9 +3,7 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
-
-    using Core.Collections;
-
+    
     /// <summary>
     /// Represents a collection of resource importers that can be queried by extension and target type. The collection
     /// allows for multiple importers to be registered to a format extension, but there can only be one importer per format extension

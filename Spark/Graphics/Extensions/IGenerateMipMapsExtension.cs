@@ -1,4 +1,4 @@
-﻿namespace Spark.Graphics.Extensions
+﻿namespace Spark.Graphics
 {
     /// <summary>
     /// Defines an extension functionality for a render context to generate texture mipmaps.

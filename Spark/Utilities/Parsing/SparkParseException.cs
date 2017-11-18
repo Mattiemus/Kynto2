@@ -2,9 +2,7 @@
 {
     using System;
     using System.Runtime.Serialization;
-
-    using Core;
-
+    
     /// <summary>
     /// Exception for a parse error
     /// </summary>

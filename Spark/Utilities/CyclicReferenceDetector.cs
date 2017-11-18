@@ -1,9 +1,7 @@
 ﻿namespace Spark.Utilities
 {
     using System.Collections.Generic;
-
-    using Core;
-
+    
     /// <summary>
     /// Simple cyclic reference detector to be used when processing parent-child or nested relationships in order to
     /// detect cycles in the relationship. The object is added as a reference, processed, then removed as a reference. 

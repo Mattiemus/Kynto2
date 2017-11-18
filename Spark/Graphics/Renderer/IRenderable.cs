@@ -1,7 +1,6 @@
-﻿namespace Spark.Graphics.Renderer
+﻿namespace Spark.Graphics
 {
     using Math;
-    using Graphics.Materials;
     
     /// <summary>
     /// Defines an object that can be rendered and thus has a set of properties that describe how it should

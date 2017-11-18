@@ -1,9 +1,7 @@
 ﻿namespace Spark.Input
 {
     using System;
-
-    using Core;
-
+    
     /// <summary>
     /// Provides convienent access to a registered <see cref="IMouseInputSystem"/> service.
     /// </summary>

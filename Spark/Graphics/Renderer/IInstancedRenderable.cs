@@ -1,4 +1,4 @@
-﻿namespace Spark.Graphics.Renderer
+﻿namespace Spark.Graphics
 {
     /// <summary>
     /// A renderable that can be instanced. Every instance is associated with a single instance definition that

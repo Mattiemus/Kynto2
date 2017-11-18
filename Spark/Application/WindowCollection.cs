@@ -2,9 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-
-    using Core.Collections;
-
+    
     /// <summary>
     /// A read-only collection of windows.
     /// </summary>

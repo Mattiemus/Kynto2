@@ -1,4 +1,4 @@
-﻿namespace Spark.Core
+﻿namespace Spark
 {
     using System;
     using System.Linq;
@@ -7,7 +7,6 @@
     using System.Globalization;
 
     using Content;
-    using Interop;
     using Math;
 
     /// <summary>
@@ -223,12 +222,12 @@
             }
 
             RawBuffer newBuffer = new RawBuffer(capacity * _elementSizeInBytes);
-            MemoryHelper.CopyMemory(newBuffer.BufferPointer, _data.BufferPointer, Math.Min(newBuffer.SizeInBytes, _data.SizeInBytes));
+            MemoryHelper.CopyMemory(newBuffer.BufferPointer, _data.BufferPointer, System.Math.Min(newBuffer.SizeInBytes, _data.SizeInBytes));
 
             _length = capacity;
             _data.Dispose();
             _data = newBuffer;
-            _position = Math.Min(_position, _length);
+            _position = System.Math.Min(_position, _length);
 
             _version++;
         }

@@ -1,8 +1,7 @@
 ﻿namespace Spark.Scene
 {
-    using Core;
     using Math;
-    using Graphics.Renderer;
+    using Graphics;
 
     /// <summary>
     /// Defines an object that exists in world space. A spatial may be a single mesh or a collection of meshes.

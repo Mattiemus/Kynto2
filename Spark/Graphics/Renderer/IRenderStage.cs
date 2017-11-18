@@ -1,4 +1,4 @@
-﻿namespace Spark.Graphics.Renderer
+﻿namespace Spark.Graphics
 {
     /// <summary>
     /// Defines a stage in a renderer. Each render stage executes logic to contribute to the final output (e.g. shadow map generation, object rendering,

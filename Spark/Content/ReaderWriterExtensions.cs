@@ -1,7 +1,5 @@
 ﻿namespace Spark.Content
 {
-    using Core;
-
     /// <summary>
     /// Extension methods for the serialization interfaces (readers/writers/etc)
     /// </summary>

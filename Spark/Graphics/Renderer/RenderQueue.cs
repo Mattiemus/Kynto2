@@ -1,12 +1,10 @@
-﻿namespace Spark.Graphics.Renderer
+﻿namespace Spark.Graphics
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Runtime.InteropServices;
-
-    using Graphics.Materials;
-
+    
     /// <summary>
     /// Encapsulates a method to draw the contents of a single render bucket.
     /// </summary>

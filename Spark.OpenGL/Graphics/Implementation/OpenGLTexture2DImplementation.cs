@@ -2,9 +2,7 @@
 {
     using Spark.Graphics;
     using Spark.Graphics.Implementation;
-
-    using Core;
-
+    
     /// <summary>
     /// OpenGL implementation for <see cref="Texture2D"/>
     /// </summary>

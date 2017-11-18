@@ -1,4 +1,4 @@
-﻿namespace Spark.Graphics.Renderer
+﻿namespace Spark.Graphics
 {
     /// <summary>
     /// Defines a coordinator for rendering objects. It defines a queue of objects that serves as input for the renderer and a collection

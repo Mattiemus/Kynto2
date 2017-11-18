@@ -1,4 +1,4 @@
-﻿namespace Spark.Graphics.Geometry
+﻿namespace Spark.Graphics
 {
     /// <summary>
     /// Defines an object that contains a <see cref="MeshData"/>.

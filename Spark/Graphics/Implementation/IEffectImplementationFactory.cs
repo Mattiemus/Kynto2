@@ -1,7 +1,5 @@
 ﻿namespace Spark.Graphics.Implementation
 {
-    using Graphics.Effects;
-
     /// <summary>
     /// Defines a factory that creates platform-specific implementations of type <see cref="IEffectImplementationFactory"/>.
     /// </summary>

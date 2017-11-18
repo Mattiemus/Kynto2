@@ -1,9 +1,7 @@
 ﻿namespace Spark.Input
 {
     using System.Collections.Generic;
-
-    using Core;
-
+    
     /// <summary>
     /// Checks if a series of input bindings have been released since the last update.
     /// </summary>

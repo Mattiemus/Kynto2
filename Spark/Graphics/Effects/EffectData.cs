@@ -1,8 +1,7 @@
-﻿namespace Spark.Graphics.Effects
+﻿namespace Spark.Graphics
 {
     using System.IO;
-
-    using Core;
+    
     using Content;
     using Content.Binary;
 

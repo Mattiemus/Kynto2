@@ -1,9 +1,7 @@
 ﻿namespace Spark.Graphics.Implementation
 {
     using System;
-
-    using Core;
-    
+        
     /// <summary>
     /// Defines a platform-specific graphics resource implementation that is created by a factory registered to a render system and is bound to a graphics resource.
     /// </summary>

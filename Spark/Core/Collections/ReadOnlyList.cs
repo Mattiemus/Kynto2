@@ -1,4 +1,4 @@
-﻿namespace Spark.Core.Collections
+﻿namespace Spark
 {
     using System;
     using System.Collections;

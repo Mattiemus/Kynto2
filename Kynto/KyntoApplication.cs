@@ -3,15 +3,11 @@
     using System.Linq;
     using System.Collections.Generic;
 
-    using Spark.Core;
+    using Spark;
     using Spark.Application;
     using Spark.Content;
-    using Spark.Content.Importers.Texture;
+    using Spark.Content.Importers;
     using Spark.Graphics;
-    using Spark.Graphics.Materials;
-    using Spark.Graphics.Geometry;
-    using Spark.Graphics.Renderer;
-    using Spark.Graphics.Renderer.Forward;
     using Spark.Effects.Importer;
     using Spark.Math;
     using Spark.Input;

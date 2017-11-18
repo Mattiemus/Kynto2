@@ -1,4 +1,4 @@
-﻿namespace Spark.Graphics.Lights
+﻿namespace Spark.Graphics
 {
     /// <summary>
     /// Enumerates supported types of lights.

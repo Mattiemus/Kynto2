@@ -4,8 +4,7 @@
 
     using Spark.Graphics;
     using Spark.Graphics.Implementation;
-
-    using Core;
+    
     using Math;
     
     /// <summary>

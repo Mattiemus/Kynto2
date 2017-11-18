@@ -2,8 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-
-    using Core;
+    
     using Utilities;
     using Xml;
     using Binary;

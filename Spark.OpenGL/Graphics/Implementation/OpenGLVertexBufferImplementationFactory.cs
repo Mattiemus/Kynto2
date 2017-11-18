@@ -2,9 +2,7 @@
 {
     using Spark.Graphics;
     using Spark.Graphics.Implementation;
-
-    using Core;
-
+    
     /// <summary>
     /// Factory for creating <see cref="OpenGLVertexBufferImplementation"/> instances
     /// </summary>

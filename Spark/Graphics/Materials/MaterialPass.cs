@@ -1,7 +1,5 @@
-﻿namespace Spark.Graphics.Materials
+﻿namespace Spark.Graphics
 {
-    using Core;
-
     /// <summary>
     /// A material pass contains all the necessary state information to configure the render pipeline before a draw call is issued.
     /// </summary>

@@ -1,7 +1,5 @@
 ﻿namespace Spark.Math
 {
-    using Core.Interop;
-
     /// <summary>
     /// 
     /// </summary>

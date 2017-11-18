@@ -1,8 +1,5 @@
 ﻿namespace Spark.Graphics.Implementation
 {
-    using Core;
-    using Graphics.Geometry;
-
     /// <summary>
     /// Defines a factory that creates platform-specific implementations of type <see cref="IIndexBufferImplementation"/>.
     /// </summary>

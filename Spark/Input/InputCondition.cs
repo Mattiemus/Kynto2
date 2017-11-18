@@ -1,9 +1,7 @@
 ﻿namespace Spark.Input
 {
     using System;
-
-    using Core;
-
+    
     /// <summary>
     /// Delegate for logic that checks some condition and evaluates true or false.
     /// </summary>

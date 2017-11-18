@@ -1,4 +1,4 @@
-﻿namespace Spark.Core
+﻿namespace Spark
 {
     /// <summary>
     /// Interface for a timer used for interpolation during simulation (the "game"). When the timer is updated, it returns a time snapshot - the elapsed

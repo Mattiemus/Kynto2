@@ -1,9 +1,8 @@
-﻿namespace Spark.Core
+﻿namespace Spark
 {
     using System;
     using System.Globalization;
-
-    using Interop;
+    
     using Utilities;
 
     /// <summary>

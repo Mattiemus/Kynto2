@@ -1,7 +1,5 @@
-﻿namespace Spark.Graphics.Lights
+﻿namespace Spark.Graphics
 {
-    using Renderer;
-
     /// <summary>
     /// Render property for a <see cref="LightCollection"/>.
     /// </summary>

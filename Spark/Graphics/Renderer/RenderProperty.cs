@@ -1,8 +1,7 @@
-﻿namespace Spark.Graphics.Renderer
+﻿namespace Spark.Graphics
 {
     using System;
-
-    using Core;
+    
     using Content;
     using Utilities;
 

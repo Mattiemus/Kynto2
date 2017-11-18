@@ -1,6 +1,6 @@
 ﻿namespace Kynto.Input.Triggers
 {
-    using Spark.Core;
+    using Spark;
     using Spark.Input;
 
     /// <summary>

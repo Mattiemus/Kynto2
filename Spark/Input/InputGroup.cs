@@ -3,9 +3,7 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
-
-    using Core;
-
+    
     /// <summary>
     /// Manages a group of <see cref="InputTrigger"/> objects. Generally triggers are grouped
     /// logically so they can all be enabled or checked together.

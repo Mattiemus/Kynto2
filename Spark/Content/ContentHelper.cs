@@ -2,9 +2,7 @@
 {
     using System.IO;
     using System.Reflection;
-
-    using Core;
-
+    
     /// <summary>
     /// Utilities for resource management
     /// </summary>

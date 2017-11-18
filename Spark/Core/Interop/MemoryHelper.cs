@@ -1,4 +1,4 @@
-﻿namespace Spark.Core.Interop
+﻿namespace Spark
 {
     using System;
     using System.Collections.Generic;

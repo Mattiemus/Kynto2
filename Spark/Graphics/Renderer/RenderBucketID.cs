@@ -1,11 +1,9 @@
-﻿namespace Spark.Graphics.Renderer
+﻿namespace Spark.Graphics
 {
     using System;
     using System.Collections.Generic;
     using System.Runtime.InteropServices;
-
-    using Core;
-
+    
     /// <summary>
     /// Identifies a render bucket in the render queue.
     /// </summary>

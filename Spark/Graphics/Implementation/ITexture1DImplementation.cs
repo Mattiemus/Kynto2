@@ -1,7 +1,5 @@
 ﻿namespace Spark.Graphics.Implementation
 {
-    using Core;
-
     /// <summary>
     /// Defines an implementation for <see cref="Texture1D"/>.
     /// </summary>

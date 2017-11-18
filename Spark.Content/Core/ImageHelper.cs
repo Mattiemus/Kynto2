@@ -1,11 +1,9 @@
 ﻿using System.Drawing;
 
-namespace Spark.Content.Core
+namespace Spark.Content
 {
     using System.Drawing.Imaging;
-
-    using Spark.Core;
-
+    
     using Math;
     using Graphics;
 

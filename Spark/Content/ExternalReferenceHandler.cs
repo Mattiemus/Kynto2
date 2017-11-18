@@ -9,8 +9,6 @@
     using System.Threading.Tasks;
 
     using Utilities;
-    using Core;
-    using Core.Collections;
 
     /// <summary>
     /// Generic external handler for processing external references during savable serialization. The handler is responsible for creating a reference

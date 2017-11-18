@@ -1,7 +1,5 @@
 ﻿namespace Spark.Graphics.Implementation
 {
-    using Core;
-
     /// <summary>
     /// Defines a factory that creates platform-specific implementations of type <see cref="ITexture2DImplementation"/>.
     /// </summary>

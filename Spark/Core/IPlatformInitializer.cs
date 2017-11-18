@@ -1,4 +1,4 @@
-﻿namespace Spark.Core
+﻿namespace Spark
 {
     /// <summary>
     /// Interface that will register all the necessary services to get fully setup and operational on a given platform. Its a logical container

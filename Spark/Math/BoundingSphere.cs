@@ -4,11 +4,9 @@
     using System.Globalization;
     using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
-
-    using Core;
-    using Core.Interop;
+    
     using Content;
-    using Graphics.Geometry;
+    using Graphics;
 
     /// <summary>
     /// Represents a Bounding Sphere. The sphere is defined by a center point and a radius.

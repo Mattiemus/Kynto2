@@ -1,12 +1,10 @@
-﻿namespace Spark.Graphics.Geometry
+﻿namespace Spark.Graphics
 {
     using System;
     using System.Collections.Generic;
     using System.Runtime.InteropServices;
     using System.Text;
-
-    using Core;
-    using Core.Collections;
+    
     using Math;
     using Content;
 

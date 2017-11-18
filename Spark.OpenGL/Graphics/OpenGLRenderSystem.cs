@@ -8,8 +8,7 @@
     using Spark.Utilities;
     using Spark.Graphics;
     using Spark.Graphics.Implementation;
-
-    using Core;
+    
     using Implementation;
 
     using OTK = OpenTK.Graphics;

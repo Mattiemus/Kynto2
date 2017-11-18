@@ -1,4 +1,4 @@
-﻿namespace Spark.OpenGL.Graphics.Implementation.Effects
+﻿namespace Spark.OpenGL.Graphics.Implementation
 {
     using System;
     using Spark.Graphics;

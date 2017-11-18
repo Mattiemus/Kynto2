@@ -5,9 +5,7 @@
     using System.IO;
     using System.Text;
     using System.Xml;
-
-    using Core;
-    using Core.Interop;
+    
     using Utilities;
 
     /// <summary>

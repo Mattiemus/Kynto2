@@ -1,7 +1,5 @@
-﻿namespace Spark.Graphics.Renderer
+﻿namespace Spark.Graphics
 {
-    using Graphics.Materials;
-
     /// <summary>
     /// An entry inside a render bucket. Each entry is a renderable with an (optional) material that will be used
     /// to render the object.

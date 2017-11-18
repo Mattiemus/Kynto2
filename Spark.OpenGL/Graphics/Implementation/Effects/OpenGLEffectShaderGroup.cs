@@ -1,11 +1,10 @@
-﻿namespace Spark.OpenGL.Graphics.Implementation.Effects
+﻿namespace Spark.OpenGL.Graphics.Implementation
 {
     using System.Text;
     using System.Collections.Generic;
 
     using Spark.Utilities;
     using Spark.Graphics;
-    using Spark.Graphics.Effects;
 
     using OTK = OpenTK.Graphics;
     using OGL = OpenTK.Graphics.OpenGL;

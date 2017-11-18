@@ -1,12 +1,10 @@
-﻿namespace Spark.Graphics.Materials
+﻿namespace Spark.Graphics
 {
     using System;
     using System.Collections.Generic;
-
-    using Core;
+    
     using Math;
     using Content;
-    using Graphics.Renderer;
 
     /// <summary>
     /// Defines the way the surface of a piece of geometry is rendered

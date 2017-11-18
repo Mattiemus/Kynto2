@@ -1,7 +1,5 @@
-﻿namespace Spark.Graphics.Materials
+﻿namespace Spark.Graphics
 {
-    using Core.Collections;
-
     /// <summary>
     /// A collection of passes in a material. Each pass contains all the state information for the rendering pipeline that is applied before a draw call is issued.
     /// </summary>

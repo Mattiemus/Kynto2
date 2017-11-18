@@ -2,12 +2,10 @@
 {
     using System;
     using System.Threading;
-
-    using Core;
+    
     using Math;
     using Content;
     using Graphics;
-    using Graphics.Materials;
     using Input;
 
     public abstract class SparkApplication

@@ -4,8 +4,7 @@
     using System.Collections.Generic;
 
     using Content;
-    using Core;
-    using Graphics.Geometry;
+    using Graphics;
 
     /// <summary>
     /// Base class for all bounding volumes, which are simple logical 3D shapes that encapsulates some volume. Bounding volumes

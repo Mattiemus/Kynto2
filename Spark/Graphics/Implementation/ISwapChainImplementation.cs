@@ -3,7 +3,6 @@
     using System;
 
     using Math;
-    using Core;
 
     /// <summary>
     /// Defines an implementation for <see cref="SwapChain"/>.

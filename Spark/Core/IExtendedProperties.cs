@@ -1,4 +1,4 @@
-﻿namespace Spark.Core
+﻿namespace Spark
 {
     /// <summary>
     /// Interface for objects that contain a map of "extended properties".

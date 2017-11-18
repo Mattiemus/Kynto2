@@ -1,13 +1,11 @@
-﻿namespace Spark.Graphics.Materials
+﻿namespace Spark.Graphics
 {
     using System;
     using System.Linq;
     using System.Collections;
     using System.Collections.Generic;
-
-    using Core;
+    
     using Content;
-    using Graphics.Renderer;
 
     /// <summary>
     /// Defines a group of materials that are used to draw geometry. Each material has a shader effect and parameters, and is

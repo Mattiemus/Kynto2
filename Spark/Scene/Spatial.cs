@@ -2,14 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
-
-    using Core;
+    
     using Math;
     using Content;
     using Graphics;
-    using Graphics.Lights;
-    using Graphics.Materials;
-    using Graphics.Renderer;
     using Utilities;
 
     public abstract class Spatial : ISpatial, ISavable, IHintable

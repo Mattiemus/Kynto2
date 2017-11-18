@@ -2,8 +2,7 @@
 {
     using System;
     using System.Globalization;
-
-    using Core;
+    
     using Content;
 
     /// <summary>

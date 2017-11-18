@@ -1,11 +1,10 @@
 ﻿namespace Spark.Math
 {
-    using Content;
-    using Core.Interop;
     using System;
-
     using System.Globalization;
     using System.Runtime.InteropServices;
+
+    using Content;
 
     /// <summary>
     /// Defines a packed 32-bit color using red, green, blue, and alpha components (in RGBA order).

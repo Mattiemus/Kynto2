@@ -5,7 +5,6 @@
     using System.Text;
 
     using Utilities;
-    using Core;
 
     /// <summary>
     /// A reader that can read built-in .NET types / primitive values in both singular and array forms from binary.

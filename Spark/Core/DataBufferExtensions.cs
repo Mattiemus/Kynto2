@@ -1,9 +1,7 @@
-﻿namespace Spark.Core
+﻿namespace Spark
 {
     using System;
-
-    using Interop;
-
+    
     /// <summary>
     /// Extension methods for the data buffer family of interfaces.
     /// </summary>

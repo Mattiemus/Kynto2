@@ -2,7 +2,7 @@
 {
     using System;
 
-    using Spark.Core;
+    using Spark;
     using Spark.Input;
 
     /// <summary>

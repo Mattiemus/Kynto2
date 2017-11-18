@@ -5,7 +5,6 @@
     using System.Text;
 
     using Utilities;
-    using Core;
 
     /// <summary>
     /// A writer that can write built-in .NET types / primitive values in both singular and array forms to binary.

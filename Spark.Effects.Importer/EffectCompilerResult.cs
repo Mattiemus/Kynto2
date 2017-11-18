@@ -1,6 +1,6 @@
 ﻿namespace Spark.Effects.Importer
 {
-    using Graphics.Effects;
+    using Spark.Graphics;
 
     /// <summary>
     /// Represents the result of compiling an effect source file.

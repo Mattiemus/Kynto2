@@ -2,9 +2,7 @@
 {
     using System;
     using System.Runtime.Serialization;
-
-    using Core;
-
+    
     /// <summary>
     /// Engine exception for an error related to application services.
     /// </summary>

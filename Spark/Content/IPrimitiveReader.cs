@@ -1,7 +1,5 @@
 ﻿namespace Spark.Content
 {
-    using Core;
-
     using System;
 
     /// <summary>

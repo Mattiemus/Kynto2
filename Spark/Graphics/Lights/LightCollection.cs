@@ -1,10 +1,9 @@
-﻿namespace Spark.Graphics.Lights
+﻿namespace Spark.Graphics
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
-
-    using Core;
+    
     using Math;
     using Content;
 

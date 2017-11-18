@@ -1,11 +1,8 @@
 ﻿namespace Spark.Windows.Input
 {
-    using Spark.Core;
     using Spark.Input;
     using Spark.Input.Utilities;
-
-    using Core;
-
+    
     /// <summary>
     /// Keyboard input system that acquires state data through the Win32 API.
     /// </summary>

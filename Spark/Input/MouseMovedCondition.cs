@@ -1,6 +1,5 @@
 ﻿namespace Spark.Input
 {
-    using Core;
     using Math;
     
     /// <summary>

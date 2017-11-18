@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
 
-    using Spark.Core;
+    using Spark;
     using Spark.Graphics;
     using Spark.Input;
     using Spark.Math;

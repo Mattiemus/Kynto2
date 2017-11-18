@@ -4,9 +4,7 @@
 
     using Spark.Graphics;
     using Spark.Graphics.Implementation;
-
-    using Core;
-
+    
     using OTK = OpenTK.Graphics;
     using OGL = OpenTK.Graphics.OpenGL;
 

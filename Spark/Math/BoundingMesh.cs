@@ -1,10 +1,9 @@
 ﻿namespace Spark.Math
 {
     using System;
-
-    using Core;
+    
     using Content;
-    using Graphics.Geometry;
+    using Graphics;
 
     public sealed class BoundingMesh : BoundingVolume
     {

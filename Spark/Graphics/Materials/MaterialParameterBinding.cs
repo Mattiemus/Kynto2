@@ -1,7 +1,5 @@
-﻿namespace Spark.Graphics.Materials
+﻿namespace Spark.Graphics
 {
-    using Core;
-
     /// <summary>
     /// Parameter binding for a <see cref="Material"/>
     /// </summary>

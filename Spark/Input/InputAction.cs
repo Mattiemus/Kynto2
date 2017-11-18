@@ -1,9 +1,7 @@
 ﻿namespace Spark.Input
 {
     using System;
-
-    using Core;
-
+    
     /// <summary>
     /// Delegate for logic that is executed by an InputAction, used in leui of a subclass.
     /// </summary>

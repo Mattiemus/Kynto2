@@ -1,11 +1,9 @@
-﻿namespace Spark.Graphics.Geometry
+﻿namespace Spark.Graphics
 {
     using System;
     using System.Collections.Generic;
-
-    using Core;
+    
     using Math;
-    using Core.Collections;
     using Content;
     
     public sealed class MeshData : ISavable, IDeepCloneable

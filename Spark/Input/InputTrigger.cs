@@ -1,9 +1,7 @@
 ﻿namespace Spark.Input
 {
     using System;
-
-    using Core;
-
+    
     /// <summary>
     /// Groups a single input condition with a single action that is only triggered when the condition is true.
     /// </summary>

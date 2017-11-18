@@ -3,11 +3,8 @@
     using System;
 
     using Spark.Graphics;
-    using Spark.Graphics.Geometry;
     using Spark.Graphics.Implementation;
-
-    using Core;
-
+    
     using OTK = OpenTK.Graphics;
     using OGL = OpenTK.Graphics.OpenGL;
 

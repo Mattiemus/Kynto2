@@ -3,11 +3,8 @@
     using System;
 
     using Spark.Graphics;
-    using Spark.Graphics.Effects;
     using Spark.Graphics.Implementation;
-
-    using Effects;
-
+    
     /// <summary>
     /// OpenGL implementation for <see cref="Effect"/>
     /// </summary>

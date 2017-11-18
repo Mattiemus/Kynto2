@@ -2,7 +2,6 @@
 {
     using Math;
     using Graphics;
-    using Graphics.Geometry;
 
     public abstract class Visual : DependencyObject
     {

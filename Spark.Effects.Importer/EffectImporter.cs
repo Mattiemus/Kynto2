@@ -5,7 +5,6 @@
 
     using Content;
     using Graphics;
-    using Graphics.Effects;
 
     /// <summary>
     /// A resource importer that can load <see cref="Effect"/> objects from a Spark effect file

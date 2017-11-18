@@ -1,4 +1,4 @@
-﻿namespace Spark.Windows.Core
+﻿namespace Spark.Windows
 {
     using System;
     using System.Runtime.InteropServices;

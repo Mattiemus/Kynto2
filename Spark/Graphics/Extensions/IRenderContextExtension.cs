@@ -1,4 +1,4 @@
-﻿namespace Spark.Graphics.Extensions
+﻿namespace Spark.Graphics
 {
     /// <summary>
     /// Defines an extended functionality for a render context.

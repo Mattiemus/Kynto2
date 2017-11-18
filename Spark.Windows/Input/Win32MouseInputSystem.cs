@@ -1,11 +1,9 @@
 ﻿namespace Spark.Windows.Input
 {
     using System;
-
-    using Spark.Core;
+    
     using Spark.Input;
-
-    using Core;
+    
     using Utilities;
 
     using SWF = System.Windows.Forms;

@@ -4,8 +4,7 @@
 
     using Spark.Application;
     using Spark.Application.Implementation;
-
-    using Core;
+    
     using Utilities;
     using Implementation;
 

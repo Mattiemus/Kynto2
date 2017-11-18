@@ -1,6 +1,5 @@
-﻿namespace Spark.Graphics.Geometry
+﻿namespace Spark.Graphics
 {
-    using Core;
     using Math;
 
     public sealed class BoxGenerator : GeometryGenerator

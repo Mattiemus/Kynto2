@@ -1,7 +1,5 @@
 ﻿namespace Spark.Input
 {
-    using Core;
-
     /// <summary>
     /// Checks if a key has been released since the last update, that is, moved from a down to up state.
     /// </summary>

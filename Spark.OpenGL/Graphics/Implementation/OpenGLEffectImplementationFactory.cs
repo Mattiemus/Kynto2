@@ -1,7 +1,6 @@
 ﻿namespace Spark.OpenGL.Graphics.Implementation
 {
     using Spark.Graphics;
-    using Spark.Graphics.Effects;
     using Spark.Graphics.Implementation;
 
     /// <summary>

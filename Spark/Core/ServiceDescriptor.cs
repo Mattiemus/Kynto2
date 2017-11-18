@@ -1,4 +1,4 @@
-﻿namespace Spark.Core
+﻿namespace Spark
 {
     /// <summary>
     /// Describes an <see cref="IEngineService"/> so that it can be dynamically loaded.

@@ -1,8 +1,7 @@
 ﻿namespace Spark.Application
 {
     using System;
-
-    using Core;
+    
     using Math;
     using Graphics;
 

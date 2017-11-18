@@ -1,11 +1,9 @@
-﻿namespace Spark.Graphics.Materials
+﻿namespace Spark.Graphics
 {
     using System;
     using System.Collections.Generic;
-
-    using Core;
+    
     using Math;
-    using Graphics.Renderer;
     
     /// <summary>
     /// Definitions for built in bindable material parameters

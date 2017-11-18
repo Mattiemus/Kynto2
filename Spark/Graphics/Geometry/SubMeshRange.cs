@@ -1,4 +1,4 @@
-﻿namespace Spark.Graphics.Geometry
+﻿namespace Spark.Graphics
 {
     using Content;
 

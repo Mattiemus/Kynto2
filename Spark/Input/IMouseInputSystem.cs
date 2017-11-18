@@ -1,9 +1,7 @@
 ﻿namespace Spark.Input
 {
     using System;
-
-    using Core;
-
+    
     /// <summary>
     /// Defines a service that polls a mouse device and maintains the current device's state.
     /// </summary>
