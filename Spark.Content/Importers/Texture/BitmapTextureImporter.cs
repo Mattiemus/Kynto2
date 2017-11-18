@@ -1,4 +1,4 @@
-﻿namespace Spark.Content.Importer.Texture
+﻿namespace Spark.Content.Importers.Texture
 {
     using System;
     using System.IO;
@@ -16,12 +16,12 @@
     /// <summary>
     /// 
     /// </summary>
-    public class BitmapImporter : ResourceImporter<Texture2D>
+    public class BitmapTextureImporter : ResourceImporter<Texture2D>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BitmapImporter"/> class.
+        /// Initializes a new instance of the <see cref="BitmapTextureImporter"/> class.
         /// </summary>
-        public BitmapImporter() 
+        public BitmapTextureImporter() 
             : base(".png", ".jpg", ".jpeg", ".bmp", ".gif", ".tiff", ".tif")
         {
         }

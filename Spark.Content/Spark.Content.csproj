@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\ImageHelper.cs" />
-    <Compile Include="Importer\Texture\BitmapTextureImporter.cs" />
+    <Compile Include="Importers\Texture\BitmapTextureImporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

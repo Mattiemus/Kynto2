@@ -6,6 +6,7 @@
     using Spark.Core;
     using Spark.Application;
     using Spark.Content;
+    using Spark.Content.Importers.Texture;
     using Spark.Graphics;
     using Spark.Graphics.Materials;
     using Spark.Graphics.Geometry;
@@ -63,6 +64,7 @@
         protected override void LoadContent(ContentManager content)
         {
             content.ResourceImporters.Add(new EffectImporter());
+            content.ResourceImporters.Add(new BitmapTextureImporter());
 
             Effect effect = Content.Load<Effect>("Content/BasicEffect.effect");
 

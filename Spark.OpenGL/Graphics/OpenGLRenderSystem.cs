@@ -263,6 +263,9 @@
             new OpenGLIndexBufferImplementationFactory(this).Initialize();
             new OpenGLVertexBufferImplementationFactory(this).Initialize();
 
+            // Texutres
+            new OpenGLTexture2DImplementationFactory(this).Initialize();
+
             // Swap chain
             new OpenGLSwapChainImplementationFactory(this).Initialize();
 
