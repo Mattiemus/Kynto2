@@ -13,7 +13,7 @@ namespace Spark.Content
     /// <summary>
     /// Helper methods for loading images
     /// </summary>
-    public static class ImageHelper
+    internal static class ImageHelper
     {
         /// <summary>
         /// Creates a mip chain for the input image
@@ -30,7 +30,7 @@ namespace Spark.Content
             }
 
             int numMips = Texture.CalculateMipMapCount(mip0Width, mip0Height);
-            IDataBuffer<Color>[] mipChain = new IDataBuffer<Color>[numMips];
+            var mipChain = new IDataBuffer<Color>[numMips];
             mipChain[0] = mip0;
 
             Bitmap mip0Image = ToBitmap(mip0, mip0Width, mip0Height);
@@ -41,7 +41,7 @@ namespace Spark.Content
                 int newHeight = mip0Height;
 
                 Texture.CalculateMipLevelDimensions(i, ref newWidth, ref newHeight);
-                Bitmap image = new Bitmap(newWidth, newHeight);
+                var image = new Bitmap(newWidth, newHeight);
                 using (SD.Graphics g = SD.Graphics.FromImage(image))
                 {
                     g.SmoothingMode = SD2D.SmoothingMode.HighQuality;
@@ -70,12 +70,12 @@ namespace Spark.Content
                 return null;
             }
 
-            Bitmap image = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+            var image = new Bitmap(width, height, PixelFormat.Format32bppArgb);
             BitmapData lockedData = image.LockBits(new SD.Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
 
             int offset = (lockedData.Stride - (lockedData.Width * 4));
 
-            byte* paddingOffset = (byte*)lockedData.Scan0.ToPointer();
+            var paddingOffset = (byte*)lockedData.Scan0.ToPointer();
 
             int index = 0;
             for (int y = 0; y < height; y++)
@@ -116,18 +116,18 @@ namespace Spark.Content
             int height = data.Height;
             BitmapData lockedData = data.LockBits(new SD.Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
 
-            DataBuffer<Color> db = new DataBuffer<Color>(width * height);
+            var db = new DataBuffer<Color>(width * height);
 
             int paddingOffset = (lockedData.Stride - (lockedData.Width * 4));
 
-            byte* pData = (byte*)lockedData.Scan0.ToPointer();
+            var pData = (byte*)lockedData.Scan0.ToPointer();
 
             int index = 0;
             for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
                 {
-                    Color c = new Color(pData[2], pData[1], pData[0], pData[3]);
+                    var c = new Color(pData[2], pData[1], pData[0], pData[3]);
                     db[index] = c;
 
                     index++;

@@ -61,18 +61,7 @@
         {
             content.ResourceImporters.Add(new EffectImporter());
             content.ResourceImporters.Add(new BitmapTextureImporter());
-
-            var effect = Content.Load<Effect>("Content/BasicEffect.effect");
-
-            var material = new Material(effect);
-            material.Passes.Add("Pass0", effect.ShaderGroups.First());
-            material.SetParameterBinding("mvp", MaterialBinding.WorldViewProjectionMatrix);
-
-            var meshData = new MeshData();
-            var boxGen = new BoxGenerator(new Vector3(100, 100, 100));
-            boxGen.BuildMeshData(meshData, GenerateOptions.Positions);
-            meshData.Compile();
-
+            
             _sceneRoot = new Node("Root");
 
             int dimension = 4;
@@ -82,11 +71,7 @@
                 {
                     for (int z = -dimension; z <= dimension; z++)
                     {
-                        var mesh = new Mesh("Mesh_{x}_{y}_{z}", meshData);
-                        mesh.MakeNonInstanced(new MaterialDefinition
-                        {
-                            { RenderBucketId.Opaque, material }
-                        }, false);
+                        var mesh = CreateBoxMesh();
                         mesh.Translation = new Vector3(x * 500.0f, y * 500.0f, z * 500.0f);
                         
                         _sceneRoot.Children.Add(mesh);
@@ -112,6 +97,28 @@
             _sceneRoot.ProcessVisibleSet(_forwardRenderer);
 
             _forwardRenderer.Render();
+        }
+
+        private Mesh CreateBoxMesh()
+        {
+            var effect = Content.Load<Effect>("Content/BasicEffect.effect");
+
+            var material = new Material(effect);
+            material.Passes.Add("Pass0", effect.ShaderGroups.First());
+            material.SetParameterBinding("mvp", MaterialBinding.WorldViewProjectionMatrix);
+
+            var meshData = new MeshData();
+            var boxGen = new BoxGenerator(new Vector3(100, 100, 100));
+            boxGen.BuildMeshData(meshData, GenerateOptions.Positions);
+            meshData.Compile();
+
+            var mesh = new Mesh("Mesh_{x}_{y}_{z}", meshData);
+            mesh.MakeNonInstanced(new MaterialDefinition
+            {
+                { RenderBucketId.Opaque, material }
+            }, false);
+
+            return mesh;
         }
     }
 }
