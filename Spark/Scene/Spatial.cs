@@ -297,7 +297,7 @@
                 return;
             }
 
-            ContainmentType frustumIntersect = ContainmentType.Inside;
+            var frustumIntersect = ContainmentType.Inside;
 
             // Do frustum check - unless if no world bounding, or if we're skipping the check for any reason
             if (!skipCullCheck && hint != CullHint.Never && _worldBounding != null)
@@ -329,7 +329,7 @@
             }
 
             // If pickable, the query will do a bounding intersection test first so no need to do it here
-            IPickable pickable = this as IPickable;
+            var pickable = this as IPickable;
             if (pickable != null)
             {
                 return query.AddPick(pickable);
@@ -398,7 +398,7 @@
 
         public Spatial Clone(CopyContext copyContext = null)
         {
-            Spatial clone = SmartActivator.CreateInstance(GetType()) as Spatial;
+            var clone = SmartActivator.CreateInstance(GetType()) as Spatial;
             if (clone == null)
             {
                 return null;

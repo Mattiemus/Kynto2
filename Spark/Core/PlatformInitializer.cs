@@ -1,11 +1,10 @@
 ﻿namespace Spark
 {
     using System;
-    using System.IO;
     using System.Linq;
     using System.Reflection;
     using System.Collections.Generic;
-
+    
     /// <summary>
     /// Generic platform initializer that dynamically loads assemblies containing implementations of <see cref="IEngineService"/> and
     /// then registers them to the engine.

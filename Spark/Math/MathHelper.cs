@@ -57,6 +57,11 @@
         /// </summary>
         public const float RadiansToDegrees = (float)(180.0d / Math.PI);
 
+        internal static bool IsNearlyZero(float attenuation)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Represents Pi^2
         /// </summary>

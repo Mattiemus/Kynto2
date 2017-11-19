@@ -1,7 +1,6 @@
 ﻿namespace Kynto
 {
     using System.Linq;
-    using System.Collections.Generic;
 
     using Spark;
     using Spark.Application;
@@ -11,6 +10,7 @@
     using Spark.Effects.Importer;
     using Spark.Math;
     using Spark.Input;
+    using Spark.Scene;
 
     using Input;
         
@@ -21,8 +21,8 @@
     {
         private OrbitCameraController _orbitCamera;
         private ForwardRenderer _forwardRenderer;
-        private List<BoxMesh> _meshes;
-
+        private Node _sceneRoot;
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="KyntoApplication"/> class.
         /// </summary>
@@ -42,7 +42,7 @@
             RenderSystem.ImmediateContext.Camera.LookAt(Vector3.Zero, Vector3.Up);
 
             _orbitCamera = new OrbitCameraController(RenderSystem.ImmediateContext.Camera, Vector3.Zero);
-            _orbitCamera.MapControls(null); 
+            _orbitCamera.MapControls(null);
 
             Mouse.WindowHandle = GameWindow.Handle;
 
@@ -62,20 +62,18 @@
             content.ResourceImporters.Add(new EffectImporter());
             content.ResourceImporters.Add(new BitmapTextureImporter());
 
-            Effect effect = Content.Load<Effect>("Content/BasicEffect.effect");
+            var effect = Content.Load<Effect>("Content/BasicEffect.effect");
 
-            Material material = new Material(effect);
+            var material = new Material(effect);
             material.Passes.Add("Pass0", effect.ShaderGroups.First());
             material.SetParameterBinding("mvp", MaterialBinding.WorldViewProjectionMatrix);
 
-            MeshData meshData = new MeshData();
-
-            BoxGenerator boxGen = new BoxGenerator(new Vector3(100, 100, 100));
+            var meshData = new MeshData();
+            var boxGen = new BoxGenerator(new Vector3(100, 100, 100));
             boxGen.BuildMeshData(meshData, GenerateOptions.Positions);
-
             meshData.Compile();
 
-            _meshes = new List<BoxMesh>();
+            _sceneRoot = new Node("Root");
 
             int dimension = 4;
             for (int x = -dimension; x <= dimension; x++)
@@ -84,10 +82,14 @@
                 {
                     for (int z = -dimension; z <= dimension; z++)
                     {
-                        BoxMesh mesh = new BoxMesh(meshData, material);
-                        mesh.WorldTransform.SetTranslation(x * 500.0f, y * 500.0f, z * 500.0f);
-
-                        _meshes.Add(mesh);
+                        var mesh = new Mesh("Mesh_{x}_{y}_{z}", meshData);
+                        mesh.MakeNonInstanced(new MaterialDefinition
+                        {
+                            { RenderBucketId.Opaque, material }
+                        }, false);
+                        mesh.Translation = new Vector3(x * 500.0f, y * 500.0f, z * 500.0f);
+                        
+                        _sceneRoot.Children.Add(mesh);
                     }
                 }
             }
@@ -105,55 +107,11 @@
             context.Clear(Color.Indigo);
 
             context.Camera.Update();
+            _sceneRoot.Update(time);
 
-            foreach (BoxMesh mesh in _meshes)
-            {
-                _forwardRenderer.Process(mesh);
-            }
+            _sceneRoot.ProcessVisibleSet(_forwardRenderer);
 
             _forwardRenderer.Render();
-        }
-    }
-
-    public sealed class BoxMesh : IRenderable
-    {
-        private readonly MeshData _meshData;
-
-        public BoxMesh(MeshData mesh, Material material)
-        {
-            MaterialDefinition = new MaterialDefinition();
-            WorldTransform = new Transform();
-            RenderProperties = new RenderPropertyCollection();
-            
-            _meshData = mesh;
-
-            MaterialDefinition.Add(RenderBucketId.Opaque, material);
-
-            RenderProperties.Add(new WorldTransformProperty(WorldTransform));
-            RenderProperties.Add(new OrthoOrderProperty(0));
-        }
-
-        public MaterialDefinition MaterialDefinition { get; }
-
-        public Transform WorldTransform { get; }
-
-        public RenderPropertyCollection RenderProperties { get; }
-
-        public bool IsValidForDraw => true;
-
-        public void SetupDrawCall(IRenderContext renderContext, RenderBucketId currentBucketId, MaterialPass currentPass)
-        {
-            renderContext.SetVertexBuffer(_meshData.VertexBuffer);
-
-            if (_meshData.UseIndexedPrimitives)
-            {
-                renderContext.SetIndexBuffer(_meshData.IndexBuffer);
-                renderContext.DrawIndexed(_meshData.PrimitiveType, _meshData.IndexCount, 0, 0);
-            }
-            else
-            {
-                renderContext.Draw(_meshData.PrimitiveType, _meshData.VertexCount, 0);
-            }
         }
     }
 }

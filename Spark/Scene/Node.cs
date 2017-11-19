@@ -179,7 +179,7 @@
                 return;
             }
 
-            ContainmentType frustumIntersect = ContainmentType.Inside;
+            var frustumIntersect = ContainmentType.Inside;
             BoundingVolume worldBounding = WorldBounding;
 
             // Do frustum check - unless if no world bounding, or if we're skipping the check for any reason

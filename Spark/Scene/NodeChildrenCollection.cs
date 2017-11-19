@@ -8,7 +8,6 @@
     public class NodeChildrenCollection : IList<Spatial>, IReadOnlyList<Spatial>
     {
         private int _version;
-        private readonly Node _parent;
         private readonly List<Spatial> _children;
         private bool _suspendPropogateDirty;
         
@@ -19,7 +18,7 @@
                 throw new ArgumentNullException(nameof(parent));
             }
 
-            _parent = parent;
+            Parent = parent;
             _children = new List<Spatial>();
         }
 
@@ -30,11 +29,11 @@
                 throw new ArgumentNullException(nameof(parent));
             }
 
-            _parent = parent;
+            Parent = parent;
             _children = new List<Spatial>(initialCapacity);
         }
 
-        public Node Parent => _parent;
+        public Node Parent { get; }
 
         public int Capacity
         {
@@ -70,11 +69,11 @@
 
                 Spatial old = _children[index];
                 old.SetParent(null);
-                value.AttachToParent(_parent);
+                value.AttachToParent(Parent);
                 _children[index] = value;
 
-                _parent.PropagateDirtyDown(DirtyMark.All);
-                _parent.PropagateDirtyUp(DirtyMark.Bounding);
+                Parent.PropagateDirtyDown(DirtyMark.All);
+                Parent.PropagateDirtyUp(DirtyMark.Bounding);
                 _version++;
             }
         }
@@ -111,18 +110,18 @@
 
         public void Add(Spatial spatial)
         {
-            if (spatial == null || spatial.Parent == _parent)
+            if (spatial == null || spatial.Parent == Parent)
             {
                 return;
             }
 
-            spatial.AttachToParent(_parent);
+            spatial.AttachToParent(Parent);
             _children.Add(spatial);
 
             if (!_suspendPropogateDirty)
             {
-                _parent.PropagateDirtyDown(DirtyMark.All);
-                _parent.PropagateDirtyUp(DirtyMark.Bounding);
+                Parent.PropagateDirtyDown(DirtyMark.All);
+                Parent.PropagateDirtyUp(DirtyMark.Bounding);
             }
 
             _version++;
@@ -139,9 +138,9 @@
 
             foreach (Spatial s in spatials)
             {
-                if (s != null && s.Parent != _parent)
+                if (s != null && s.Parent != Parent)
                 {
-                    s.AttachToParent(_parent);
+                    s.AttachToParent(Parent);
                     _children.Add(s);
                     addedOne = true;
                 }
@@ -151,8 +150,8 @@
             {
                 if (!_suspendPropogateDirty)
                 {
-                    _parent.PropagateDirtyDown(DirtyMark.All);
-                    _parent.PropagateDirtyUp(DirtyMark.Bounding);
+                    Parent.PropagateDirtyDown(DirtyMark.All);
+                    Parent.PropagateDirtyUp(DirtyMark.Bounding);
                 }
 
                 _version++;
@@ -161,7 +160,7 @@
 
         public int IndexOf(Spatial spatial)
         {
-            if (spatial == null || spatial.Parent != _parent)
+            if (spatial == null || spatial.Parent != Parent)
             {
                 return -1;
             }
@@ -179,7 +178,7 @@
 
         public bool Remove(Spatial spatial)
         {
-            if (spatial == null || spatial.Parent != _parent)
+            if (spatial == null || spatial.Parent != Parent)
             {
                 return false;
             }
@@ -194,7 +193,7 @@
 
                     if (!_suspendPropogateDirty)
                     {
-                        _parent.PropagateDirtyUp(DirtyMark.Bounding);
+                        Parent.PropagateDirtyUp(DirtyMark.Bounding);
                     }
 
                     _version++;
@@ -222,7 +221,7 @@
 
                     if (!_suspendPropogateDirty)
                     {
-                        _parent.PropagateDirtyUp(DirtyMark.Bounding);
+                        Parent.PropagateDirtyUp(DirtyMark.Bounding);
                     }
 
                     _version++;
@@ -246,7 +245,7 @@
 
             if (!_suspendPropogateDirty)
             {
-                _parent.PropagateDirtyUp(DirtyMark.Bounding);
+                Parent.PropagateDirtyUp(DirtyMark.Bounding);
             }
 
             _version++;
@@ -265,18 +264,18 @@
 
         public void Insert(int index, Spatial item)
         {
-            if (index < 0 || item == null || item.Parent == _parent)
+            if (index < 0 || item == null || item.Parent == Parent)
             {
                 return;
             }
 
-            item.AttachToParent(_parent);
+            item.AttachToParent(Parent);
             _children.Insert(index, item);
 
             if (!_suspendPropogateDirty)
             {
-                _parent.PropagateDirtyDown(DirtyMark.All);
-                _parent.PropagateDirtyUp(DirtyMark.Bounding);
+                Parent.PropagateDirtyDown(DirtyMark.All);
+                Parent.PropagateDirtyUp(DirtyMark.Bounding);
             }
 
             _version++;
@@ -289,7 +288,7 @@
                 return false;
             }
 
-            if (item.Parent == _parent)
+            if (item.Parent == Parent)
             {
                 return true;
             }
@@ -345,10 +344,10 @@
         [Serializable, StructLayout(LayoutKind.Sequential)]
         public struct NodeChildrenEnumerator : IEnumerator<Spatial>
         {
-            private NodeChildrenCollection _collection;
-            private List<Spatial> _children;
+            private readonly int _version;
+            private readonly NodeChildrenCollection _collection;
+            private readonly List<Spatial> _children;
             private int _index;
-            private int _version;
             private Spatial _current;
 
             public Spatial Current => _current;

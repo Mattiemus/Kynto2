@@ -35,7 +35,7 @@
         {
             get
             {
-                CopyContext c = new CopyContext();
+                var c = new CopyContext();
                 c[CopyMaterialKey] = true;
 
                 return c;
@@ -49,7 +49,7 @@
         {
             get
             {
-                CopyContext c = new CopyContext();
+                var c = new CopyContext();
                 c[CopyMeshDataKey] = true;
 
                 return c;
@@ -63,7 +63,7 @@
         {
             get
             {
-                CopyContext c = new CopyContext();
+                var c = new CopyContext();
                 c[CopyMaterialKey] = true;
                 c[CopyMeshDataKey] = true;
 

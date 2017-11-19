@@ -134,6 +134,7 @@
     <Compile Include="Core\IGameTimer.cs" />
     <Compile Include="Core\INamable.cs" />
     <Compile Include="Core\INamed.cs" />
+    <Compile Include="Graphics\Renderer\WorldBoundingVolumeProperty.cs" />
     <Compile Include="Graphics\States\Blend.cs" />
     <Compile Include="Graphics\States\BlendFunction.cs" />
     <Compile Include="Graphics\States\BlendState.cs" />
@@ -439,11 +440,14 @@
     <Compile Include="Scene\ISpatial.cs" />
     <Compile Include="Scene\ISpatialVisitor.cs" />
     <Compile Include="Scene\LightCombineHint.cs" />
+    <Compile Include="Scene\LightComparer.cs" />
+    <Compile Include="Scene\Mesh.cs" />
     <Compile Include="Scene\Node.cs" />
     <Compile Include="Scene\NodeChildrenCollection.cs" />
     <Compile Include="Scene\PickingHint.cs" />
     <Compile Include="Scene\SceneHints.cs" />
     <Compile Include="Scene\Spatial.cs" />
+    <Compile Include="Scene\Visual.cs" />
     <Compile Include="Utilities\BaseDisposable.cs" />
     <Compile Include="Utilities\CyclicReferenceDetector.cs" />
     <Compile Include="Utilities\Parsing\ParseNode.cs" />

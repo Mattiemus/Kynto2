@@ -10,7 +10,7 @@
     using SD = System.Drawing;
 
     /// <summary>
-    /// 
+    /// Imports texture files from various bitmap formats
     /// </summary>
     public class BitmapTextureImporter : ResourceImporter<Texture2D>
     {
@@ -59,9 +59,9 @@
         /// <returns>The loaded texture or null if it could not be loaded</returns>
         private Texture2D LoadInternal(Stream input, ContentManager contentManager, ImporterParameters parameters, String texName)
         {
-            using (SD.Bitmap bitmap = new SD.Bitmap(input))
+            using (var bitmap = new SD.Bitmap(input))
             {
-                TextureImporterParameters textureParams = parameters as TextureImporterParameters;
+                var textureParams = parameters as TextureImporterParameters;
 
                 if(QueryFlip(textureParams))
                 {
@@ -149,7 +149,7 @@
             byte[] bytes = new byte[stride * height];
 
             IntPtr ptr = MemoryHelper.PinObject(bytes);
-            SD.Imaging.BitmapData data = new SD.Imaging.BitmapData
+            var data = new SD.Imaging.BitmapData
             {
                 Width = width,
                 Height = height,
@@ -175,7 +175,7 @@
             int width = bitmap.Width;
             int height = bitmap.Height;
             int totalSize = width * height;
-            Color[] colors = new Color[totalSize];
+            var colors = new Color[totalSize];
 
             for (int i = 0, index = 0; i < totalSize; i++, index += 3)
             {
@@ -199,7 +199,7 @@
             int width = bitmap.Width;
             int height = bitmap.Height;
             int totalSize = width * height;
-            Color[] colors = new Color[totalSize];
+            var colors = new Color[totalSize];
 
             for (int i = 0, index = 0; i < totalSize; i++, index += 4)
             {
@@ -224,8 +224,8 @@
             int width = bitmap.Width;
             int height = bitmap.Height;
             int totalSize = width * height;
-            SD.Imaging.ColorPalette palette = bitmap.Palette;
-            Color[] colors = new Color[totalSize];
+            var palette = bitmap.Palette;
+            var colors = new Color[totalSize];
 
             for (int i = 0; i < totalSize; i++)
             {
