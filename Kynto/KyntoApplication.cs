@@ -19,6 +19,7 @@
     /// </summary>
     public sealed class KyntoApplication : SparkApplication
     {
+        private SpriteBatch _spriteBatch;
         private OrbitCameraController _orbitCamera;
         private ForwardRenderer _forwardRenderer;
         private Node _sceneRoot;
@@ -64,21 +65,21 @@
             
             _sceneRoot = new Node("Root");
 
-            int dimension = 4;
+            int dimension = 10;
             for (int x = -dimension; x <= dimension; x++)
             {
                 for (int y = -dimension; y <= dimension; y++)
                 {
                     for (int z = -dimension; z <= dimension; z++)
                     {
-                        var mesh = CreateBoxMesh();
-                        mesh.Translation = new Vector3(x * 500.0f, y * 500.0f, z * 500.0f);
-                        
+                        var mesh = CreateBoxMesh(x, y, z);
                         _sceneRoot.Children.Add(mesh);
                     }
                 }
             }
-            
+
+            _spriteBatch = new SpriteBatch(RenderSystem);
+
             base.LoadContent(content);
         }
 
@@ -96,10 +97,14 @@
 
             _sceneRoot.ProcessVisibleSet(_forwardRenderer);
 
+            //_spriteBatch.Begin(context);
+            //_spriteBatch.Draw(null, new Rectangle(10, 10, 100, 100), Color.Red);
+            //_spriteBatch.End();
+
             _forwardRenderer.Render();
         }
 
-        private Mesh CreateBoxMesh()
+        private Mesh CreateBoxMesh(float x, float y, float z)
         {
             var effect = Content.Load<Effect>("Content/BasicEffect.effect");
 
@@ -112,11 +117,16 @@
             boxGen.BuildMeshData(meshData, GenerateOptions.Positions);
             meshData.Compile();
 
-            var mesh = new Mesh("Mesh_{x}_{y}_{z}", meshData);
+            var mesh = new Mesh($"Mesh_{x}_{y}_{z}", meshData);
+
+            mesh.SetModelBounding(new BoundingBox(), true);
+
             mesh.MakeNonInstanced(new MaterialDefinition
             {
                 { RenderBucketId.Opaque, material }
             }, false);
+            
+            mesh.Translation = new Vector3(x * 1000.0f, y * 1000.0f, z * 1000.0f);
 
             return mesh;
         }

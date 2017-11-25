@@ -438,7 +438,7 @@
         /// <returns>True if both are equal, false otherwise.</returns>
         public static bool operator ==(Transform a, Transform b)
         {
-            return a.Equals(b);
+            return Equals(a, b);
         }
 
         /// <summary>
@@ -449,7 +449,7 @@
         /// <returns>True if both are not equal, false otherwise.</returns>
         public static bool operator !=(Transform a, Transform b)
         {
-            return !a.Equals(b);
+            return !Equals(a, b);
         }
 
         /// <summary>

@@ -127,8 +127,7 @@ namespace Spark.Content
             {
                 for (int x = 0; x < width; x++)
                 {
-                    var c = new Color(pData[2], pData[1], pData[0], pData[3]);
-                    db[index] = c;
+                    db[index] = new Color(pData[2], pData[1], pData[0], pData[3]);
 
                     index++;
                     pData += 4;

@@ -100,7 +100,7 @@
                     _blendFactor = value.BlendFactor;
                     _blendSampleMask = value.MultiSampleMask;
                                         
-                    OpenGLBlendStateImplementation nativeState = value.Implementation as OpenGLBlendStateImplementation;
+                    var nativeState = value.Implementation as OpenGLBlendStateImplementation;
                     nativeState.ApplyState(this);
                 }
             }
@@ -136,7 +136,7 @@
 
                     _rasterizerState = value;
 
-                    OpenGLRasterizerStateImplementation nativeState = value.Implementation as OpenGLRasterizerStateImplementation;
+                    var nativeState = value.Implementation as OpenGLRasterizerStateImplementation;
                     nativeState.ApplyState(this);
                 }
             }
@@ -173,7 +173,7 @@
                     _depthStencilState = value;
                     _referenceStencil = _depthStencilState.ReferenceStencil;
 
-                    OpenGLDepthStencilStateImplementation nativeState = value.Implementation as OpenGLDepthStencilStateImplementation;
+                    var nativeState = value.Implementation as OpenGLDepthStencilStateImplementation;
                     nativeState.ApplyState(this);
                 }
             }
@@ -382,7 +382,7 @@
         /// <param name="indexBuffer">Index buffer to bind.</param>
         public void SetIndexBuffer(IndexBuffer indexBuffer)
         {
-            OpenGLIndexBufferImplementation oglIndexBuffer = indexBuffer.Implementation as OpenGLIndexBufferImplementation;
+            var oglIndexBuffer = indexBuffer.Implementation as OpenGLIndexBufferImplementation;
 
             OGL.GL.BindBuffer(OGL.BufferTarget.ElementArrayBuffer, oglIndexBuffer.OpenGLBufferId);
         }
@@ -393,7 +393,7 @@
         /// <param name="vertexBuffer">Vertex buffer to bind.</param>
         public void SetVertexBuffer(VertexBufferBinding vertexBuffer)
         {
-            OpenGLVertexBufferImplementation oglVertexBuffer = vertexBuffer.VertexBuffer.Implementation as OpenGLVertexBufferImplementation;
+            var oglVertexBuffer = vertexBuffer.VertexBuffer.Implementation as OpenGLVertexBufferImplementation;
 
             OGL.GL.BindBuffer(OGL.BufferTarget.ArrayBuffer, oglVertexBuffer.OpenGLBufferId);
 

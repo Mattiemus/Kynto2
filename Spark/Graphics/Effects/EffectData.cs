@@ -32,17 +32,35 @@
         /// <returns>Parsed effect data</returns>
         public static EffectData FromBytes(byte[] bytes)
         {
-            using (MemoryStream stream = new MemoryStream(bytes))
+            using (var stream = new MemoryStream(bytes))
             {
-                using (BinarySavableReader reader = new BinarySavableReader(Engine.Instance.Services, null))
+                using (var reader = new BinarySavableReader(Engine.Instance.Services, stream))
                 {
-                    EffectData data = new EffectData();
+                    var data = new EffectData();
                     data.Read(reader);
                     return data;
                 }
             }
         }
-        
+
+        /// <summary>
+        /// Writes an effect data instance to a byte array
+        /// </summary>
+        /// <param name="data">Data to write</param>
+        /// <returns>Data represented as a byte array</returns>
+        public static byte[] ToBytes(EffectData data)
+        {
+            using (var stream = new MemoryStream())
+            {
+                using (var writer = new BinarySavableWriter(stream, true))
+                {
+                    data.Write(writer);
+                }
+
+                return stream.ToArray();
+            }            
+        }
+
         /// <summary>
         /// Reads the object data from the input.
         /// </summary>

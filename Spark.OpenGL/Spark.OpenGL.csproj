@@ -70,12 +70,18 @@
     <Compile Include="Graphics\Implementation\Factories\OpenGLTexture2DImplementationFactory.cs" />
     <Compile Include="Graphics\Implementation\OpenGLVertexBufferImplementation.cs" />
     <Compile Include="Graphics\Implementation\Factories\OpenGLVertexBufferImplementationFactory.cs" />
+    <Compile Include="Graphics\OpenGLEffectByteCodeProvider.cs" />
     <Compile Include="Graphics\OpenGLGraphicsAdapter.cs" />
     <Compile Include="Graphics\OpenGLRenderContext.cs" />
     <Compile Include="Graphics\OpenGLState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Graphics\OpenGLRenderSystem.cs" />
     <Compile Include="Graphics\OpenGLHelper.cs" />
+    <Compile Include="StandardEffects.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StandardEffects.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
@@ -86,6 +92,12 @@
       <Project>{9059028c-0b79-48ef-8e76-bdb59aa424d7}</Project>
       <Name>Spark</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="StandardEffects.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>StandardEffects.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

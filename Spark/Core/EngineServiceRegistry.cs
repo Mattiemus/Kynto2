@@ -266,9 +266,11 @@
         {
             foreach (KeyValuePair<Type, IEngineService> kv in _services)
             {
+                OnServiceRemoved(kv.Key, kv.Value);
                 DisposeService(kv.Value);
             }
 
+            _updateServices.Clear();
             _services.Clear();
         }
 

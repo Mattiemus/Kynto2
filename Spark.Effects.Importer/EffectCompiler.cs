@@ -77,11 +77,11 @@
         {
             try
             {
-                EffectScanner scanner = new EffectScanner();
-                EffectParser parser = new EffectParser(scanner);
+                var scanner = new EffectScanner();
+                var parser = new EffectParser(scanner);
                 ParseTree<EffectTokenType, EffectNodeType> parseTree = parser.Parse(readToEnd);
 
-                EffectData effectData = new EffectData();
+                var effectData = new EffectData();
                 effectData.EffectName = parseTree.Children[1].Text;
                 effectData.VertexShader = parseTree.Children.Last(c => c.NodeType == EffectNodeType.VertexShader).Children[2].Text;
                 effectData.PixelShader = parseTree.Children.Last(c => c.NodeType == EffectNodeType.PixelShader).Children[2].Text;

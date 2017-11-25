@@ -134,6 +134,12 @@
     <Compile Include="Core\IGameTimer.cs" />
     <Compile Include="Core\INamable.cs" />
     <Compile Include="Core\INamed.cs" />
+    <Compile Include="Entities\Component.cs" />
+    <Compile Include="Entities\Entity.cs" />
+    <Compile Include="Entities\IBehavior.cs" />
+    <Compile Include="Entities\IComponent.cs" />
+    <Compile Include="Entities\NullComponent.cs" />
+    <Compile Include="Entities\World.cs" />
     <Compile Include="Graphics\Renderer\WorldBoundingVolumeProperty.cs" />
     <Compile Include="Graphics\States\Blend.cs" />
     <Compile Include="Graphics\States\BlendFunction.cs" />
@@ -460,8 +466,6 @@
     <Compile Include="Utilities\SmartActivator.cs" />
     <Compile Include="Utilities\VisitLock.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Entities\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

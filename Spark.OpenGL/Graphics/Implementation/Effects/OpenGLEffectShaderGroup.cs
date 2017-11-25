@@ -145,16 +145,16 @@
             OGL.GL.ShaderSource(shaderId, shaderSource);
             OGL.GL.CompileShader(shaderId);
 
-            OGL.GL.GetShader(shaderId, OGL.ShaderParameter.CompileStatus, out int compileStatus);
-            if (compileStatus == 0)
-            {
-                throw new SparkGraphicsException("Could not compile shader");
-            }
-
             string infoLog = OGL.GL.GetShaderInfoLog(shaderId);
             if (!string.IsNullOrEmpty(infoLog))
             {
                 throw new SparkGraphicsException(infoLog);
+            }
+
+            OGL.GL.GetShader(shaderId, OGL.ShaderParameter.CompileStatus, out int compileStatus);
+            if (compileStatus == 0)
+            {
+                throw new SparkGraphicsException("Could not compile shader");
             }
 
             OGL.GL.AttachShader(_program, shaderId);

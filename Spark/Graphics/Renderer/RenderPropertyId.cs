@@ -17,7 +17,7 @@
         /// Initializes a new instance of the <see cref="RenderPropertyId"/> struct.
         /// </summary>
         /// <param name="idValue">The integer ID value.</param>
-        public RenderPropertyId(int idValue)
+        private RenderPropertyId(int idValue)
         {
             if (idValue < 0)
             {
@@ -33,9 +33,9 @@
         public static RenderPropertyId Invalid => new RenderPropertyId(-1);
 
         /// <summary>
-        /// Gets the integer value of the ID.
+        /// Gets the integer value of the id.
         /// </summary>
-        public int Value { get; private set; }
+        public int Value { get; }
 
         /// <summary>
         /// Gets if the ID is valid (greater than or equal to zero).

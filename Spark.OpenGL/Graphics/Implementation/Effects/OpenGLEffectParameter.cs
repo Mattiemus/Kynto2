@@ -333,8 +333,8 @@
         {
             // TODO: add type checks
             // TODO: optimise
-
-            float[] matrixValue = new float[]
+            
+            float[] matrixValue = 
             {
                 value.M11, value.M12, value.M13, value.M14,
                 value.M21, value.M22, value.M23, value.M24,

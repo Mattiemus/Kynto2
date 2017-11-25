@@ -40,6 +40,7 @@
             
             _prebuiltRenderStates = new PredefinedRenderStateProvider(this);
             StandardEffects = new StandardEffectLibrary(this);
+            StandardEffects.LoadProvider(new OpenGLEffectByteCodeProvider());
 
             OpenGLImmediateContext = new OpenGLRenderContext(this);
         }

@@ -1,5 +1,7 @@
 ﻿namespace Spark.OpenGL.Graphics.Implementation
 {
+    using System;
+
     using Spark.Graphics;
     using Spark.Graphics.Implementation;
     
@@ -8,14 +10,36 @@
     /// </summary>
     public sealed class OpenGLTexture2DImplementation : OpenGLGraphicsResourceImplementation, ITexture2DImplementation
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OpenGLTexture2DImplementation"/> class.
+        /// </summary>
+        /// <param name="renderSystem">Parent render system</param>
+        /// <param name="width">Width of the texture, in texels.</param>
+        /// <param name="height">Height of the texture, in texels.</param>
+        /// <param name="mipMapCount">Number of mip map levels, must be greater than zero.</param>
+        /// <param name="format">Surface format of the texture.</param>
+        /// <param name="resourceUsage">Resource usage specifying the type of memory the texture should use.</param>
         public OpenGLTexture2DImplementation(OpenGLRenderSystem renderSystem, int width, int height, int mipMapCount, SurfaceFormat format, ResourceUsage resourceUsage)
             : base(renderSystem)
         {
+            throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OpenGLTexture2DImplementation"/> class.
+        /// </summary>
+        /// <param name="renderSystem">Parent render system</param>
+        /// <param name="width">Width of the texture, in texels.</param>
+        /// <param name="height">Height of the texture, in texels.</param>
+        /// <param name="mipMapCount">Number of mip map levels, must be greater than zero.</param>
+        /// <param name="format">Surface format of the texture.</param>
+        /// <param name="resourceUsage">Resource usage specifying the type of memory the texture should use.</param>
+        /// <param name="data">Data to initialize the texture with, the array length must not exceed the number of mip levels and each data buffer must not exceed the size of the corresponding mip level, and is
+        /// permitted to be null.</param>
         public OpenGLTexture2DImplementation(OpenGLRenderSystem renderSystem, int width, int height, int mipMapCount, SurfaceFormat format, ResourceUsage resourceUsage, params IReadOnlyDataBuffer[] data)
             : base(renderSystem)
         {
+            throw new NotImplementedException();
         }
 
         /// <summary>

@@ -67,21 +67,17 @@
         /// <returns>The initialized engine instance</returns>
         public static Engine Initialize(IPlatformInitializer platform)
         {
-            if (IsInitialized)
-            {
-                throw new SparkException("Engine is already initialized");
-            }
-
             if (platform == null)
             {
                 throw new ArgumentNullException(nameof(platform), "Platform initializer cannot be null");
             }
 
-            Instance = new Engine();
+            // Initialize the engine singleton, this will cause any initialize handlers to be called before we start adding services.
+            Initialize();
+
+            // After engine initialized, populate with platform specific services
             platform.Initialize(Instance);
-
-            OnInitialized(Instance);
-
+            
             return Instance;
         }
 
@@ -96,8 +92,9 @@
                 throw new SparkException("Engine is not initialized");
             }
 
-            OnDestroyed(Instance);
             Instance.Services.RemoveAllAndDispose();
+
+            OnDestroyed(Instance);
 
             Instance = null;
         }

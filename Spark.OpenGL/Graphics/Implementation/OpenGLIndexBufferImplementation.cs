@@ -38,7 +38,17 @@
         public OpenGLIndexBufferImplementation(OpenGLRenderSystem renderSystem, IndexFormat format, ResourceUsage resourceUsage, IReadOnlyDataBuffer data)
             : base(renderSystem)
         {
-            throw new NotImplementedException();
+            OpenGLBufferId = OGL.GL.GenBuffer();
+
+            IndexCount = data.Length;
+            IndexFormat = format;
+            ResourceUsage = resourceUsage;
+
+            OGL.GL.BindBuffer(OGL.BufferTarget.ElementArrayBuffer, OpenGLBufferId);
+            using (MappedDataBuffer mappedData = data.Map())
+            {
+                OGL.GL.NamedBufferData(OpenGLBufferId, data.SizeInBytes, mappedData.Pointer, OGL.BufferUsageHint.StaticDraw);
+            }
         }
 
         /// <summary>
