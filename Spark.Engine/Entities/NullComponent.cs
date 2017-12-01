@@ -11,18 +11,30 @@
         /// The null component value.
         /// </summary>
         public static readonly NullComponent Value = new NullComponent();
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NullComponent"/> class.
-        /// </summary>
-        private NullComponent()
-        {
-        }
         
+        /// <summary>
+        /// Gets the unique type id that represents this component.
+        /// </summary>
+        public ComponentTypeId TypeId => ComponentTypeId.NullTypeId;
+
         /// <summary>
         /// Gets the entity that this component is attached to. Each component can only be attached to one parent at a time.
         /// </summary>
         public Entity Parent => null;
+
+        /// <summary>
+        /// Gets the world that the parent entity belongs to.
+        /// </summary>
+        public World World => null;
+
+        /// <summary>
+        /// Gets or sets the name of the component.
+        /// </summary>
+        public string Name
+        {
+            get => "NullComponent";
+            set { }
+        }
 
         /// <summary>
         /// Called when the component is added to the entity.

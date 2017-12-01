@@ -55,7 +55,7 @@
         /// <summary>
         /// Default input binding names.
         /// </summary>
-        public static readonly string[] InputBindingNames = new string[] { RotateBindingName, ZoomBindingName, PanBindingName };
+        public static readonly IReadOnlyList<string> InputBindingNames = new string[] { RotateBindingName, ZoomBindingName, PanBindingName };
 
         private static readonly Angle MinPitch = Angle.FromDegrees(-89.9f);
         private static readonly Angle MaxPitch = Angle.FromDegrees(89.9f);
@@ -422,8 +422,17 @@
         public void MapControls(IReadOnlyDictionary<string, KeyOrMouseButton[]> keyBindings)
         {
             InputGroup.Clear();
-            InputGroup.Add(new InputTrigger(RotateBindingName, KeyOrMouseButton.CreateInputCondition(keyBindings, RotateBindingName, MouseButton.Left, false, true), new RotateInputAction(Rotate)));
-            InputGroup.Add(new InputTrigger(PanBindingName, KeyOrMouseButton.CreateInputCondition(keyBindings, PanBindingName, MouseButton.Right, false, true), new PanInputAction(Pan)));
+
+            InputGroup.Add(new InputTrigger(
+                RotateBindingName, 
+                KeyOrMouseButton.CreateInputCondition(keyBindings, RotateBindingName, MouseButton.Left, false, true), 
+                new RotateInputAction(Rotate)));
+
+            InputGroup.Add(new InputTrigger(
+                PanBindingName, 
+                KeyOrMouseButton.CreateInputCondition(keyBindings, PanBindingName, MouseButton.Right, false, true), 
+                new PanInputAction(Pan)));
+
             InputGroup.Add(CreateZoomTrigger(keyBindings));
         }
 
@@ -439,7 +448,9 @@
                 return new ZoomInputTrigger(ZoomBindingName, Zoom);
             }
 
-            CompositeInputCondition compositeCondition = new CompositeInputCondition(new MouseWheelScrollCondition(), KeyOrMouseButton.CreateInputCondition(false, true, buttons));
+            var compositeCondition = new CompositeInputCondition(
+                new MouseWheelScrollCondition(), 
+                KeyOrMouseButton.CreateInputCondition(false, true, buttons));
 
             return new InputTrigger(ZoomBindingName, compositeCondition, new ZoomInputAction(Zoom));
         }

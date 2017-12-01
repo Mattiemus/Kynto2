@@ -46,38 +46,20 @@
 
         public Triad Axes
         {
-            get
-            {
-                return _axes;
-            }
-            set
-            {
-                _axes = value;
-            }
+            get => _axes;
+            set => _axes = value;
         }
 
         public Vector3 Center
         {
-            get
-            {
-                return _center;
-            }
-            set
-            {
-                _center = value;
-            }
+            get => _center;
+            set => _center = value;
         }
 
         public Vector3 Extents
         {
-            get
-            {
-                return _extents;
-            }
-            set
-            {
-                _extents = value;
-            }
+            get => _extents;
+            set => _extents = value;
         }
 
         /// <summary>

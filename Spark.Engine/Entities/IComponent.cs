@@ -6,8 +6,13 @@
     /// Defines a component that can be added to an entity. A component is either data ("Attributes") or logic ("Behaviors").
     /// Each component has a unique ID associated with its runtime type and each entity can have only one type of component.
     /// </summary>
-    public interface IComponent : ISavable
+    public interface IComponent : INamable, ISavable
     {
+        /// <summary>
+        /// Gets the unique type id that represents this component.
+        /// </summary>
+        ComponentTypeId TypeId { get; }
+        
         /// <summary>
         /// Gets the entity that this component is attached to. Each component can only be attached to one parent at a time.
         /// </summary>

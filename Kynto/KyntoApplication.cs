@@ -10,7 +10,7 @@
     using Spark.Effects.Importer;
     using Spark.Math;
     using Spark.Input;
-    using Spark.Scene;
+    using Spark.Entities;
 
     using Input;
         
@@ -19,10 +19,9 @@
     /// </summary>
     public sealed class KyntoApplication : SparkApplication
     {
-        private SpriteBatch _spriteBatch;
         private OrbitCameraController _orbitCamera;
         private ForwardRenderer _forwardRenderer;
-        private Node _sceneRoot;
+        private World _world;
         
         /// <summary>
         /// Initializes a new instance of the <see cref="KyntoApplication"/> class.
@@ -35,16 +34,7 @@
         protected override void OnInitialize(Engine engine)
         {
             _forwardRenderer = new ForwardRenderer(RenderSystem.ImmediateContext);
-
-            RenderSystem.ImmediateContext.Camera = new Camera();
-            RenderSystem.ImmediateContext.Camera.Viewport = new Viewport(0, 0, GameWindow.ClientBounds.Width, GameWindow.ClientBounds.Height);
-            RenderSystem.ImmediateContext.Camera.SetProjection(45, 1, 10000000);
-            RenderSystem.ImmediateContext.Camera.Position = new Vector3(0, 0, 1000);
-            RenderSystem.ImmediateContext.Camera.LookAt(Vector3.Zero, Vector3.Up);
-
-            _orbitCamera = new OrbitCameraController(RenderSystem.ImmediateContext.Camera, Vector3.Zero);
-            _orbitCamera.MapControls(null);
-
+            
             Mouse.WindowHandle = GameWindow.Handle;
 
             base.OnInitialize(engine);
@@ -62,23 +52,30 @@
         {
             content.ResourceImporters.Add(new EffectImporter());
             content.ResourceImporters.Add(new BitmapTextureImporter());
-            
-            _sceneRoot = new Node("Root");
 
-            int dimension = 10;
-            for (int x = -dimension; x <= dimension; x++)
+            _world = new World();
+
+            var boxEntity = new Entity();
+            boxEntity.AddComponent(new BoxComponent
             {
-                for (int y = -dimension; y <= dimension; y++)
-                {
-                    for (int z = -dimension; z <= dimension; z++)
-                    {
-                        var mesh = CreateBoxMesh(x, y, z);
-                        _sceneRoot.Children.Add(mesh);
-                    }
-                }
-            }
+                MaterialDefinition = CreateMaterial(),
+                Scale = new Vector3(100, 100, 100)
+            });
+            _world.Add(boxEntity);
 
-            _spriteBatch = new SpriteBatch(RenderSystem);
+            var camEntity = new Entity();
+            camEntity.AddComponent(new CameraComponent
+            {
+                Translation = new Vector3(0, 0, 1000)
+            });
+            _world.Add(camEntity);
+
+            RenderSystem.ImmediateContext.Camera = camEntity.GetComponent<CameraComponent>().Camera;
+            RenderSystem.ImmediateContext.Camera.Viewport = new Viewport(0, 0, GameWindow.ClientBounds.Width, GameWindow.ClientBounds.Height);
+            RenderSystem.ImmediateContext.Camera.SetProjection(45, 1, 10000000);
+
+            _orbitCamera = new OrbitCameraController(RenderSystem.ImmediateContext.Camera, Vector3.Zero);
+            _orbitCamera.MapControls(null);
 
             base.LoadContent(content);
         }
@@ -86,25 +83,17 @@
         protected override void Update(IGameTime time)
         {
             _orbitCamera.Update(time, true);
+            _world.Update(time);
         }
 
         protected override void Render(IRenderContext context, IGameTime time)
         {
-            context.Clear(Color.Indigo);
-
-            context.Camera.Update();
-            _sceneRoot.Update(time);
-
-            _sceneRoot.ProcessVisibleSet(_forwardRenderer);
-
-            //_spriteBatch.Begin(context);
-            //_spriteBatch.Draw(null, new Rectangle(10, 10, 100, 100), Color.Red);
-            //_spriteBatch.End();
-
+            context.Clear(Color.Indigo);            
+            _world.ProcessVisibleSet(_forwardRenderer);            
             _forwardRenderer.Render();
         }
 
-        private Mesh CreateBoxMesh(float x, float y, float z)
+        private MaterialDefinition CreateMaterial()
         {
             var effect = Content.Load<Effect>("Content/BasicEffect.effect");
 
@@ -112,23 +101,10 @@
             material.Passes.Add("Pass0", effect.ShaderGroups.First());
             material.SetParameterBinding("mvp", MaterialBinding.WorldViewProjectionMatrix);
 
-            var meshData = new MeshData();
-            var boxGen = new BoxGenerator(new Vector3(100, 100, 100));
-            boxGen.BuildMeshData(meshData, GenerateOptions.Positions);
-            meshData.Compile();
-
-            var mesh = new Mesh($"Mesh_{x}_{y}_{z}", meshData);
-
-            mesh.SetModelBounding(new BoundingBox(), true);
-
-            mesh.MakeNonInstanced(new MaterialDefinition
+            return new MaterialDefinition
             {
                 { RenderBucketId.Opaque, material }
-            }, false);
-            
-            mesh.Translation = new Vector3(x * 1000.0f, y * 1000.0f, z * 1000.0f);
-
-            return mesh;
+            };
         }
     }
 }

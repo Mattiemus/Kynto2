@@ -4,6 +4,7 @@
 
     using Spark;
     using Spark.Input;
+    using Spark.Application;
 
     /// <summary>
     /// Input trigger that responds to input and performs a <see cref="ZoomInputAction"/>.

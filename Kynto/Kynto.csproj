@@ -63,9 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Input\Cursors.cs" />
     <Compile Include="Input\OrbitCameraController.cs" />
-    <Compile Include="Input\Triggers\CursorInputAction.cs" />
     <Compile Include="Input\Triggers\PanInputTrigger.cs" />
     <Compile Include="Input\Triggers\RotateInputTrigger.cs" />
     <Compile Include="Input\Triggers\ZoomInputTrigger.cs" />
@@ -87,6 +85,10 @@
     <ProjectReference Include="..\Spark.Effects.Importer\Spark.Effects.Importer.csproj">
       <Project>{c3baa3d0-59f3-4ed1-9368-ea169477f378}</Project>
       <Name>Spark.Effects.Importer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Spark.Engine\Spark.Engine.csproj">
+      <Project>{fa672379-53ba-4185-8a68-f4aae99d61c1}</Project>
+      <Name>Spark.Engine</Name>
     </ProjectReference>
     <ProjectReference Include="..\Spark.OpenGL\Spark.OpenGL.csproj">
       <Project>{c407b6d2-3fbc-4517-bc6a-ad8232c307cc}</Project>

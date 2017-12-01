@@ -1,7 +1,6 @@
-﻿namespace Kynto.Input.Triggers
+﻿namespace Spark.Input
 {
-    using Spark;
-    using Spark.Input;
+    using Application;
 
     /// <summary>
     /// Input action that applies a cursor at the start of the action and restores the previous cursor at the end.

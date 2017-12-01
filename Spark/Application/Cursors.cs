@@ -1,4 +1,4 @@
-﻿namespace Kynto.Input
+﻿namespace Spark.Application
 {
     using System;
 

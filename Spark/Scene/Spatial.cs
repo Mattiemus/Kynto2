@@ -8,7 +8,7 @@
     using Graphics;
     using Utilities;
 
-    public abstract class Spatial : ISpatial, ISavable, IHintable
+    public abstract class Spatial : ISpatial, ITransformed, ISavable, IHintable
     {
         public static readonly ushort VersionNumber = 1;
 
@@ -43,6 +43,9 @@
 
         public Node Parent => _parent;
 
+        /// <summary>
+        /// Gets or sets the local transform
+        /// </summary>
         public Transform Transform
         {
             get => _transform;
@@ -59,6 +62,9 @@
             }
         }
 
+        /// <summary>
+        /// Gets or sets the local scale
+        /// </summary>
         public Vector3 Scale
         {
             get => _transform.Scale;
@@ -70,6 +76,9 @@
             }
         }
 
+        /// <summary>
+        /// Gets or sets the local rotation
+        /// </summary>
         public Quaternion Rotation
         {
             get => _transform.Rotation;
@@ -81,6 +90,9 @@
             }
         }
 
+        /// <summary>
+        /// Gets or sets the local translation
+        /// </summary>
         public Vector3 Translation
         {
             get => _transform.Translation;
@@ -92,14 +104,29 @@
             }
         }
 
+        /// <summary>
+        /// Gets the world transform
+        /// </summary>
         public Transform WorldTransform => _worldTransform;
 
+        /// <summary>
+        /// Gets the world scale
+        /// </summary>
         public Vector3 WorldScale => _worldTransform.Scale;
 
+        /// <summary>
+        /// Gets the world rotation
+        /// </summary>
         public Quaternion WorldRotation => _worldTransform.Rotation;
 
+        /// <summary>
+        /// Gets the world translation
+        /// </summary>
         public Vector3 WorldTranslation => _worldTransform.Translation;
 
+        /// <summary>
+        /// Gets the world transformation matrix
+        /// </summary>
         public Matrix4x4 WorldMatrix => _worldTransform.Matrix;
 
         public BoundingVolume WorldBounding => _worldBounding;

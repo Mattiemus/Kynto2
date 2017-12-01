@@ -7,6 +7,44 @@
     /// </summary>
     public class Component : IComponent
     {
+        private string _name;
+
+        /// <summary>
+        /// Initializes the <see cref="Component"/> class.
+        /// </summary>
+        public Component()
+            : this("Component")
+        {
+        }
+
+        /// <summary>
+        /// Initializes the <see cref="Component"/> class.
+        /// </summary>
+        /// <param name="name">Name of the component</param>
+        public Component(string name)
+        {
+            TypeId = ComponentTypeId.GetTypeId(GetType());
+            _name = name;
+        }
+
+        /// <summary>
+        /// Gets the unique type id that represents this component.
+        /// </summary>
+        public ComponentTypeId TypeId { get; }
+
+        /// <summary>
+        /// Gets or sets the name of the component.
+        /// </summary>
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                _name = value;
+                OnNameChanged();
+            }
+        }
+
         /// <summary>
         /// Gets the entity that this component is attached to. Each component can only be attached to one parent at a time.
         /// </summary>
@@ -65,6 +103,14 @@
         /// </summary>
         /// <param name="output">Savable writer</param>
         public virtual void Write(ISavableWriter output)
+        {
+            // No-op
+        }
+
+        /// <summary>
+        /// Invoked when the components name is changed
+        /// </summary>
+        protected virtual void OnNameChanged()
         {
             // No-op
         }

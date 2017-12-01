@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Application\ApplicationHost.cs" />
     <Compile Include="Application\ApplicationMode.cs" />
+    <Compile Include="Application\Cursors.cs" />
     <Compile Include="Application\IApplicationSystem.cs" />
     <Compile Include="Application\Implementation\IApplicationHostImplementation.cs" />
     <Compile Include="Application\IWindow.cs" />
@@ -134,12 +135,6 @@
     <Compile Include="Core\IGameTimer.cs" />
     <Compile Include="Core\INamable.cs" />
     <Compile Include="Core\INamed.cs" />
-    <Compile Include="Entities\Component.cs" />
-    <Compile Include="Entities\Entity.cs" />
-    <Compile Include="Entities\IBehavior.cs" />
-    <Compile Include="Entities\IComponent.cs" />
-    <Compile Include="Entities\NullComponent.cs" />
-    <Compile Include="Entities\World.cs" />
     <Compile Include="Graphics\Renderer\WorldBoundingVolumeProperty.cs" />
     <Compile Include="Graphics\States\Blend.cs" />
     <Compile Include="Graphics\States\BlendFunction.cs" />
@@ -370,6 +365,7 @@
     <Compile Include="Input\ButtonState.cs" />
     <Compile Include="Input\CompositeInputAction.cs" />
     <Compile Include="Input\CompositeInputCondition.cs" />
+    <Compile Include="Input\CursorInputAction.cs" />
     <Compile Include="Input\IKeyboardInputSystem.cs" />
     <Compile Include="Input\IKeyInputBinding.cs" />
     <Compile Include="Input\IMouseInputSystem.cs" />
@@ -445,12 +441,14 @@
     <Compile Include="Scene\IHintable.cs" />
     <Compile Include="Scene\ISpatial.cs" />
     <Compile Include="Scene\ISpatialVisitor.cs" />
+    <Compile Include="Scene\ITransformed.cs" />
     <Compile Include="Scene\LightCombineHint.cs" />
     <Compile Include="Scene\LightComparer.cs" />
     <Compile Include="Scene\Mesh.cs" />
     <Compile Include="Scene\Node.cs" />
     <Compile Include="Scene\NodeChildrenCollection.cs" />
     <Compile Include="Scene\PickingHint.cs" />
+    <Compile Include="Scene\Scene.cs" />
     <Compile Include="Scene\SceneHints.cs" />
     <Compile Include="Scene\Spatial.cs" />
     <Compile Include="Scene\Visual.cs" />
