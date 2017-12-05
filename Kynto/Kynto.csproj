@@ -63,10 +63,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Input\OrbitCameraController.cs" />
-    <Compile Include="Input\Triggers\PanInputTrigger.cs" />
-    <Compile Include="Input\Triggers\RotateInputTrigger.cs" />
-    <Compile Include="Input\Triggers\ZoomInputTrigger.cs" />
     <Compile Include="KyntoApplication.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -94,9 +90,17 @@
       <Project>{c407b6d2-3fbc-4517-bc6a-ad8232c307cc}</Project>
       <Name>Spark.OpenGL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Spark.Toolkit\Spark.Toolkit.csproj">
+      <Project>{d7879fd7-fc69-4219-a967-08796f8919af}</Project>
+      <Name>Spark.Toolkit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Spark.UI\Spark.UI.csproj">
       <Project>{4f2a0c2b-15e4-4032-9b4d-4c10fc50d2f8}</Project>
       <Name>Spark.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Spark.Windows\Spark.Windows.csproj">
+      <Project>{f51647b9-c264-4a39-bbf2-5d8b6a72be76}</Project>
+      <Name>Spark.Windows</Name>
     </ProjectReference>
     <ProjectReference Include="..\Spark\Spark.csproj">
       <Project>{9059028c-0b79-48ef-8e76-bdb59aa424d7}</Project>

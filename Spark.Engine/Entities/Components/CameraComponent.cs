@@ -55,7 +55,6 @@
         /// <param name="gameTime">Time elapsed since the last update.</param>
         public void Update(IGameTime gameTime)
         {
-            Camera.Position = Translation;
             Camera.Update();
         }
 

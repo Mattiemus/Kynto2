@@ -516,7 +516,7 @@
                 _behaviors[i].Update(time);
             }
         }
-        
+                
         /// <summary>
         /// Sorts behaviors according to their <see cref="IBehavior.UpdatePriority"/>.
         /// </summary>
@@ -595,7 +595,7 @@
                 World.Scene.Children.Remove(RootComponent.SceneNode);
             }
         }
-
+        
         /// <summary>
         /// Compares two behaviors
         /// </summary>

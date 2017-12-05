@@ -1,15 +1,13 @@
-﻿namespace Kynto.Input
+﻿namespace Spark.Toolkit.Input
 {
     using System;
     using System.Collections.Generic;
 
-    using Spark;
-    using Spark.Graphics;
     using Spark.Input;
-    using Spark.Math;
 
-    using Triggers;
-    
+    using Graphics;
+    using Math;
+        
     /// <summary>
     /// A controller that orbits a camera around a target point, at a certain distance away from that point. This is defined by three values, yaw/pitch angles and a zoom distance. The pitch angle
     /// is always limited between (-90, 90) degrees, not inclusive, while the yaw angle can rotate a full 360 degrees. The controller defines a number of methods that take in delta values (e.g. mouse positions) 

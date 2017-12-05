@@ -12,7 +12,7 @@
     using Spark.Input;
     using Spark.Entities;
 
-    using Input;
+    using Spark.Toolkit.Input;
         
     /// <summary>
     /// Main application window
@@ -88,8 +88,8 @@
 
         protected override void Render(IRenderContext context, IGameTime time)
         {
-            context.Clear(Color.Indigo);            
-            _world.ProcessVisibleSet(_forwardRenderer);            
+            context.Clear(Color.Indigo);
+            _world.ProcessVisibleSet(_forwardRenderer);
             _forwardRenderer.Render();
         }
 

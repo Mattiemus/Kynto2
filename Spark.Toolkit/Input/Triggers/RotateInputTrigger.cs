@@ -1,11 +1,11 @@
-﻿namespace Kynto.Input.Triggers
+﻿namespace Spark.Toolkit.Input
 {
     using System;
 
-    using Spark;
-    using Spark.Math;
     using Spark.Input;
-    using Spark.Application;
+
+    using Math;
+    using Application;
 
     /// <summary>
     /// Input trigger that responds to input and performs a <see cref="RotateInputAction"/>.
