@@ -34,7 +34,7 @@
         {
             using (var stream = new MemoryStream(bytes))
             {
-                using (var reader = new BinarySavableReader(Engine.Instance.Services, stream))
+                using (var reader = new BinarySavableReader(SparkEngine.Instance.Services, stream))
                 {
                     var data = new EffectData();
                     data.Read(reader);

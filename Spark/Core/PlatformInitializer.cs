@@ -31,7 +31,7 @@
         /// Initializes the platform's services.
         /// </summary>
         /// <param name="engine">Engine instance</param>
-        public void Initialize(Engine engine)
+        public void Initialize(SparkEngine engine)
         {
             foreach (ServiceDescriptor descriptor in _descriptors)
             {

@@ -232,7 +232,7 @@
             m_lock = new SpinLock();
             m_markId = MarkId.GenerateNewUniqueId();
 
-            m_renderSystem = Engine.Instance.Services.GetService<IRenderSystem>();
+            m_renderSystem = SparkEngine.Instance.Services.GetService<IRenderSystem>();
             m_vbBindings = new VertexBufferBinding[2];
         }
 

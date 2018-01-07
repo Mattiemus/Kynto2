@@ -1,4 +1,4 @@
-﻿namespace Spark.Entities
+﻿namespace Spark.Engine
 {
     public abstract class ShapeComponent : GeometryComponent
     {

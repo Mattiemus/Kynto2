@@ -65,7 +65,7 @@
             _initPlatform = platformInitializer;
         }
 
-        public Engine Engine { get; private set; }
+        public SparkEngine Engine { get; private set; }
 
         public EngineServiceRegistry Services { get; private set; }
 
@@ -151,7 +151,7 @@
             _nextLastUpdateCountIndex = 0;
         }
 
-        protected virtual void OnInitialize(Engine engine)
+        protected virtual void OnInitialize(SparkEngine engine)
         {
         }
 
@@ -181,7 +181,7 @@
 
         private void Initialize(PresentationParameters presentParams, IResourceRepository resourceRepo, IPlatformInitializer platformInitializer, ApplicationMode mode)
         {
-            Engine = Engine.Initialize(platformInitializer);
+            Engine = SparkEngine.Initialize(platformInitializer);
             Services = Engine.Services;
 
             RenderSystem = Services.GetService<IRenderSystem>();
@@ -439,7 +439,7 @@
             Content.Unload();
             UnloadContent(Content);
 
-            Engine.Destroy();
+            SparkEngine.Destroy();
         }
 
         private void ClientSizeChanged(IWindow sender, EventArgs args)

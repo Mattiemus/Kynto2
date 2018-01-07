@@ -1,4 +1,4 @@
-﻿namespace Spark.Entities
+﻿namespace Spark.Engine
 {
     /// <summary>
     /// Defines a component that contains logic.

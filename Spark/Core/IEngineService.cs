@@ -14,6 +14,6 @@
         /// Initializes the service. This is called by the engine when a service is newly registered.
         /// </summary>
         /// <param name="engine">Engine instance</param>
-        void Initialize(Engine engine);
+        void Initialize(SparkEngine engine);
     }
 }

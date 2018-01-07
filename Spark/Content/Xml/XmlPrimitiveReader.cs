@@ -11,7 +11,7 @@
     /// <summary>
     /// A reader that can read built-in .NET types / primitive values in both singular and array forms from XML.
     /// </summary>
-    public class XmlPrimitiveReader : BaseDisposable, IPrimitiveReader
+    public class XmlPrimitiveReader : Disposable, IPrimitiveReader
     {
         private static Dictionary<Type, Action<string, IntPtr>> PrimitiveConversions;
 

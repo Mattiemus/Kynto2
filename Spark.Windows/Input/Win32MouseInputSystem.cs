@@ -11,7 +11,7 @@
     /// <summary>
     /// Mouse input system that acquires state data from the Win32 API.
     /// </summary>
-    public sealed class Win32MouseInputSystem : BaseDisposable, IMouseInputSystem, IDisposableEngineService
+    public sealed class Win32MouseInputSystem : Disposable, IMouseInputSystem, IDisposableEngineService
     {
         private IntPtr _handle;
         private readonly MouseWheelListener _wheelListener;
@@ -74,7 +74,7 @@
         /// Initializes the service. This is called by the engine when a service is newly registered.
         /// </summary>
         /// <param name="engine">Engine instance</param>
-        public void Initialize(Engine engine)
+        public void Initialize(SparkEngine engine)
         {
             // No-op
         }

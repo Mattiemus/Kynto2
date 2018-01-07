@@ -12,13 +12,13 @@
     {
         private readonly Dictionary<Type, IEngineService> _services;
         private readonly List<IUpdatableEngineService> _updateServices;
-        private readonly Engine _engine;
+        private readonly SparkEngine _engine;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EngineServiceRegistry"/> class.
         /// </summary>
         /// <param name="engine"></param>
-        internal EngineServiceRegistry(Engine engine)
+        internal EngineServiceRegistry(SparkEngine engine)
         {
             _services = new Dictionary<Type, IEngineService>();
             _updateServices = new List<IUpdatableEngineService>();

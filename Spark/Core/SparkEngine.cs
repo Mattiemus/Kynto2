@@ -6,12 +6,12 @@
     /// Engine root class that manages core engine services such as rendering, windowing, input, etc. The class itself
     /// is a singleton, therefore individual services do not have to be implemented in such a manner.
     /// </summary>
-    public sealed class Engine
+    public sealed class SparkEngine
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Engine"/> class.
+        /// Initializes a new instance of the <see cref="SparkEngine"/> class.
         /// </summary>
-        private Engine()
+        private SparkEngine()
         {
             Services = new EngineServiceRegistry(this);
         }
@@ -19,17 +19,17 @@
         /// <summary>
         /// Occurs when the engine has been initialized.
         /// </summary>
-        public static event TypedEventHandler<Engine, EventArgs> Initialized;
+        public static event TypedEventHandler<SparkEngine, EventArgs> Initialized;
 
         /// <summary>
         /// Occurs when the engine has been destroyed, disposing of all resources.
         /// </summary>
-        public static event TypedEventHandler<Engine, EventArgs> Destroyed;
+        public static event TypedEventHandler<SparkEngine, EventArgs> Destroyed;
 
         /// <summary>
         /// Gets the current engine instance.
         /// </summary>
-        public static Engine Instance { get; private set; }
+        public static SparkEngine Instance { get; private set; }
 
         /// <summary>
         /// Gets if the engine has been initialized or not.
@@ -45,14 +45,14 @@
         /// Initializes the engine. This should be called on the main thread.
         /// </summary>
         /// <returns>The initialized engine instance.</returns>
-        public static Engine Initialize()
+        public static SparkEngine Initialize()
         {
             if (IsInitialized)
             {
                 throw new SparkException("Engine is already initialized");
             }
 
-            Instance = new Engine();
+            Instance = new SparkEngine();
 
             OnInitialized(Instance);
 
@@ -65,7 +65,7 @@
         /// </summary>
         /// <param name="platform">Platform plugin</param>
         /// <returns>The initialized engine instance</returns>
-        public static Engine Initialize(IPlatformInitializer platform)
+        public static SparkEngine Initialize(IPlatformInitializer platform)
         {
             if (platform == null)
             {
@@ -112,7 +112,7 @@
         /// Invoked the engine initialized event
         /// </summary>
         /// <param name="engine">Engine instance</param>
-        private static void OnInitialized(Engine engine)
+        private static void OnInitialized(SparkEngine engine)
         {
             Initialized?.Invoke(engine, EventArgs.Empty);
         }
@@ -121,7 +121,7 @@
         /// Invoked the engine destroyed event
         /// </summary>
         /// <param name="engine">Engine instance</param>
-        private static void OnDestroyed(Engine engine)
+        private static void OnDestroyed(SparkEngine engine)
         {
             Destroyed?.Invoke(engine, EventArgs.Empty);
         }

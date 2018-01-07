@@ -12,7 +12,7 @@
     using OTK = OpenTK;
     using OTKG = OpenTK.Graphics;
 
-    public sealed class OpenGLWindow : BaseDisposable, IWindow
+    public sealed class OpenGLWindow : Disposable, IWindow
     {
         private readonly PresentationParameters _initPresentParams;
         private bool _inSuspended;

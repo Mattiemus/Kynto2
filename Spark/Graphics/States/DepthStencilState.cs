@@ -18,10 +18,10 @@
         /// </summary>
         static DepthStencilState()
         {
-            Engine.Initialized += HandleEngineInitialized;
-            Engine.Destroyed += HandleEngineDestroyed;
+            SparkEngine.Initialized += HandleEngineInitialized;
+            SparkEngine.Destroyed += HandleEngineDestroyed;
 
-            Engine engine = Engine.Instance;
+            SparkEngine engine = SparkEngine.Instance;
 
             if (engine != null)
             {
@@ -436,7 +436,7 @@
         /// </summary>
         /// <param name="sender">Event sender</param>
         /// <param name="args">Event arguments</param>
-        private static void HandleEngineInitialized(Engine sender, EventArgs args)
+        private static void HandleEngineInitialized(SparkEngine sender, EventArgs args)
         {
             sender.Services.ServiceAdded += HandleServiceAdded;
             sender.Services.ServiceReplaced += HandleServiceChanged;
@@ -448,7 +448,7 @@
         /// </summary>
         /// <param name="sender">Event sender</param>
         /// <param name="args">Event arguments</param>
-        private static void HandleEngineDestroyed(Engine sender, EventArgs args)
+        private static void HandleEngineDestroyed(SparkEngine sender, EventArgs args)
         {
             sender.Services.ServiceAdded -= HandleServiceAdded;
             sender.Services.ServiceReplaced -= HandleServiceChanged;

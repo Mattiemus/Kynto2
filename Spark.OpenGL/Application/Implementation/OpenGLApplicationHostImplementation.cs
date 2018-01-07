@@ -15,7 +15,7 @@
     /// <summary>
     /// OpenGL implementation for <see cref="ApplicationHost"/>
     /// </summary>
-    public sealed class OpenGLApplicationHostImplementation : BaseDisposable, IApplicationHostImplementation
+    public sealed class OpenGLApplicationHostImplementation : Disposable, IApplicationHostImplementation
     {
         private readonly OpenGLApplicationSystem _applicationSystem;
         private OpenGLWindow _mainWindow;

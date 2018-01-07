@@ -10,7 +10,7 @@
     /// <summary>
     /// A writer that can write built-in .NET types / primitive values in both singular and array forms to XML.
     /// </summary>
-    public class XmlPrimitiveWriter : BaseDisposable, IPrimitiveWriter
+    public class XmlPrimitiveWriter : Disposable, IPrimitiveWriter
     {
         private byte[] _chunkBuffer;
         

@@ -118,7 +118,7 @@
     <Compile Include="Core\Collections\TupleKey.cs" />
     <Compile Include="Core\DataBuffer.cs" />
     <Compile Include="Core\DataBufferExtensions.cs" />
-    <Compile Include="Core\Engine.cs" />
+    <Compile Include="Core\SparkEngine.cs" />
     <Compile Include="Core\EngineServiceEventArgs.cs" />
     <Compile Include="Core\EngineServiceRegistry.cs" />
     <Compile Include="Core\EngineServiceReplacedEventArgs.cs" />
@@ -452,8 +452,11 @@
     <Compile Include="Scene\SceneHints.cs" />
     <Compile Include="Scene\Spatial.cs" />
     <Compile Include="Scene\Visual.cs" />
-    <Compile Include="Utilities\BaseDisposable.cs" />
+    <Compile Include="Utilities\Disposable.cs" />
     <Compile Include="Utilities\CyclicReferenceDetector.cs" />
+    <Compile Include="Utilities\Guard.cs" />
+    <Compile Include="Utilities\IExecuteWithObject.cs" />
+    <Compile Include="Utilities\IGuardInstance.cs" />
     <Compile Include="Utilities\Parsing\ParseNode.cs" />
     <Compile Include="Utilities\Parsing\Parser.cs" />
     <Compile Include="Utilities\Parsing\ParseTree.cs" />
@@ -463,6 +466,7 @@
     <Compile Include="Utilities\ReferenceEqualityComparer.cs" />
     <Compile Include="Utilities\SmartActivator.cs" />
     <Compile Include="Utilities\VisitLock.cs" />
+    <Compile Include="Utilities\WeakAction.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

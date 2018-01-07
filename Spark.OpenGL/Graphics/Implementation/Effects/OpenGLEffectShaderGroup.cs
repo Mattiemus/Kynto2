@@ -12,7 +12,7 @@
     /// <summary>
     /// OpenGL implementation of a shader group
     /// </summary>
-    public sealed class OpenGLEffectShaderGroup : BaseDisposable, IEffectShaderGroup
+    public sealed class OpenGLEffectShaderGroup : Disposable, IEffectShaderGroup
     {
         private readonly OpenGLEffectImplementation _implementation;
         private readonly Dictionary<ShaderStage, int> _programShaders;

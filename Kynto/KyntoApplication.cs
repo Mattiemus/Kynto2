@@ -10,7 +10,7 @@
     using Spark.Effects.Importer;
     using Spark.Math;
     using Spark.Input;
-    using Spark.Entities;
+    using Spark.Engine;
 
     using Spark.Toolkit.Input;
         
@@ -31,7 +31,7 @@
         {
         }
 
-        protected override void OnInitialize(Engine engine)
+        protected override void OnInitialize(SparkEngine engine)
         {
             _forwardRenderer = new ForwardRenderer(RenderSystem.ImmediateContext);
             

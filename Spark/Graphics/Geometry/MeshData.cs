@@ -599,7 +599,7 @@
 
         public void Compile()
         {
-            Compile(Engine.Instance.Services.GetService<IRenderSystem>());
+            Compile(SparkEngine.Instance.Services.GetService<IRenderSystem>());
         }
 
         public void Compile(IRenderSystem renderSystem)

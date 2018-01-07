@@ -9,7 +9,7 @@
     /// <summary>
     /// A writer that can write built-in .NET types / primitive values in both singular and array forms to binary.
     /// </summary>
-    public class BinaryPrimitiveWriter : BaseDisposable, IPrimitiveWriter
+    public class BinaryPrimitiveWriter : Disposable, IPrimitiveWriter
     {
         private readonly SwappableBinaryWriter _binaryWriter;
         private byte[] _chunkBuffer;

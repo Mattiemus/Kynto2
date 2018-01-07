@@ -11,7 +11,7 @@
     /// <summary>
     /// OpenGL application system implementation
     /// </summary>
-    public sealed class OpenGLApplicationSystem : BaseDisposable, IApplicationSystem
+    public sealed class OpenGLApplicationSystem : Disposable, IApplicationSystem
     {
         /// <summary>
         /// Event fired when the system is disposing
@@ -32,7 +32,7 @@
         /// Initializes the service. This is called by the engine when a service is newly registered.
         /// </summary>
         /// <param name="engine">Engine instance</param>
-        public void Initialize(Engine engine)
+        public void Initialize(SparkEngine engine)
         {
             // No-op
         }

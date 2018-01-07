@@ -11,7 +11,7 @@
     /// The standard effect library contains effect byte code that do not require a content repository and can be used to create new effect instances. 
     /// The standard library can be extended to include effect byte code from other sources.
     /// </summary>
-    public sealed class StandardEffectLibrary : BaseDisposable
+    public sealed class StandardEffectLibrary : Disposable
     {
         private readonly object _sync;
         private Dictionary<string, Entry> _effects;

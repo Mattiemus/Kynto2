@@ -9,7 +9,7 @@
     /// <summary>
     /// A reader that can read built-in .NET types / primitive values in both singular and array forms from binary.
     /// </summary>
-    public class BinaryPrimitiveReader : BaseDisposable, IPrimitiveReader
+    public class BinaryPrimitiveReader : Disposable, IPrimitiveReader
     {        
         private byte[] _chunkBuffer;
         

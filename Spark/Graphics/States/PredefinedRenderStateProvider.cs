@@ -8,7 +8,7 @@
     /// <summary>
     /// Standard implementation for creating all the engine's prebuilt render states.
     /// </summary>
-    public sealed class PredefinedRenderStateProvider : BaseDisposable, IPredefinedBlendStateProvider, IPredefinedDepthStencilStateProvider, IPredefinedRasterizerStateProvider, IPredefinedSamplerStateProvider, IDisposable
+    public sealed class PredefinedRenderStateProvider : Disposable, IPredefinedBlendStateProvider, IPredefinedDepthStencilStateProvider, IPredefinedRasterizerStateProvider, IPredefinedSamplerStateProvider, IDisposable
     {
         private readonly Dictionary<string, RenderState> _namesToStates;
 

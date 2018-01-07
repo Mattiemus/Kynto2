@@ -15,7 +15,7 @@
     /// <summary>
     /// Render context for the OpenGL renderer
     /// </summary>
-    public sealed class OpenGLRenderContext : BaseDisposable, IRenderContext
+    public sealed class OpenGLRenderContext : Disposable, IRenderContext
     {
         private BlendState _blendState;
         private RasterizerState _rasterizerState;

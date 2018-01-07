@@ -7,7 +7,7 @@
     <ProjectGuid>{FA672379-53BA-4185-8A68-F4AAE99D61C1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Spark</RootNamespace>
+    <RootNamespace>Spark.Engine</RootNamespace>
     <AssemblyName>Spark.Engine</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -53,6 +53,10 @@
     <Compile Include="Entities\IBehavior.cs" />
     <Compile Include="Entities\IComponent.cs" />
     <Compile Include="Entities\NullComponent.cs" />
+    <Compile Include="Entities\Services\IEventDispatcher.cs" />
+    <Compile Include="Entities\Services\IService.cs" />
+    <Compile Include="Entities\Services\EventDispatcher.cs" />
+    <Compile Include="Entities\Services\ServiceBase.cs" />
     <Compile Include="Entities\World.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

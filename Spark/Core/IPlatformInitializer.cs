@@ -10,6 +10,6 @@
         /// Initializes the platform's services.
         /// </summary>
         /// <param name="engine">Engine instance</param>
-        void Initialize(Engine engine);
+        void Initialize(SparkEngine engine);
     }
 }

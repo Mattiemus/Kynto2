@@ -2,12 +2,12 @@
 {
     using System;
 
-    public abstract class BaseDisposable : IDisposable
+    public abstract class Disposable : IDisposable
     {
         /// <summary>
-        /// Finalizes an instance of the <see cref="BaseDisposable"/> class.
+        /// Finalizes an instance of the <see cref="Disposable"/> class.
         /// </summary>
-        ~BaseDisposable()
+        ~Disposable()
         {
             Dispose(false);            
         }

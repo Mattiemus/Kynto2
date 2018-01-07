@@ -15,7 +15,7 @@
     /// that do the actual import and processing. Optionally, a content manager can be configured to throw exceptions for content that cannot be loaded
     /// or is missing, or be configured with place holder handlers that return non-cached default content.
     /// </summary>
-    public sealed class ContentManager : BaseDisposable
+    public sealed class ContentManager : Disposable
     {
         private IResourceRepository _repository;
         private readonly Dictionary<string, object> _loadedResources;
@@ -72,12 +72,12 @@
         {
             if (serviceProvider == null)
             {
-                if (!Engine.IsInitialized)
+                if (!SparkEngine.IsInitialized)
                 {
                     throw new SparkContentException("Engine is not initialized");
                 }
 
-                ServiceProvider = Engine.Instance.Services;
+                ServiceProvider = SparkEngine.Instance.Services;
             }
             else
             {

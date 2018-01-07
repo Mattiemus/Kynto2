@@ -8,7 +8,7 @@
     /// <summary>
     /// Represents an IDataBuffer mapped for direct access via a pointer.
     /// </summary>
-    public class MappedDataBuffer : BaseDisposable
+    public class MappedDataBuffer : Disposable
     {
         private IntPtr _pointer;
 

@@ -7,7 +7,7 @@
     /// <summary>
     /// Base class for all platform-specific graphics resource implementations that are created by a render system and bound to a graphics resource.
     /// </summary>
-    public abstract class GraphicsResourceImplementation : BaseDisposable, IGraphicsResourceImplementation
+    public abstract class GraphicsResourceImplementation : Disposable, IGraphicsResourceImplementation
     {
         private string _name;
 

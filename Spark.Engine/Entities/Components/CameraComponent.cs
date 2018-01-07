@@ -1,9 +1,10 @@
-﻿namespace Spark.Entities
+﻿namespace Spark.Engine
 {
     using System;
 
     using Math;
     using Graphics;
+    using Utilities;
 
     public class CameraComponent : SceneComponent, IBehavior
     {
@@ -35,10 +36,7 @@
             get => _camera;
             set
             {
-                if (value == null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                Guard.Against.NullArgument(value, nameof(value));
 
                 _camera = value;
             }
