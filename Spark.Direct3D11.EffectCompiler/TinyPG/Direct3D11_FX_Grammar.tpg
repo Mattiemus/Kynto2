@@ -1,0 +1,262 @@
+﻿// Tiny Parser Generator v1.3
+// Copyright © Herre Kuijpers 2008-2012
+
+<% @TinyPG Namespace="Spark.Direct3D11.Graphics" Language="C#"%>
+
+[Skip] BlockComment -> @"/\*([^*]|\*[^/])*\*/";
+[Skip] Comment -> @"//[^\n\r]*";
+[Skip] Whitespace -> @"[ \t\n\r]+";
+
+// Tokens
+
+Identifier -> @"[A-Za-z_][A-Za-z0-9_]*";
+Pass -> @"pass|Pass";
+Technique -> @"technique(10|11)?|Technique(10|11)?";
+SetVertexShader -> @"SetVertexShader";
+SetPixelShader -> @"SetPixelShader";
+SetGeometryShader -> @"SetGeometryShader";
+SetDomainShader -> @"SetDomainShader";
+SetHullShader -> @"SetHullShader";
+SetComputeShader -> @"SetComputeShader";
+CompileShader -> @"CompileShader";
+VSShaderProfile -> @"(vs_)(4_0|4_1|5_0)";
+PSShaderProfile -> @"(ps_)(4_0|4_1|5_0)";
+GSShaderProfile -> @"(gs_)(4_0|4_1|5_0)";
+DSShaderProfile -> @"(ds_)(5_0)";
+HSShaderProfile -> @"(hs_)(5_0)";
+CSShaderProfile -> @"(cs_)(5_0)";
+Code -> @"[\S]";
+EndOfFile -> @"^$";
+OpenBracket -> @"{";
+CloseBracket -> @"}";
+Equals -> @"=";
+Semicolon -> @";";
+OpenParentheses -> @"\(";
+CloseParentheses -> @"\)";
+Comma -> @",";
+NULL -> @"NULL|0";
+
+// Production rules
+Start -> ( Code | Technique_Declaration )* EndOfFile
+{
+	EffectContent effect = new EffectContent();
+	foreach(ParseNode node in Nodes)
+	{
+		node.Eval(tree, effect);
+	}
+
+	return effect;
+};
+
+//
+// Technique Parsing, convert to shader groups
+//
+
+Technique_Declaration -> Technique Identifier? OpenBracket Pass_Declaration+ CloseBracket
+{
+	// Treat the technique has a list of shader groups, each shader group will have the name of {TechName}-{PassName} in order to allow us to parse legacy FX files.
+	// Essentially this will mean that the the techniques/passes get flattened into one list
+	List<EffectContent.ShaderGroupContent> technique = new List<EffectContent.ShaderGroupContent>();
+	string techName = $Identifier as string ?? string.Empty;
+
+	foreach(ParseNode node in Nodes)
+	{
+		EffectContent.ShaderGroupContent pass = node.Eval(tree, technique) as EffectContent.ShaderGroupContent;
+		if(pass != null)
+		{
+			technique.Add(pass);
+		}
+	}
+
+	// Do a second pass over the passes and do any renaming
+	bool hasMoreThanOnePass = technique.Count > 1;
+	int currentPassIndex = 0;
+
+	bool doesTechNameExist = !string.IsNullOrEmpty(techName);
+	EffectContent effect = paramlist[0] as EffectContent;
+
+	foreach(EffectContent.ShaderGroupContent grp in technique)
+	{
+		bool doesPassNameExist = !string.IsNullOrEmpty(grp.Name);
+
+		// Use {TechName}-{PassName} scheme if both are named
+		if(doesTechNameExist && doesPassNameExist)
+		{
+			grp.Name = techName + "-" + grp.Name;
+		}
+		else if(doesTechNameExist && !doesPassNameExist)
+		{
+			// If tech name does exist and no pass name, then use the technique name, unless if we have multiple passes, then assign a name based on index
+			if(hasMoreThanOnePass)
+			{
+				grp.Name = techName + "-" + currentPassIndex.ToString();
+			}
+			else
+			{
+				grp.Name = techName;
+			}
+		}
+		else if(!doesTechNameExist && !doesPassNameExist)
+		{
+			// If tech name does not exist and neither does the pass, set the index as the name
+			grp.Name = currentPassIndex.ToString();
+		}
+		// Else just use whatever the pass name is coming in
+
+		currentPassIndex++;
+
+		effect.AddShaderGroup(grp);
+	}
+
+	return null;
+};
+
+Pass_Declaration ->	Pass Identifier? OpenBracket (SetVertexShader_Expression? | SetPixelShader_Expression? | SetGeometryShader_Expression? | SetDomainShader_Expression? | SetHullShader_Expression? | SetComputeShader_Expression?)* CloseBracket
+{
+	// Each pass is a ShaderGroup technically, but we concat its name with the technique's name
+	EffectContent.ShaderGroupContent pass = new EffectContent.ShaderGroupContent();
+	pass.Name = $Identifier as string ?? string.Empty;
+
+	foreach(ParseNode node in Nodes)
+	{
+		node.Eval(tree, pass);
+	}
+
+	return pass;
+};
+
+//
+// Shader setting parsing
+//
+
+SetVertexShader_Expression -> SetVertexShader OpenParentheses ((CompileShader OpenParentheses VSShaderProfile Comma Identifier OpenParentheses CloseParentheses CloseParentheses) | NULL) CloseParentheses Semicolon
+{
+	if(string.IsNullOrEmpty($Identifier as string) || string.IsNullOrEmpty($VSShaderProfile as string))
+	{
+		return null;
+	}
+
+	EffectContent.ShaderContent shader = new EffectContent.ShaderContent();
+	shader.ShaderType = ShaderStage.VertexShader;
+	shader.EntryPoint = $Identifier as string ?? string.Empty;
+	shader.ShaderProfile = $VSShaderProfile as string ?? string.Empty;
+
+	// Can be either legacy Pass or new ShaderGroup syntax
+	EffectContent.ShaderGroupContent grp = paramlist[0] as EffectContent.ShaderGroupContent;
+	if(grp != null)
+	{
+		grp[ShaderStage.VertexShader] = shader;
+	}
+
+	return null;
+};
+
+SetPixelShader_Expression -> SetPixelShader OpenParentheses ((CompileShader OpenParentheses PSShaderProfile Comma Identifier OpenParentheses CloseParentheses CloseParentheses) | NULL) CloseParentheses Semicolon
+{
+	if(string.IsNullOrEmpty($Identifier as string) || string.IsNullOrEmpty($PSShaderProfile as string))
+	{
+		return null;
+	}
+
+	EffectContent.ShaderContent shader = new EffectContent.ShaderContent();
+	shader.ShaderType = ShaderStage.PixelShader;
+	shader.EntryPoint = $Identifier as string ?? string.Empty;
+	shader.ShaderProfile = $PSShaderProfile as string ?? string.Empty;
+
+	// Can be either legacy Pass or new ShaderGroup syntax
+	EffectContent.ShaderGroupContent grp = paramlist[0] as EffectContent.ShaderGroupContent;
+	if(grp != null)
+	{
+		grp[ShaderStage.PixelShader] = shader;
+	}
+
+	return null;
+};
+
+SetGeometryShader_Expression -> SetGeometryShader OpenParentheses ((CompileShader OpenParentheses GSShaderProfile Comma Identifier OpenParentheses CloseParentheses CloseParentheses) | NULL) CloseParentheses Semicolon
+{
+	if(string.IsNullOrEmpty($Identifier as string) || string.IsNullOrEmpty($GSShaderProfile as string))
+	{
+		return null;
+	}
+
+	EffectContent.ShaderContent shader = new EffectContent.ShaderContent();
+	shader.ShaderType = ShaderStage.GeometryShader;
+	shader.EntryPoint = $Identifier as string ?? string.Empty;
+	shader.ShaderProfile = $GSShaderProfile as string ?? string.Empty;
+
+	// Can be either legacy Pass or new ShaderGroup syntax
+	EffectContent.ShaderGroupContent grp = paramlist[0] as EffectContent.ShaderGroupContent;
+	if(grp != null)
+	{
+		grp[ShaderStage.GeometryShader] = shader;
+	}
+
+	return null;
+};
+
+SetDomainShader_Expression -> SetDomainShader OpenParentheses ((CompileShader OpenParentheses DSShaderProfile Comma Identifier OpenParentheses CloseParentheses CloseParentheses) | NULL) CloseParentheses Semicolon
+{
+	if(string.IsNullOrEmpty($Identifier as string) || string.IsNullOrEmpty($DSShaderProfile as string))
+	{
+		return null;
+	}
+
+	EffectContent.ShaderContent shader = new EffectContent.ShaderContent();
+	shader.ShaderType = ShaderStage.DomainShader;
+	shader.EntryPoint = $Identifier as string ?? string.Empty;
+	shader.ShaderProfile = $DSShaderProfile as string ?? string.Empty;
+
+	// Can be either legacy Pass or new ShaderGroup syntax
+	EffectContent.ShaderGroupContent grp = paramlist[0] as EffectContent.ShaderGroupContent;
+	if(grp != null)
+	{
+		grp[ShaderStage.DomainShader] = shader;
+	}
+
+	return null;
+};
+
+SetHullShader_Expression -> SetHullShader OpenParentheses ((CompileShader OpenParentheses HSShaderProfile Comma Identifier OpenParentheses CloseParentheses CloseParentheses) | NULL) CloseParentheses Semicolon
+{
+	if(string.IsNullOrEmpty($Identifier as string) || string.IsNullOrEmpty($HSShaderProfile as string))
+	{
+		return null;
+	}
+
+	EffectContent.ShaderContent shader = new EffectContent.ShaderContent();
+	shader.ShaderType = ShaderStage.HullShader;
+	shader.EntryPoint = $Identifier as string ?? string.Empty;
+	shader.ShaderProfile = $HSShaderProfile as string ?? string.Empty;
+
+	// Can be either legacy Pass or new ShaderGroup syntax
+	EffectContent.ShaderGroupContent grp = paramlist[0] as EffectContent.ShaderGroupContent;
+	if(grp != null)
+	{
+		grp[ShaderStage.HullShader] = shader;
+	}
+
+	return null;
+};
+
+SetComputeShader_Expression -> SetComputeShader OpenParentheses ((CompileShader OpenParentheses CSShaderProfile Comma Identifier OpenParentheses CloseParentheses CloseParentheses) | NULL) CloseParentheses Semicolon
+{
+	if(string.IsNullOrEmpty($Identifier as string) || string.IsNullOrEmpty($CSShaderProfile as string))
+	{
+		return null;
+	}
+
+	EffectContent.ShaderContent shader = new EffectContent.ShaderContent();
+	shader.ShaderType = ShaderStage.ComputeShader;
+	shader.EntryPoint = $Identifier as string ?? string.Empty;
+	shader.ShaderProfile = $CSShaderProfile as string ?? string.Empty;
+
+	// Can be either legacy Pass or new ShaderGroup syntax
+	EffectContent.ShaderGroupContent grp = paramlist[0] as EffectContent.ShaderGroupContent;
+	if(grp != null)
+	{
+		grp[ShaderStage.ComputeShader] = shader;
+	}
+
+	return null;
+};

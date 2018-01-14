@@ -14,43 +14,98 @@
     /// </summary>
     public class InstanceDefinition : IMarkedRenderable, ISavable, IMeshDataContainer
     {
-        private IRenderSystem m_renderSystem;
-        private MarkId m_markId = MarkId.Invalid;
-        private MaterialDefinition m_matDef;
-        private Transform m_worldTransform;
-        private LightCollection m_worldLights;
-        private RenderPropertyCollection m_renderProperties;
-        private MeshData m_meshData;
-        private SubMeshRange? m_meshRange;
-        private VertexBuffer m_instanceVertexBuffer;
-        private IDataBuffer<byte> m_instanceDataBuffer;
+        private IRenderSystem _renderSystem;
+        private readonly MarkId _markId;
+        private MaterialDefinition _matDef;
+        private Transform _worldTransform;
+        private LightCollection _worldLights;
+        private RenderPropertyCollection _renderProperties;
+        private MeshData _meshData;
+        private SubMeshRange? _meshRange;
+        private VertexBuffer _instanceVertexBuffer;
+        private IDataBuffer<byte> _instanceDataBuffer;
 
-        private List<IInstancedRenderable> m_instances;
-        private List<IInstancedRenderable> m_instancesToDraw;
-        private bool m_renderedOnce;
-        private bool m_invalidateBuffers;
-        private int m_sequence;
-        private VisitLock m_visitLock;
-        private SpinLock m_lock;
+        private readonly List<IInstancedRenderable> _instances;
+        private readonly List<IInstancedRenderable> _instancesToDraw;
+        private bool _renderedOnce;
+        private bool _invalidateBuffers;
+        private int _sequence;
+        private readonly VisitLock _visitLock;
+        private readonly SpinLock _lock;
 
-        private Dictionary<String, IInstanceDataProvider> m_instanceDataProviderSet;
-        private List<IInstanceDataProvider> m_instanceDataProviders;
+        private readonly Dictionary<String, IInstanceDataProvider> _instanceDataProviderSet;
+        private readonly List<IInstanceDataProvider> _instanceDataProviders;
 
-        private VertexBufferBinding[] m_vbBindings;
+        private readonly VertexBufferBinding[] _vbBindings;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InstanceDefinition"/> class.
+        /// </summary>
+        public InstanceDefinition() 
+            : this(null, null)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InstanceDefinition"/> class.
+        /// </summary>
+        /// <param name="meshData">MeshData that contains the geometry of the instances.</param>
+        public InstanceDefinition(MeshData meshData) 
+            : this(null, meshData)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InstanceDefinition"/> class.
+        /// </summary>
+        /// <param name="matDef">Materials used to render the instances, needs to support hardware instancing.</param>
+        public InstanceDefinition(MaterialDefinition matDef) 
+            : this(matDef, null)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InstanceDefinition"/> class.
+        /// </summary>
+        /// <param name="matDef">Materials used to render the instances, needs to support hardware instancing.</param>
+        /// <param name="meshData">MeshData that contains the geometry of the instances.</param>
+        public InstanceDefinition(MaterialDefinition matDef, MeshData meshData)
+        {
+            _matDef = matDef;
+            _meshData = meshData;
+            _worldTransform = new Transform();
+            _worldLights = new LightCollection();
+            _worldLights.MonitorLightChanges = true;
+
+            _renderProperties = new RenderPropertyCollection();
+
+            SetDefaultRenderProperties(false);
+
+            _instanceDataProviders = new List<IInstanceDataProvider>();
+            _instanceDataProviderSet = new Dictionary<String, IInstanceDataProvider>();
+
+            _instances = new List<IInstancedRenderable>();
+            _instancesToDraw = new List<IInstancedRenderable>();
+            _instanceVertexBuffer = null;
+            _instanceDataBuffer = null;
+            _invalidateBuffers = false;
+            _renderedOnce = false;
+            _sequence = 1;
+            _visitLock = new VisitLock();
+            _lock = new SpinLock();
+            _markId = MarkId.GenerateNewUniqueId();
+
+            _renderSystem = SparkEngine.Instance.Services.GetService<IRenderSystem>();
+            _vbBindings = new VertexBufferBinding[2];
+        }
 
         /// <summary>
         /// Gets the material definition that contains the materials used to render the object.
         /// </summary>
         public MaterialDefinition MaterialDefinition
         {
-            get
-            {
-                return m_matDef;
-            }
-            set
-            {
-                m_matDef = value;
-            }
+            get => _matDef;
+            set => _matDef = value;
         }
 
         /// <summary>
@@ -58,14 +113,8 @@
         /// </summary>
         public MeshData MeshData
         {
-            get
-            {
-                return m_meshData;
-            }
-            set
-            {
-                m_meshData = value;
-            }
+            get => _meshData;
+            set => _meshData = value;
         }
 
         /// <summary>
@@ -75,92 +124,44 @@
         /// </summary>
         public SubMeshRange? MeshRange
         {
-            get
-            {
-                return m_meshRange;
-            }
-            set
-            {
-                m_meshRange = value;
-            }
+            get => _meshRange;
+            set => _meshRange = value;
         }
 
         /// <summary>
         /// Gets the ID used to reference this object in the render queue.
         /// </summary>
-        public MarkId MarkId
-        {
-            get
-            {
-                return m_markId;
-            }
-        }
+        public MarkId MarkId => _markId;
 
         /// <summary>
         /// Gets the world transform of the renderable. At the bare minimum, this render property should be present in the render properties collection.
         /// </summary>
-        public Transform WorldTransform
-        {
-            get
-            {
-                return m_worldTransform;
-            }
-        }
+        public Transform WorldTransform => _worldTransform;
 
         /// <summary>
         /// Gets the world lights of the renderable, if any.
         /// </summary>
-        public LightCollection WorldLights
-        {
-            get
-            {
-                return m_worldLights;
-            }
-        }
+        public LightCollection WorldLights => _worldLights;
 
         /// <summary>
         /// Gets the collection of render properties.
         /// </summary>
-        public RenderPropertyCollection RenderProperties
-        {
-            get
-            {
-                return m_renderProperties;
-            }
-        }
+        public RenderPropertyCollection RenderProperties => _renderProperties;
 
         /// <summary>
         /// Gets the collection of instances that the root definition manages.
         /// </summary>
-        public IReadOnlyList<IInstancedRenderable> Instances
-        {
-            get
-            {
-                return m_instances;
-            }
-        }
+        public IReadOnlyList<IInstancedRenderable> Instances => _instances;
 
         /// <summary>
         /// Gets the collection of instances that have been marked to be rendered.
         /// </summary>
-        public IReadOnlyList<IInstancedRenderable> InstancesToDraw
-        {
-            get
-            {
-                return m_instancesToDraw;
-            }
-        }
+        public IReadOnlyList<IInstancedRenderable> InstancesToDraw => _instancesToDraw;
 
         /// <summary>
         /// Gets the collection of instance data providers that feed the per-instance vertex buffer.
         /// </summary>
-        public IReadOnlyList<IInstanceDataProvider> InstanceDataProviders
-        {
-            get
-            {
-                return m_instanceDataProviders;
-            }
-        }
+        public IReadOnlyList<IInstanceDataProvider> InstanceDataProviders => _instanceDataProviders;
 
         /// <summary>
         /// Gets if the renderable is valid for drawing.
@@ -169,72 +170,20 @@
         {
             get
             {
-                bool invalid = m_matDef == null || m_matDef.Count == 0 || !m_matDef.AreMaterialsValid() || m_instances.Count == 0 || m_meshData == null || m_meshData.VertexBuffer == null || m_meshData.VertexBuffer.IsDisposed
-                        || (m_meshData.UseIndexedPrimitives && (m_meshData.IndexBuffer == null || m_meshData.IndexBuffer.IsDisposed));
+                bool invalid = _matDef == null || 
+                               _matDef.Count == 0 || 
+                               !_matDef.AreMaterialsValid() || 
+                               _instances.Count == 0 || 
+                               _meshData == null || 
+                               _meshData.VertexBuffer == null || 
+                               _meshData.VertexBuffer.IsDisposed || 
+                               (_meshData.UseIndexedPrimitives && (_meshData.IndexBuffer == null || _meshData.IndexBuffer.IsDisposed));
 
                 return !invalid;
             }
         }
 
-        private bool HasInstanceData
-        {
-            get
-            {
-                return m_instanceDataProviders.Count > 0;
-            }
-        }
-
-        /// <summary>
-        /// Constructs a new instance of the <see cref="InstanceDefinition"/> class.
-        /// </summary>
-        public InstanceDefinition() : this(null, null) { }
-
-        /// <summary>
-        /// Constructs a new instance of the <see cref="InstanceDefinition"/> class.
-        /// </summary>
-        /// <param name="meshData">MeshData that contains the geometry of the instances.</param>
-        public InstanceDefinition(MeshData meshData) : this(null, meshData) { }
-
-        /// <summary>
-        /// Constructs a new instance of the <see cref="InstanceDefinition"/> class.
-        /// </summary>
-        /// <param name="matDef">Materials used to render the instances, needs to support hardware instancing.</param>
-        public InstanceDefinition(MaterialDefinition matDef) : this(matDef, null) { }
-
-        /// <summary>
-        /// Constructs a new instance of the <see cref="InstanceDefinition"/> class.
-        /// </summary>
-        /// <param name="matDef">Materials used to render the instances, needs to support hardware instancing.</param>
-        /// <param name="meshData">MeshData that contains the geometry of the instances.</param>
-        public InstanceDefinition(MaterialDefinition matDef, MeshData meshData)
-        {
-            m_matDef = matDef;
-            m_meshData = meshData;
-            m_worldTransform = new Transform();
-            m_worldLights = new LightCollection();
-            m_worldLights.MonitorLightChanges = true;
-
-            m_renderProperties = new RenderPropertyCollection();
-
-            SetDefaultRenderProperties(false);
-
-            m_instanceDataProviders = new List<IInstanceDataProvider>();
-            m_instanceDataProviderSet = new Dictionary<String, IInstanceDataProvider>();
-
-            m_instances = new List<IInstancedRenderable>();
-            m_instancesToDraw = new List<IInstancedRenderable>();
-            m_instanceVertexBuffer = null;
-            m_instanceDataBuffer = null;
-            m_invalidateBuffers = false;
-            m_renderedOnce = false;
-            m_sequence = 1;
-            m_visitLock = new VisitLock();
-            m_lock = new SpinLock();
-            m_markId = MarkId.GenerateNewUniqueId();
-
-            m_renderSystem = SparkEngine.Instance.Services.GetService<IRenderSystem>();
-            m_vbBindings = new VertexBufferBinding[2];
-        }
+        private bool HasInstanceData => _instanceDataProviders.Count > 0;
 
         /// <summary>
         /// Sets the default render properties.
@@ -242,13 +191,13 @@
         /// <param name="fromSavable">True if reading from a savable input, false otherwise.</param>
         protected void SetDefaultRenderProperties(bool fromSavable)
         {
-            m_renderProperties.Add(new WorldTransformProperty(m_worldTransform));
-            m_renderProperties.Add(new LightCollectionProperty(m_worldLights));
+            _renderProperties.Add(new WorldTransformProperty(_worldTransform));
+            _renderProperties.Add(new LightCollectionProperty(_worldLights));
 
             //Will be serialized...
             if (!fromSavable)
             {
-                m_renderProperties.Add(new OrthoOrderProperty(0));
+                _renderProperties.Add(new OrthoOrderProperty(0));
             }
         }
 
@@ -263,18 +212,18 @@
             if (renderer == null || instance == null || instance.InstanceDefinition != this)
                 return;
 
-            if (m_visitLock.IsFirstVisit(m_sequence))
+            if (_visitLock.IsFirstVisit(_sequence))
             {
-                if (renderer.RenderQueue.Mark(m_markId, this))
+                if (renderer.RenderQueue.Mark(_markId, this))
                     renderer.Process(this);
             }
 
             bool lockTaken = false;
-            m_lock.Enter(ref lockTaken);
+            _lock.Enter(ref lockTaken);
 
-            m_instancesToDraw.Add(instance);
+            _instancesToDraw.Add(instance);
 
-            m_lock.Exit();
+            _lock.Exit();
         }
 
         /// <summary>
@@ -285,21 +234,21 @@
         public void NotifyToDrawAll(IRenderer renderer)
         {
             //If # of instances to draw equals the # of instances, then this is a redundant call
-            if (renderer == null || m_instancesToDraw.Count == m_instances.Count)
+            if (renderer == null || _instancesToDraw.Count == _instances.Count)
                 return;
 
-            if (m_visitLock.IsFirstVisit(m_sequence))
+            if (_visitLock.IsFirstVisit(_sequence))
             {
-                if (renderer.RenderQueue.Mark(m_markId, this))
+                if (renderer.RenderQueue.Mark(_markId, this))
                     renderer.Process(this);
             }
 
             //Make sure we don't add duplicates
-            if (m_instancesToDraw.Count > 0)
-                m_instancesToDraw.Clear();
+            if (_instancesToDraw.Count > 0)
+                _instancesToDraw.Clear();
 
-            for (int i = 0; i < m_instances.Count; i++)
-                m_instancesToDraw.Add(m_instances[i]);
+            for (int i = 0; i < _instances.Count; i++)
+                _instancesToDraw.Add(_instances[i]);
         }
 
         /// <summary>
@@ -316,10 +265,10 @@
 
             if (instance.SetInstanceDefinition(this))
             {
-                m_instances.Add(instance);
+                _instances.Add(instance);
 
                 //Make sure the instances to draw is the same or greater capacity so we don't run into lots of allocations when notifying to draw
-                m_instancesToDraw.Capacity = Math.Max(m_instances.Capacity, m_instancesToDraw.Capacity);
+                _instancesToDraw.Capacity = Math.Max(_instances.Capacity, _instancesToDraw.Capacity);
                 InvalidateInstanceBuffers();
                 return true;
             }
@@ -337,7 +286,7 @@
             if (instance == null || instance.InstanceDefinition != null)
                 return false;
 
-            m_instances.Remove(instance);
+            _instances.Remove(instance);
             instance.RemoveInstanceDefinition();
             InvalidateInstanceBuffers();
             return true;
@@ -351,11 +300,11 @@
         /// <returns>True if the data provider was successfully added, false if otherwise.</returns>
         public bool AddInstanceData(IInstanceDataProvider dataProvider)
         {
-            if (dataProvider == null || m_instanceDataProviderSet.ContainsKey(dataProvider.InstanceDataName))
+            if (dataProvider == null || _instanceDataProviderSet.ContainsKey(dataProvider.InstanceDataName))
                 return false;
 
-            m_instanceDataProviderSet.Add(dataProvider.InstanceDataName, dataProvider);
-            m_instanceDataProviders.Add(dataProvider);
+            _instanceDataProviderSet.Add(dataProvider.InstanceDataName, dataProvider);
+            _instanceDataProviders.Add(dataProvider);
 
             InvalidateInstanceBuffers();
 
@@ -382,15 +331,15 @@
         /// <returns>True if the data provider was successfully removed, false if otherwise.</returns>
         public bool RemoveInstanceData(String instanceDataName)
         {
-            if (String.IsNullOrEmpty(instanceDataName) || !m_instanceDataProviderSet.ContainsKey(instanceDataName))
+            if (String.IsNullOrEmpty(instanceDataName) || !_instanceDataProviderSet.ContainsKey(instanceDataName))
                 return false;
 
             IInstanceDataProvider dataProvider;
-            if (m_instanceDataProviderSet.TryGetValue(instanceDataName, out dataProvider))
+            if (_instanceDataProviderSet.TryGetValue(instanceDataName, out dataProvider))
             {
                 InvalidateInstanceBuffers();
-                m_instanceDataProviderSet.Remove(instanceDataName);
-                return m_instanceDataProviders.Remove(dataProvider);
+                _instanceDataProviderSet.Remove(instanceDataName);
+                return _instanceDataProviders.Remove(dataProvider);
             }
 
             return false;
@@ -401,15 +350,15 @@
         /// </summary>
         public void ClearInstances()
         {
-            for (int i = 0; i < m_instances.Count; i++)
+            for (int i = 0; i < _instances.Count; i++)
             {
-                IInstancedRenderable instance = m_instances[i];
+                IInstancedRenderable instance = _instances[i];
                 if (instance != null)
                     instance.RemoveInstanceDefinition();
             }
 
-            m_instances.Clear();
-            m_instancesToDraw.Clear(); //make sure this is clear in case we queue up instances but don't actually draw
+            _instances.Clear();
+            _instancesToDraw.Clear(); //make sure this is clear in case we queue up instances but don't actually draw
             InvalidateInstanceBuffers();
         }
 
@@ -418,8 +367,8 @@
         /// </summary>
         public void ClearInstanceData()
         {
-            m_instanceDataProviders.Clear();
-            m_instanceDataProviderSet.Clear();
+            _instanceDataProviders.Clear();
+            _instanceDataProviderSet.Clear();
             InvalidateInstanceBuffers();
         }
 
@@ -431,7 +380,7 @@
         /// <param name="currentPass">The current pass that is drawing the renderable, may be null.</param>
         public void SetupDrawCall(IRenderContext renderContext, RenderBucketId renderBucketId, MaterialPass currentPass)
         {
-            int instancesToDrawCount = m_instancesToDraw.Count;
+            int instancesToDrawCount = _instancesToDraw.Count;
 
             if (instancesToDrawCount == 0)
                 return;
@@ -440,23 +389,23 @@
 
             BindBuffers(renderContext);
 
-            PrimitiveType primType = m_meshData.PrimitiveType;
-            bool useIndices = m_meshData.UseIndexedPrimitives;
+            PrimitiveType primType = _meshData.PrimitiveType;
+            bool useIndices = _meshData.UseIndexedPrimitives;
             int offset;
             int count;
             int baseVertexOffset;
 
-            GraphicsHelper.GetMeshDrawParameters(m_meshData, ref m_meshRange, out offset, out count, out baseVertexOffset);
+            GraphicsHelper.GetMeshDrawParameters(_meshData, ref _meshRange, out offset, out count, out baseVertexOffset);
 
             if (HasInstanceData)
             {
                 //Always discard the instance buffer when filling, even if only drawing a small number of objects. Tests showed that
                 //doing a circular buffer didn't give us any boost and caused multiple draw calls even for small batches. Maybe
                 //one day come up with a better algorithm for that
-                if (!m_renderedOnce)
+                if (!_renderedOnce)
                 {
                     FillBuffer();
-                    m_instanceVertexBuffer.SetData<byte>(renderContext, m_instanceDataBuffer, DataWriteOptions.Discard);
+                    _instanceVertexBuffer.SetData<byte>(renderContext, _instanceDataBuffer, DataWriteOptions.Discard);
                 }
 
                 //Draw the batch
@@ -481,7 +430,7 @@
                 }
             }
 
-            m_renderedOnce = true;
+            _renderedOnce = true;
         }
 
         /// <summary>
@@ -491,82 +440,82 @@
         /// <param name="queue">Render queue that the renderable was marked in.</param>
         void IMarkedRenderable.OnMarkCleared(MarkId id, RenderQueue queue)
         {
-            m_sequence++;
-            m_instancesToDraw.Clear();
-            m_renderedOnce = false;
+            _sequence++;
+            _instancesToDraw.Clear();
+            _renderedOnce = false;
         }
 
         private void BindBuffers(IRenderContext renderContext)
         {
             if (HasInstanceData)
             {
-                m_vbBindings[0] = new VertexBufferBinding(m_meshData.VertexBuffer);
-                m_vbBindings[1] = new VertexBufferBinding(m_instanceVertexBuffer, 0, 1);
-                renderContext.SetVertexBuffers(m_vbBindings);
+                _vbBindings[0] = new VertexBufferBinding(_meshData.VertexBuffer);
+                _vbBindings[1] = new VertexBufferBinding(_instanceVertexBuffer, 0, 1);
+                renderContext.SetVertexBuffers(_vbBindings);
             }
             else
             {
-                renderContext.SetVertexBuffer(m_meshData.VertexBuffer);
+                renderContext.SetVertexBuffer(_meshData.VertexBuffer);
             }
 
-            if (m_meshData.UseIndexedPrimitives)
-                renderContext.SetIndexBuffer(m_meshData.IndexBuffer);
+            if (_meshData.UseIndexedPrimitives)
+                renderContext.SetIndexBuffer(_meshData.IndexBuffer);
         }
 
         private void FillBuffer()
         {
-            m_instanceDataBuffer.Position = 0;
-            MappedDataBuffer dbPtr = m_instanceDataBuffer.Map();
+            _instanceDataBuffer.Position = 0;
+            MappedDataBuffer dbPtr = _instanceDataBuffer.Map();
 
             try
             {
-                for (int i = 0; i < m_instancesToDraw.Count; i++)
+                for (int i = 0; i < _instancesToDraw.Count; i++)
                 {
-                    IInstancedRenderable renderable = m_instancesToDraw[i];
-                    for (int j = 0; j < m_instanceDataProviders.Count; j++)
-                        m_instanceDataProviders[j].SetData(this, renderable.RenderProperties, ref dbPtr);
+                    IInstancedRenderable renderable = _instancesToDraw[i];
+                    for (int j = 0; j < _instanceDataProviders.Count; j++)
+                        _instanceDataProviders[j].SetData(this, renderable.RenderProperties, ref dbPtr);
                 }
             }
             finally
             {
-                m_instanceDataBuffer.Unmap();
+                _instanceDataBuffer.Unmap();
             }
         }
 
         private void InvalidateInstanceBuffers()
         {
-            m_invalidateBuffers = true;
-            m_renderedOnce = false;
+            _invalidateBuffers = true;
+            _renderedOnce = false;
         }
 
         private void PrepRendering()
         {
-            if (m_invalidateBuffers)
+            if (_invalidateBuffers)
             {
-                if (m_instanceDataBuffer != null)
+                if (_instanceDataBuffer != null)
                 {
-                    m_instanceDataBuffer.Dispose();
-                    m_instanceDataBuffer = null;
+                    _instanceDataBuffer.Dispose();
+                    _instanceDataBuffer = null;
                 }
 
-                if (m_instanceVertexBuffer != null)
+                if (_instanceVertexBuffer != null)
                 {
-                    m_instanceVertexBuffer.Dispose();
-                    m_instanceVertexBuffer = null;
+                    _instanceVertexBuffer.Dispose();
+                    _instanceVertexBuffer = null;
                 }
 
-                m_invalidateBuffers = false;
+                _invalidateBuffers = false;
             }
 
-            if (m_instanceVertexBuffer == null && HasInstanceData)
-                CreateInstanceBuffers(m_instances.Count, m_instanceDataProviders);
+            if (_instanceVertexBuffer == null && HasInstanceData)
+                CreateInstanceBuffers(_instances.Count, _instanceDataProviders);
         }
 
         private void CreateInstanceBuffers(int maxInstances, IList<IInstanceDataProvider> dataProviders)
         {
             List<VertexElement> vertexElements = new List<VertexElement>();
             Dictionary<VertexSemantic, int> semanticIndexCounter = new Dictionary<VertexSemantic, int>();
-            ScanVertexLayout(m_meshData.VertexBuffer.VertexLayout, semanticIndexCounter);
+            ScanVertexLayout(_meshData.VertexBuffer.VertexLayout, semanticIndexCounter);
 
             int vertexOffset = 0;
             for (int i = 0; i < dataProviders.Count; i++)
@@ -588,8 +537,8 @@
             }
 
             VertexLayout layout = new VertexLayout(vertexElements.ToArray());
-            m_instanceVertexBuffer = new VertexBuffer(m_renderSystem, layout, maxInstances, ResourceUsage.Dynamic);
-            m_instanceDataBuffer = new DataBuffer<byte>(maxInstances * layout.VertexStride);
+            _instanceVertexBuffer = new VertexBuffer(_renderSystem, layout, maxInstances, ResourceUsage.Dynamic);
+            _instanceDataBuffer = new DataBuffer<byte>(maxInstances * layout.VertexStride);
         }
 
         private void ScanVertexLayout(VertexLayout layout, Dictionary<VertexSemantic, int> semanticIndexCounter)
@@ -612,25 +561,25 @@
         /// <param name="input">Savable reader</param>
         public void Read(ISavableReader input)
         {
-            m_matDef = input.ReadExternalSavable<MaterialDefinition>();
-            m_worldTransform = input.ReadSavable<Transform>();
-            m_worldLights = input.ReadSavable<LightCollection>();
-            m_renderProperties = input.ReadSavable<RenderPropertyCollection>();
-            m_meshData = input.ReadSharedSavable<MeshData>();
-            input.ReadNullable<SubMeshRange>(out m_meshRange);
+            _matDef = input.ReadExternalSavable<MaterialDefinition>();
+            _worldTransform = input.ReadSavable<Transform>();
+            _worldLights = input.ReadSavable<LightCollection>();
+            _renderProperties = input.ReadSavable<RenderPropertyCollection>();
+            _meshData = input.ReadSharedSavable<MeshData>();
+            input.ReadNullable<SubMeshRange>(out _meshRange);
 
             int instanceDataCount = input.ReadInt32();
             for (int i = 0; i < instanceDataCount; i++)
             {
                 IInstanceDataProvider instanceData = input.ReadSavable<IInstanceDataProvider>();
-                m_instanceDataProviders.Add(instanceData);
-                m_instanceDataProviderSet.Add(instanceData.InstanceDataName, instanceData);
+                _instanceDataProviders.Add(instanceData);
+                _instanceDataProviderSet.Add(instanceData.InstanceDataName, instanceData);
             }
 
             SetDefaultRenderProperties(true);
 
             //Fixup render system
-            m_renderSystem = GraphicsHelper.GetRenderSystem(input.ServiceProvider);
+            _renderSystem = GraphicsHelper.GetRenderSystem(input.ServiceProvider);
         }
 
         /// <summary>
@@ -639,17 +588,17 @@
         /// <param name="output">Savable writer</param>
         public void Write(ISavableWriter output)
         {
-            output.WriteExternalSavable<MaterialDefinition>("MaterialDefinition", m_matDef);
-            output.WriteSavable<Transform>("WorldTransform", m_worldTransform);
-            output.WriteSavable<LightCollection>("WorldLights", m_worldLights);
-            output.WriteSavable<RenderPropertyCollection>("RenderProperties", m_renderProperties);
-            output.WriteSharedSavable<MeshData>("MeshData", m_meshData);
-            output.WriteNullable<SubMeshRange>("MeshRange", m_meshRange);
+            output.WriteExternalSavable<MaterialDefinition>("MaterialDefinition", _matDef);
+            output.WriteSavable<Transform>("WorldTransform", _worldTransform);
+            output.WriteSavable<LightCollection>("WorldLights", _worldLights);
+            output.WriteSavable<RenderPropertyCollection>("RenderProperties", _renderProperties);
+            output.WriteSharedSavable<MeshData>("MeshData", _meshData);
+            output.WriteNullable<SubMeshRange>("MeshRange", _meshRange);
 
-            output.Write("InstanceDataProviderCount", m_instanceDataProviders.Count);
-            for (int i = 0; i < m_instanceDataProviders.Count; i++)
+            output.Write("InstanceDataProviderCount", _instanceDataProviders.Count);
+            for (int i = 0; i < _instanceDataProviders.Count; i++)
             {
-                output.WriteSavable<IInstanceDataProvider>("InstanceData", m_instanceDataProviders[i]);
+                output.WriteSavable<IInstanceDataProvider>("InstanceData", _instanceDataProviders[i]);
             }
 
             //Don't write out instances...they should write a reference to us as a SharedSavable and Add us

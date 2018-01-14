@@ -214,7 +214,7 @@
 
                     entry.ByteCode = byteCode;
                     entry.Provider = provider;
-                    entry.FirstEffectInstance = new Effect(_renderSystem, EffectData.FromBytes(entry.ByteCode), fullName);
+                    entry.FirstEffectInstance = new Effect(_renderSystem, EffectData.Read(entry.ByteCode), fullName);
                     entry.FirstEffectInstance.Name = fullName;
 
                     _effects.Add(fullName, entry);
@@ -297,7 +297,7 @@
             public string FolderPath => _folderPath;
 
             /// <summary>
-            /// Constructs a new instance of the <see cref="BaseProvider"/> class.
+            /// Initializes a new instance of the <see cref="BaseProvider"/> class.
             /// </summary>
             /// <param name="folderPath">The folder path that identifies the location of the effect shader files.</param>
             protected BaseProvider(string folderPath)

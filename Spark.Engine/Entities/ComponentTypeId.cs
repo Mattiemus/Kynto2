@@ -12,7 +12,7 @@
     public struct ComponentTypeId : IEquatable<ComponentTypeId>, IComparable<ComponentTypeId>
     {
         /// <summary>
-        /// Constructs a new instance of the <see cref="ComponentTypeId"/> struct.
+        /// Initializes a new instance of the <see cref="ComponentTypeId"/> struct.
         /// </summary>
         /// <param name="idValue">The integer Type ID value.</param>
         internal ComponentTypeId(int idValue)

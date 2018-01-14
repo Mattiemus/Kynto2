@@ -94,7 +94,7 @@
         /// <summary>
         /// Gets the name of the content this instance represents. If <see cref="IsStandardContent" /> is false, then this returns an empty string.
         /// </summary>
-        public string StandardContentName { get; }
+        public string StandardContentName { get; private set; }
 
         /// <summary>
         /// Gets if the instance represents standard library content or not.
@@ -171,7 +171,15 @@
             IRenderSystem renderSystem = GraphicsHelper.GetRenderSystem(input.ServiceProvider);
 
             string name = input.ReadString();
-            EffectData effectData = input.ReadSavable<EffectData>();
+            StandardContentName = string.Empty;
+
+            if (input.ReadBoolean())
+            {
+                StandardContentName = input.ReadString();
+            }
+
+            byte[] effectByteCode = input.ReadByteArray();
+            EffectData effectData = EffectData.Read(effectByteCode);
 
             CreateImplementation(renderSystem, effectData);
             Name = name;
@@ -184,7 +192,16 @@
         public void Write(ISavableWriter output)
         {
             output.Write("Name", EffectImplementation.Name);
-            output.WriteSavable("EffectData", EffectData);
+            output.Write("IsStandardContent", IsStandardContent);
+
+            if (IsStandardContent)
+            {
+                output.Write("StandardContentName", StandardContentName);
+            }
+
+            byte[] effectByteCode = EffectData.Write(EffectImplementation.EffectData);
+
+            output.Write("EffectByteCode", effectByteCode);
         }
 
         /// <summary>

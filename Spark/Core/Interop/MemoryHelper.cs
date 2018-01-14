@@ -102,7 +102,39 @@
             int mask = alignment - 1;
             return (memoryPtr.ToInt64() & mask) == 0;
         }
-        
+
+        /// <summary>
+        /// Computes a hash code using the FNV modified algorithm</a>m.
+        /// </summary>
+        /// <param name="data">Byte data to hash.</param>
+        /// <returns>Hash code for the data.</returns>
+        public static int ComputeFNVModifiedHashCode(byte[] data)
+        {
+            if (data == null || data.Length == 0)
+            {
+                return 0;
+            }
+
+            unchecked
+            {
+                uint p = 16777619;
+                uint hash = 2166136261;
+
+                for (int i = 0; i < data.Length; i++)
+                {
+                    hash = (hash ^ data[i]) * p;
+                }
+
+                hash += hash << 13;
+                hash ^= hash >> 7;
+                hash += hash << 3;
+                hash ^= hash >> 17;
+                hash += hash << 5;
+
+                return (int)hash;
+            }
+        }
+
         /// <summary>
         /// Copies memory from one location to another
         /// </summary>
@@ -115,6 +147,40 @@
         }
 
         /// <summary>
+        /// Compares two arrays of bytes for equivalence. 
+        /// </summary>
+        /// <param name="firstData">First array of data.</param>
+        /// <param name="secondData">Second array of data.</param>
+        /// <returns>True if both arrays contain the same data, false otherwise.</returns>
+        public static bool Compare(byte[] firstData, byte[] secondData)
+        {
+            if (ReferenceEquals(firstData, secondData))
+            {
+                return true;
+            }
+
+            if (ReferenceEquals(firstData, null) || ReferenceEquals(secondData, null))
+            {
+                return false;
+            }
+
+            if (firstData.Length != secondData.Length)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < firstData.Length; i++)
+            {
+                if (firstData[i] != secondData[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Fills a block of memory with a single value
         /// </summary>
         /// <param name="pDest">Destination pointer</param>
@@ -122,7 +188,7 @@
         /// <param name="value">Value to set</param>
         public static void ClearMemory(IntPtr pDest, int count, byte value)
         {
-            NativeMethods.ClearMemory(pDest, new IntPtr(count), value);            
+            NativeMethods.ClearMemory(pDest, new IntPtr(count), value);
         }
 
         /// <summary>

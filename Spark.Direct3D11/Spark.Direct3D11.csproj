@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{EA557A8B-BF3F-477A-9071-39155CB380EE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Spark.Direct3D11</RootNamespace>
+    <AssemblyName>Spark.Direct3D11</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="SharpDX, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.4.0.1\lib\net45\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D11, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.Direct3D11.4.0.1\lib\net45\SharpDX.Direct3D11.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.DXGI, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.DXGI.4.0.1\lib\net45\SharpDX.DXGI.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Graphics\Effects\D3D11EffectByteCodeProvider.cs" />
+    <Compile Include="Graphics\Implementation\D3D11BlendStateImplementation.cs" />
+    <Compile Include="Graphics\Implementation\D3D11DepthStencilStateImplementation.cs" />
+    <Compile Include="Graphics\Implementation\D3D11IndexBufferImplementation.cs" />
+    <Compile Include="Graphics\Implementation\D3D11RasterizerStateImplementation.cs" />
+    <Compile Include="Graphics\Implementation\D3D11RenderTarget2DImplementation.cs" />
+    <Compile Include="Graphics\Implementation\D3D11RenderTargetCubeImplementation.cs" />
+    <Compile Include="Graphics\Implementation\D3D11SamplerStateImplementation.cs" />
+    <Compile Include="Graphics\Implementation\D3D11SwapChainImplementation.cs" />
+    <Compile Include="Graphics\Implementation\D3D11Texture1DImplementation.cs" />
+    <Compile Include="Graphics\Implementation\D3D11Texture2DImplementation.cs" />
+    <Compile Include="Graphics\Implementation\D3D11Texture3DImplementation.cs" />
+    <Compile Include="Graphics\Implementation\D3D11TextureCubeImplementation.cs" />
+    <Compile Include="Graphics\Implementation\D3D11VertexBufferImplementation.cs" />
+    <Compile Include="Graphics\Implementation\Effects\ConstantBufferDependency.cs" />
+    <Compile Include="Graphics\Implementation\Effects\D3D11EffectConstantBuffer.cs" />
+    <Compile Include="Graphics\Implementation\Effects\D3D11EffectImplementation.cs" />
+    <Compile Include="Graphics\Implementation\Effects\D3D11EffectParameter.cs" />
+    <Compile Include="Graphics\Implementation\Effects\D3D11EffectResourceManager.cs" />
+    <Compile Include="Graphics\Implementation\Effects\D3D11EffectShaderGroup.cs" />
+    <Compile Include="Graphics\Implementation\Effects\GSWithSOCache.cs" />
+    <Compile Include="Graphics\Implementation\Effects\ResourceDependency.cs" />
+    <Compile Include="Graphics\Implementation\Effects\ResourceLink.cs" />
+    <Compile Include="Graphics\Implementation\Effects\SamplerDependency.cs" />
+    <Compile Include="Graphics\Implementation\Effects\ShaderBlock.cs" />
+    <Compile Include="Graphics\Implementation\Effects\ShaderManager.cs" />
+    <Compile Include="Graphics\Implementation\Effects\ShaderResourceDependency.cs" />
+    <Compile Include="Graphics\Implementation\Factories\D3D11BlendStateImplementationFactory.cs" />
+    <Compile Include="Graphics\Implementation\Factories\D3D11DepthStencilStateImplementationFactory.cs" />
+    <Compile Include="Graphics\Implementation\Factories\D3D11EffectImplementationFactory.cs" />
+    <Compile Include="Graphics\Implementation\Factories\D3D11GraphicsResourceImplementationFactory.cs" />
+    <Compile Include="Graphics\Implementation\Factories\D3D11IndexBufferImplementationFactory.cs" />
+    <Compile Include="Graphics\Implementation\Factories\D3D11RasterizerStateImplementationFactory.cs" />
+    <Compile Include="Graphics\Implementation\Factories\D3D11SamplerStateImplementationFactory.cs" />
+    <Compile Include="Graphics\Implementation\Factories\D3D11SwapChainImplementationFactory.cs" />
+    <Compile Include="Graphics\Implementation\Factories\D3D11VertexBufferImplementationFactory.cs" />
+    <Compile Include="Graphics\Pipeline\D3D11ShaderStage.cs" />
+    <Compile Include="Graphics\Renderer\D3D11CreationFlags.cs" />
+    <Compile Include="Graphics\Renderer\D3D11GraphicsAdapter.cs" />
+    <Compile Include="Graphics\Renderer\D3D11GraphicsAdapterFactory.cs" />
+    <Compile Include="Graphics\Renderer\D3D11RenderContext.cs" />
+    <Compile Include="Graphics\Renderer\D3D11RenderSystem.cs" />
+    <Compile Include="Graphics\Renderer\DeviceContextExtensionMethods.cs" />
+    <Compile Include="Graphics\Utilities\Direct3DHelper.cs" />
+    <Compile Include="Graphics\Effects\EffectCompilerResult.cs" />
+    <Compile Include="Graphics\Effects\HashedShader.cs" />
+    <Compile Include="Graphics\Effects\HashedShaderSignature.cs" />
+    <Compile Include="Graphics\Utilities\ResourceHelper.cs" />
+    <Compile Include="Graphics\Wrappers\D3D11CommandListWrapper.cs" />
+    <Compile Include="Graphics\Wrappers\D3D11DepthStencilBufferWrapper.cs" />
+    <Compile Include="Graphics\Wrappers\D3D11RenderTargetWrapper.cs" />
+    <Compile Include="Graphics\Wrappers\D3D11ShaderResourceWrapper.cs" />
+    <Compile Include="Graphics\Wrappers\ID3D11Backbuffer.cs" />
+    <Compile Include="Graphics\Wrappers\ID3D11BlendState.cs" />
+    <Compile Include="Graphics\Wrappers\ID3D11Buffer.cs" />
+    <Compile Include="Graphics\Wrappers\ID3D11CommandList.cs" />
+    <Compile Include="Graphics\Wrappers\ID3D11DepthStencilState.cs" />
+    <Compile Include="Graphics\Wrappers\ID3D11DepthStencilView.cs" />
+    <Compile Include="Graphics\Wrappers\ID3D11RasterizerState.cs" />
+    <Compile Include="Graphics\Wrappers\ID3D11RenderTargetView.cs" />
+    <Compile Include="Graphics\Wrappers\ID3D11SamplerState.cs" />
+    <Compile Include="Graphics\Wrappers\ID3D11ShaderResourceView.cs" />
+    <Compile Include="Graphics\Wrappers\ID3D11SwapChain.cs" />
+    <Compile Include="Graphics\Effects\IEffectCompiler.cs" />
+    <Compile Include="Graphics\Effects\IIncludeHandler.cs" />
+    <Compile Include="Graphics\Pipeline\InputLayoutCache.cs" />
+    <Compile Include="Graphics\Pipeline\InputLayoutManager.cs" />
+    <Compile Include="Graphics\TempEnums.cs" />
+    <Compile Include="Graphics\Effects\IncludeType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StandardEffects.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StandardEffects.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Spark\Spark.csproj">
+      <Project>{9059028c-0b79-48ef-8e76-bdb59aa424d7}</Project>
+      <Name>Spark</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="StandardEffects.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>StandardEffects.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -72,6 +72,7 @@
     <Compile Include="Content\ExternalSharedMode.cs" />
     <Compile Include="Content\FileResourceFile.cs" />
     <Compile Include="Content\FileResourceRepository.cs" />
+    <Compile Include="Content\FourCC.cs" />
     <Compile Include="Content\IContentCastable.cs" />
     <Compile Include="Content\IExternalReferenceHandler.cs" />
     <Compile Include="Content\IExternalReferenceResolver.cs" />
@@ -135,6 +136,11 @@
     <Compile Include="Core\IGameTimer.cs" />
     <Compile Include="Core\INamable.cs" />
     <Compile Include="Core\INamed.cs" />
+    <Compile Include="Graphics\Effects\CompositeEffectParameterCollection.cs" />
+    <Compile Include="Graphics\Effects\CompositeEffectParameterEnumerator.cs" />
+    <Compile Include="Graphics\Effects\EffectContent.cs" />
+    <Compile Include="Graphics\Effects\EffectHeader.cs" />
+    <Compile Include="Graphics\Effects\ShaderCompileFlags.cs" />
     <Compile Include="Graphics\Renderer\WorldBoundingVolumeProperty.cs" />
     <Compile Include="Graphics\States\Blend.cs" />
     <Compile Include="Graphics\States\BlendFunction.cs" />
@@ -234,7 +240,6 @@
     <Compile Include="Graphics\Effects\IEffectPart.cs" />
     <Compile Include="Graphics\Effects\IEffectShaderGroup.cs" />
     <Compile Include="Graphics\Implementation\GraphicsResourceImplementation.cs" />
-    <Compile Include="Graphics\Implementation\Factories\GraphicsResourceImplementationFactory.cs" />
     <Compile Include="Graphics\Implementation\IEffectImplementation.cs" />
     <Compile Include="Graphics\Implementation\Factories\IEffectImplementationFactory.cs" />
     <Compile Include="Graphics\Implementation\IGraphicsResourceImplementation.cs" />
@@ -421,6 +426,7 @@
     <Compile Include="Math\PickResult.cs" />
     <Compile Include="Math\Plane.cs" />
     <Compile Include="Math\PlaneIntersectionType.cs" />
+    <Compile Include="Math\Range.cs" />
     <Compile Include="Math\Ray.cs" />
     <Compile Include="Math\Rectangle.cs" />
     <Compile Include="Math\RectangleF.cs" />
@@ -462,6 +468,7 @@
     <Compile Include="Utilities\Parsing\ParseTree.cs" />
     <Compile Include="Utilities\Parsing\Scanner.cs" />
     <Compile Include="Utilities\Parsing\SparkParseException.cs" />
+    <Compile Include="Utilities\Parsing\StringTokenizer.cs" />
     <Compile Include="Utilities\Parsing\Token.cs" />
     <Compile Include="Utilities\ReferenceEqualityComparer.cs" />
     <Compile Include="Utilities\SmartActivator.cs" />

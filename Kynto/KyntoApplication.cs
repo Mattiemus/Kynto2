@@ -7,10 +7,11 @@
     using Spark.Content;
     using Spark.Content.Importers;
     using Spark.Graphics;
-    using Spark.Effects.Importer;
     using Spark.Math;
     using Spark.Input;
     using Spark.Engine;
+
+    using Spark.Direct3D11.Graphics;
 
     using Spark.Toolkit.Input;
         
@@ -27,7 +28,7 @@
         /// Initializes a new instance of the <see cref="KyntoApplication"/> class.
         /// </summary>
         public KyntoApplication()
-            : base(Platforms.WindowsOpenGLBasicInputNoSound)
+            : base(Platforms.Windows)
         {
         }
 
@@ -35,8 +36,6 @@
         {
             _forwardRenderer = new ForwardRenderer(RenderSystem.ImmediateContext);
             
-            Mouse.WindowHandle = GameWindow.Handle;
-
             base.OnInitialize(engine);
         }
 
@@ -50,7 +49,7 @@
 
         protected override void LoadContent(ContentManager content)
         {
-            content.ResourceImporters.Add(new EffectImporter());
+            content.ResourceImporters.Add(new Effects11ResourceImporter());
             content.ResourceImporters.Add(new BitmapTextureImporter());
 
             _world = new World();
@@ -74,6 +73,8 @@
             RenderSystem.ImmediateContext.Camera.Viewport = new Viewport(0, 0, GameWindow.ClientBounds.Width, GameWindow.ClientBounds.Height);
             RenderSystem.ImmediateContext.Camera.SetProjection(45, 1, 10000000);
 
+            RenderSystem.ImmediateContext.Camera.Position = new Vector3(0, 0, 1000);
+
             _orbitCamera = new OrbitCameraController(RenderSystem.ImmediateContext.Camera, Vector3.Zero);
             _orbitCamera.MapControls(null);
 
@@ -83,23 +84,26 @@
         protected override void Update(IGameTime time)
         {
             _orbitCamera.Update(time, true);
+            RenderSystem.ImmediateContext.Camera.Update();
+
             _world.Update(time);
         }
 
         protected override void Render(IRenderContext context, IGameTime time)
         {
-            context.Clear(Color.Indigo);
+            context.Clear(Color.Black);
             _world.ProcessVisibleSet(_forwardRenderer);
             _forwardRenderer.Render();
         }
 
         private MaterialDefinition CreateMaterial()
         {
-            var effect = Content.Load<Effect>("Content/BasicEffect.effect");
+            var effect = Content.Load<Effect>("Content/BasicEffect.fx");
 
             var material = new Material(effect);
             material.Passes.Add("Pass0", effect.ShaderGroups.First());
-            material.SetParameterBinding("mvp", MaterialBinding.WorldViewProjectionMatrix);
+            material.SetParameterBinding("WVP", MaterialBinding.WorldViewProjectionMatrix);
+            material.SetParameter("MatDiffuse", new Vector3(1.0f, 0.0f, 1.0f));
 
             return new MaterialDefinition
             {

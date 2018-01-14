@@ -15,6 +15,8 @@
             CompressionMode = EffectCompressionMode.GZip;
             ShaderMacros = null;
             IncludeDirectories = null;
+            CompileFlags = ShaderCompileFlags.None;
+            AdditionalCompileFlags = 0;
         }
 
         /// <summary>
@@ -33,6 +35,16 @@
         public string[] IncludeDirectories { get; set; }
 
         /// <summary>
+        /// Gets or sets compile flags. Not all options may be available for all platforms. Default value is <see cref="ShaderCompileFlags.None"/>.
+        /// </summary>
+        public ShaderCompileFlags CompileFlags { get; set; }
+
+        /// <summary>
+        /// Gets or sets additional, platform specific compile flags.
+        /// </summary>
+        public int AdditionalCompileFlags { get; set; }
+
+        /// <summary>
         /// Copies the importer parameters from the specified instance.
         /// </summary>
         /// <param name="parameters">Importer parameter instance to copy from.</param>
@@ -40,8 +52,7 @@
         {
             base.Set(parameters);
 
-            EffectImporterParameters effectParams = parameters as EffectImporterParameters;
-
+            var effectParams = parameters as EffectImporterParameters;
             if (effectParams == null)
             {
                 return;
@@ -50,6 +61,9 @@
             CompressionMode = effectParams.CompressionMode;
             ShaderMacros = (effectParams.ShaderMacros == null) ? null : effectParams.ShaderMacros.Clone() as ShaderMacro[];
             IncludeDirectories = (effectParams.IncludeDirectories == null) ? null : effectParams.IncludeDirectories.Clone() as string[];
+            CompileFlags = effectParams.CompileFlags;
+            AdditionalCompileFlags = effectParams.AdditionalCompileFlags;
+
         }
 
         /// <summary>
@@ -63,6 +77,8 @@
             output.WriteEnum("CompressionMode", CompressionMode);
             output.WriteSavable("ShaderMacros", ShaderMacros);
             output.Write("IncludeDirectories", IncludeDirectories);
+            output.WriteEnum("CompileFlags", CompileFlags);
+            output.Write("AdditionalCompileFlags", AdditionalCompileFlags);
         }
 
         /// <summary>
@@ -76,6 +92,8 @@
             CompressionMode = input.ReadEnum<EffectCompressionMode>();
             ShaderMacros = input.ReadSavableArray<ShaderMacro>();
             IncludeDirectories = input.ReadStringArray();
+            CompileFlags = input.ReadEnum<ShaderCompileFlags>();
+            AdditionalCompileFlags = input.ReadInt32();
         }
     }
 }

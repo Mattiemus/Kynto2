@@ -31,7 +31,7 @@
         }
 
         /// <summary>
-        /// Constructs a new instance of the <see cref="SpriteFont"/> class.
+        /// Initializes a new instance of the <see cref="SpriteFont"/> class.
         /// </summary>
         /// <param name="lineHeight">Vertical height between consecutive lines, includes blank space and height of the characters on the line.</param>
         /// <param name="textures">Array of textures that glyphs in the font map to.</param>

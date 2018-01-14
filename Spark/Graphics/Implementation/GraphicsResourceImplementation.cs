@@ -34,7 +34,11 @@
         public string Name
         {
             get => _name;
-            set => _name = value;
+            set
+            {
+                _name = value;
+                OnNameChange(value);
+            }
         }
 
         /// <summary>
@@ -84,6 +88,15 @@
             }
 
             base.Dispose(isDisposing);
+        }
+
+        /// <summary>
+        /// Called when the name of the graphics resource is changed, useful if the implementation wants to set the name to
+        /// be used as a debug name.
+        /// </summary>
+        /// <param name="name">New name of the resource</param>
+        protected virtual void OnNameChange(string name)
+        {
         }
     }
 }

@@ -2,6 +2,9 @@
 {
     using System;
 
+    /// <summary>
+    /// Abstract base class for types that implement <see cref="IDisposable"/>
+    /// </summary>
     public abstract class Disposable : IDisposable
     {
         /// <summary>
@@ -9,7 +12,7 @@
         /// </summary>
         ~Disposable()
         {
-            Dispose(false);            
+            Dispose(false);
         }
 
         /// <summary>

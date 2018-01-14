@@ -69,26 +69,26 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Content\BasicEffect.effect">
+    <Content Include="Content\BasicEffect.fx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Spark.Content\Spark.Content.csproj">
       <Project>{c3b603b6-b647-48bb-bb6a-16a9ed523c13}</Project>
       <Name>Spark.Content</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Spark.Effects.Importer\Spark.Effects.Importer.csproj">
-      <Project>{c3baa3d0-59f3-4ed1-9368-ea169477f378}</Project>
-      <Name>Spark.Effects.Importer</Name>
+    <ProjectReference Include="..\Spark.Direct3D11.EffectCompiler\Spark.Direct3D11.EffectCompiler.csproj">
+      <Project>{130d8da5-08ef-4d7b-b322-21597fcc905b}</Project>
+      <Name>Spark.Direct3D11.EffectCompiler</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Spark.Direct3D11\Spark.Direct3D11.csproj">
+      <Project>{ea557a8b-bf3f-477a-9071-39155cb380ee}</Project>
+      <Name>Spark.Direct3D11</Name>
     </ProjectReference>
     <ProjectReference Include="..\Spark.Engine\Spark.Engine.csproj">
       <Project>{fa672379-53ba-4185-8a68-f4aae99d61c1}</Project>
       <Name>Spark.Engine</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Spark.OpenGL\Spark.OpenGL.csproj">
-      <Project>{c407b6d2-3fbc-4517-bc6a-ad8232c307cc}</Project>
-      <Name>Spark.OpenGL</Name>
     </ProjectReference>
     <ProjectReference Include="..\Spark.Toolkit\Spark.Toolkit.csproj">
       <Project>{d7879fd7-fc69-4219-a967-08796f8919af}</Project>
