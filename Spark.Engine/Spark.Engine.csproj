@@ -58,6 +58,10 @@
     <Compile Include="Entities\Services\EventDispatcher.cs" />
     <Compile Include="Entities\Services\ServiceBase.cs" />
     <Compile Include="Entities\World.cs" />
+    <Compile Include="Input\OrbitCameraController.cs" />
+    <Compile Include="Input\Triggers\PanInputTrigger.cs" />
+    <Compile Include="Input\Triggers\RotateInputTrigger.cs" />
+    <Compile Include="Input\Triggers\ZoomInputTrigger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

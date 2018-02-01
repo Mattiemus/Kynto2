@@ -171,8 +171,7 @@
                 return false;
             }
 
-            var interfaces = instanceType.GetInterfaces();
-            foreach (var currentInterface in interfaces)
+            foreach (var currentInterface in instanceType.GetInterfaces())
             {
                 if (currentInterface == interfaceType)
                 {
@@ -185,8 +184,7 @@
 
         private static void SendToList<TMessage>(TMessage message, IEnumerable<WeakActionAndToken> list, Type messageTargetType, object token)
         {
-            var listClone = list.Take(list.Count()).ToList();
-            foreach (var item in listClone)
+            foreach (var item in list.Take(list.Count()).ToList())
             {
                 var executeAction = item.Action as IExecuteWithObject;
                 if (executeAction != null &&
@@ -206,18 +204,15 @@
             {
                 return;
             }
-
-            lock (lists)
+            
+            foreach (var messageType in lists.Keys)
             {
-                foreach (var messageType in lists.Keys)
+                foreach (var item in lists[messageType])
                 {
-                    foreach (var item in lists[messageType])
+                    var weakAction = item.Action;
+                    if (weakAction != null && recipient == weakAction.Target)
                     {
-                        var weakAction = item.Action;
-                        if (weakAction != null && recipient == weakAction.Target)
-                        {
-                            weakAction.MarkForDeletion();
-                        }
+                        weakAction.MarkForDeletion();
                     }
                 }
             }
@@ -230,20 +225,17 @@
             {
                 return;
             }
-
-            lock (lists)
+            
+            foreach (WeakActionAndToken item in lists[messageType])
             {
-                foreach (WeakActionAndToken item in lists[messageType])
-                {
-                    var weakActionCasted = item.Action as WeakAction<TMessage>;
+                var weakActionCasted = item.Action as WeakAction<TMessage>;
 
-                    if (weakActionCasted != null &&
-                        recipient == weakActionCasted.Target &&
-                        (action == null || action == weakActionCasted.Action) &&
-                        (token == null || token.Equals(item.Token)))
-                    {
-                        item.Action.MarkForDeletion();
-                    }
+                if (weakActionCasted != null &&
+                    recipient == weakActionCasted.Target &&
+                    (action == null || action == weakActionCasted.Action) &&
+                    (token == null || token.Equals(item.Token)))
+                {
+                    item.Action.MarkForDeletion();
                 }
             }
         }

@@ -320,7 +320,7 @@
         /// <param name="value">Value to set the parameter to</param>
         /// <param name="transpose">True if the matrix should be transposed, false otherwise</param>
         /// <returns>True if the parameter was set, false otherwise</returns>
-        public bool SetParameter(String parameterName, Matrix4x4 value, bool transpose = false)
+        public bool SetParameter(string parameterName, Matrix4x4 value, bool transpose = false)
         {
             bool success = SetParameter(parameterName, typeof(Matrix4x4));
             if (success)

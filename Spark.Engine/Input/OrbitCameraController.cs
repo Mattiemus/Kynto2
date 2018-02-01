@@ -4,6 +4,7 @@
     using System.Collections.Generic;
 
     using Spark.Input;
+    using Spark.Engine;
 
     using Graphics;
     using Math;
@@ -13,7 +14,7 @@
     /// is always limited between (-90, 90) degrees, not inclusive, while the yaw angle can rotate a full 360 degrees. The controller defines a number of methods that take in delta values (e.g. mouse positions) 
     /// to update the controller state.
     /// </summary>
-    public class OrbitCameraController
+    public class OrbitCameraController : Component, IBehavior
     {
         /// <summary>
         /// Default yaw rotate speed.
@@ -125,6 +126,8 @@
             _zoomSpeed = zoomSpeed;
 
             InputGroup = new InputGroup(GetType().Name);
+
+            MapControls(null);
         }
 
         /// <summary>
@@ -238,6 +241,11 @@
         /// Gets or sets if the controller is active.
         /// </summary>
         public bool IsEnabled { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the update priority. Smaller values represent a higher priority.
+        /// </summary>
+        public int UpdatePriority { get; set; }
 
         /// <summary>
         /// Updates the state of the controller, based on the current camera.
@@ -283,18 +291,14 @@
         /// Checks if input has happened and updates the controller state, then updates the camera if anything has changed.
         /// </summary>
         /// <param name="time">The time between updates.</param>
-        /// <param name="checkInput">True if the controller's input triggers should be checked (and performed, as necessary), false if only the camera should be updated, if necessary.</param>
-        public void Update(IGameTime time, bool checkInput)
+        public void Update(IGameTime time)
         {
             if (_camera == null || !IsEnabled)
             {
                 return;
             }
-
-            if (checkInput)
-            {
-                InputGroup.CheckAndPerformTriggers(time);
-            }
+            
+            InputGroup.CheckAndPerformTriggers(time);
 
             if (_isDirty)
             {

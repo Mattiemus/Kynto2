@@ -463,13 +463,7 @@
     <Compile Include="Utilities\Guard.cs" />
     <Compile Include="Utilities\IExecuteWithObject.cs" />
     <Compile Include="Utilities\IGuardInstance.cs" />
-    <Compile Include="Utilities\Parsing\ParseNode.cs" />
-    <Compile Include="Utilities\Parsing\Parser.cs" />
-    <Compile Include="Utilities\Parsing\ParseTree.cs" />
-    <Compile Include="Utilities\Parsing\Scanner.cs" />
-    <Compile Include="Utilities\Parsing\SparkParseException.cs" />
     <Compile Include="Utilities\Parsing\StringTokenizer.cs" />
-    <Compile Include="Utilities\Parsing\Token.cs" />
     <Compile Include="Utilities\ReferenceEqualityComparer.cs" />
     <Compile Include="Utilities\SmartActivator.cs" />
     <Compile Include="Utilities\VisitLock.cs" />

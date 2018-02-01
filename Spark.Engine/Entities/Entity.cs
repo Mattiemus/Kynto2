@@ -16,7 +16,6 @@
         private readonly List<IBehavior> _behaviors;
         private readonly BehaviorComparer _sorter;
         private bool _behaviorsNeedSorting;
-        private SceneComponent _rootComponent;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Entity"/> class.
@@ -32,19 +31,22 @@
         /// <param name="name">Name of the entity</param>
         public Entity(string name)
         {
-            Name = name;
             _components = new Dictionary<ComponentTypeId, List<IComponent>>();
             _behaviors = new List<IBehavior>();
             _sorter = new BehaviorComparer();
             _behaviorsNeedSorting = true;
-            
-            AddComponent(new SceneComponent(name));
+
+            Scene = new Scene(name);
         }
 
         /// <summary>
         /// Gets or sets the name of the entity.
         /// </summary>
-        public string Name { get; set; }
+        public string Name
+        {
+            get => Scene.Name;
+            set => Scene.Name = value;
+        }
 
         /// <summary>
         /// Gets the entities id
@@ -57,17 +59,17 @@
         public World World { get; private set; }
 
         /// <summary>
-        /// Gets the root component of the entity
+        /// Gets the scene for the entity
         /// </summary>
-        public SceneComponent RootComponent => _rootComponent;
+        public Scene Scene { get; }
 
         /// <summary>
         /// Gets or sets the local transform
         /// </summary>
         public Transform Transform
         {
-            get => RootComponent.Transform;
-            set => RootComponent.Transform = value;
+            get => Scene.Transform;
+            set => Scene.Transform = value;
         }
 
         /// <summary>
@@ -75,8 +77,8 @@
         /// </summary>
         public Vector3 Scale
         {
-            get => RootComponent.Scale;
-            set => RootComponent.Scale = value;
+            get => Scene.Scale;
+            set => Scene.Scale = value;
         }
 
         /// <summary>
@@ -84,8 +86,8 @@
         /// </summary>
         public Quaternion Rotation
         {
-            get => RootComponent.Rotation;
-            set => RootComponent.Rotation = value;
+            get => Scene.Rotation;
+            set => Scene.Rotation = value;
         }
 
         /// <summary>
@@ -93,39 +95,39 @@
         /// </summary>
         public Vector3 Translation
         {
-            get => RootComponent.Translation;
-            set => RootComponent.Translation = value;
+            get => Scene.Translation;
+            set => Scene.Translation = value;
         }
 
         /// <summary>
         /// Gets the world transform
         /// </summary>
-        public Transform WorldTransform => RootComponent.WorldTransform;
+        public Transform WorldTransform => Scene.WorldTransform;
 
         /// <summary>
         /// Gets the world scale
         /// </summary>
-        public Vector3 WorldScale => RootComponent.WorldTransform.Scale;
+        public Vector3 WorldScale => Scene.WorldTransform.Scale;
 
         /// <summary>
         /// Gets the world rotation
         /// </summary>
-        public Quaternion WorldRotation => RootComponent.WorldTransform.Rotation;
+        public Quaternion WorldRotation => Scene.WorldTransform.Rotation;
 
         /// <summary>
         /// Gets the world translation
         /// </summary>
-        public Vector3 WorldTranslation => RootComponent.WorldTransform.Translation;
+        public Vector3 WorldTranslation => Scene.WorldTransform.Translation;
 
         /// <summary>
         /// Gets the world transformation matrix
         /// </summary>
-        public Matrix4x4 WorldMatrix => RootComponent.WorldTransform.Matrix;
+        public Matrix4x4 WorldMatrix => Scene.WorldTransform.Matrix;
 
         /// <summary>
         /// Gets the world bounding volume of the entity
         /// </summary>
-        public BoundingVolume WorldBounding => RootComponent.WorldBounding;
+        public BoundingVolume WorldBounding => Scene.WorldBounding;
 
         /// <summary>
         /// Adds a component to the entity
@@ -158,19 +160,6 @@
             components.Add(component);
             component.OnAttach(this);
 
-            var sceneComponent = component as SceneComponent;
-            if (sceneComponent != null)
-            {
-                if (RootComponent == null)
-                {
-                    _rootComponent = sceneComponent;
-                }
-                else
-                {
-                    sceneComponent.AttachToComponent(RootComponent);
-                }
-            }
-
             var behavior = component as IBehavior;
             if (behavior != null)
             {
@@ -197,11 +186,6 @@
                 return false;
             }
 
-            if (component == RootComponent)
-            {
-                return false;
-            }
-
             if (_components.TryGetValue(component.TypeId, out List<IComponent> components))
             {
                 bool removed = components.Remove(component);
@@ -211,10 +195,7 @@
                     {
                         _components.Remove(component.TypeId);
                     }
-
-                    var sceneComponent = component as SceneComponent;
-                    sceneComponent?.DetachFromParent();
-
+                    
                     var behavior = component as IBehavior;
                     if (behavior != null)
                     {
@@ -575,7 +556,7 @@
         /// <param name="world">Parent world</param>
         internal void SetWorldInfo(int id, World world)
         {
-            World?.Scene.Children.Remove(RootComponent.SceneNode);
+            World?.Scene.Children.Remove(Scene);
 
             Id = id;
             World = world;
@@ -586,13 +567,13 @@
             bool isBorn = world != null;
             if (isBorn)
             {
-                World.Scene.Children.Add(RootComponent.SceneNode);
+                World.Scene.Children.Add(Scene);
                 OnSpawned();
             }
             else
             {
                 OnDestroyed();
-                World.Scene.Children.Remove(RootComponent.SceneNode);
+                World.Scene.Children.Remove(Scene);
             }
         }
         

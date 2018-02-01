@@ -68,6 +68,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\pixel.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="App.config" />
     <Content Include="Content\BasicEffect.fx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -89,14 +92,6 @@
     <ProjectReference Include="..\Spark.Engine\Spark.Engine.csproj">
       <Project>{fa672379-53ba-4185-8a68-f4aae99d61c1}</Project>
       <Name>Spark.Engine</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Spark.Toolkit\Spark.Toolkit.csproj">
-      <Project>{d7879fd7-fc69-4219-a967-08796f8919af}</Project>
-      <Name>Spark.Toolkit</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Spark.UI\Spark.UI.csproj">
-      <Project>{4f2a0c2b-15e4-4032-9b4d-4c10fc50d2f8}</Project>
-      <Name>Spark.UI</Name>
     </ProjectReference>
     <ProjectReference Include="..\Spark.Windows\Spark.Windows.csproj">
       <Project>{f51647b9-c264-4a39-bbf2-5d8b6a72be76}</Project>

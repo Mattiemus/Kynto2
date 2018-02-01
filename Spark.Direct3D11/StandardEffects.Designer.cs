@@ -59,5 +59,15 @@ namespace Spark.Direct3D11 {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Sprite {
+            get {
+                object obj = ResourceManager.GetObject("Sprite", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

@@ -290,7 +290,7 @@
 
             //new D3D11Texture1DImplFactory().Initialize(this);
             //new D3D11Texture1DArrayImplFactory().Initialize(this);
-            //new D3D11Texture2DImplFactory().Initialize(this);
+            AddImplementationFactory<ITexture2DImplementationFactory>(new D3D11Texture2DImplementationFactory(this));
             //new D3D11Texture2DArrayImplFactory().Initialize(this);
             //new D3D11Texture3DImplFactory().Initialize(this);
             //new D3D11TextureCubeImplFactory().Initialize(this);

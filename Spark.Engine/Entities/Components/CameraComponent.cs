@@ -37,7 +37,6 @@
             set
             {
                 Guard.Against.NullArgument(value, nameof(value));
-
                 _camera = value;
             }
         }
@@ -46,6 +45,72 @@
         /// Gets or sets the update priority. Smaller values represent a higher priority.
         /// </summary>
         public int UpdatePriority { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the local transform
+        /// </summary>
+        public override Transform Transform
+        {
+            get => throw new NotImplementedException();
+            set => throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets or sets the local scale
+        /// </summary>
+        public override Vector3 Scale
+        {
+            get => throw new NotImplementedException();
+            set => throw new NotImplementedException();
+    }
+
+        /// <summary>
+        /// Gets or sets the local rotation
+        /// </summary>
+        public override Quaternion Rotation
+        {
+            get => throw new NotImplementedException();
+            set => throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets or sets the local translation
+        /// </summary>
+        public override Vector3 Translation
+        {
+            get => Camera.Position;
+            set => Camera.Position = value;
+        }
+
+        /// <summary>
+        /// Gets the world transform
+        /// </summary>
+        public override Transform WorldTransform => throw new NotImplementedException();
+
+        /// <summary>
+        /// Gets the world scale
+        /// </summary>
+        public override Vector3 WorldScale => throw new NotImplementedException();
+
+        /// <summary>
+        /// Gets the world rotation
+        /// </summary>
+        public override Quaternion WorldRotation => throw new NotImplementedException();
+
+        /// <summary>
+        /// Gets the world translation
+        /// </summary>
+        public override Vector3 WorldTranslation => throw new NotImplementedException();
+
+        /// <summary>
+        /// Gets the world transformation matrix
+        /// </summary>
+        public override Matrix4x4 WorldMatrix => throw new NotImplementedException();
+
+        /// <summary>
+        /// Gets the world bounding volume of the entity
+        /// </summary>
+        public override BoundingVolume WorldBounding => throw new NotImplementedException();
 
         /// <summary>
         /// Performs the logic update.
@@ -54,16 +119,6 @@
         public void Update(IGameTime gameTime)
         {
             Camera.Update();
-        }
-
-        /// <summary>
-        /// Determines if given component can be attached as a child
-        /// </summary>
-        /// <param name="component">Component to be attached</param>
-        /// <returns>True if the component can be attached as a child, false otherwise</returns>
-        public override bool CanAttachAsChild(SceneComponent component)
-        {
-            return false;
         }
 
         /// <summary>
@@ -77,7 +132,7 @@
             cam.SetProjection(45, 1, 10000000);
             cam.Position = Vector3.Backward;
             cam.LookAt(Vector3.Zero, Vector3.Up);
-
+            
             return cam;
         }
     }

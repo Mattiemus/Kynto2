@@ -9,7 +9,7 @@
         /// Initializes a new instance of the <see cref="ForwardRenderer"/> class.
         /// </summary>
         /// <param name="renderContext">The render context.</param>
-        public ForwardRenderer(IRenderContext renderContext) 
+        public ForwardRenderer(IRenderContext renderContext)
             : base(renderContext)
         {
             SetDefaultStages();
@@ -22,9 +22,9 @@
         {
             int initialSize = 32;
 
-            OpaqueRenderBucketComparer opaqueComparer = new OpaqueRenderBucketComparer();
-            TransparentRenderBucketComparer transparentComparer = new TransparentRenderBucketComparer();
-            OrthoRenderBucketComparer orthoComparer = new OrthoRenderBucketComparer();
+            var opaqueComparer = new OpaqueRenderBucketComparer();
+            var transparentComparer = new TransparentRenderBucketComparer();
+            var orthoComparer = new OrthoRenderBucketComparer();
 
             RenderQueue.AddBucket(new RenderBucket(RenderBucketId.PreOpaqueBucket, opaqueComparer, initialSize));
             RenderQueue.AddBucket(new RenderBucket(RenderBucketId.Opaque, opaqueComparer, initialSize));
