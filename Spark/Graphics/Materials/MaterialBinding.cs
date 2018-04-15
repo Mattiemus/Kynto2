@@ -213,10 +213,7 @@
                 {
                     return false;
                 }
-
-                // TODO: sort this
-                return true;
-
+                
                 return (parameter.ParameterClass == EffectParameterClass.MatrixColumns || parameter.ParameterClass == EffectParameterClass.MatrixRows) &&
                        parameter.RowCount == 4 &&
                        parameter.ColumnCount == 4 &&

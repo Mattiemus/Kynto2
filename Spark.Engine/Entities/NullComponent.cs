@@ -20,7 +20,7 @@
         /// <summary>
         /// Gets the entity that this component is attached to. Each component can only be attached to one parent at a time.
         /// </summary>
-        public Entity Parent => null;
+        public IEntity Parent => null;
 
         /// <summary>
         /// Gets the world that the parent entity belongs to.
@@ -33,14 +33,14 @@
         public string Name
         {
             get => "NullComponent";
-            set { }
+            set { /* No-op */ }
         }
 
         /// <summary>
         /// Called when the component is added to the entity.
         /// </summary>
         /// <param name="parent">Entity</param>
-        public void OnAttach(Entity parent)
+        public void OnAttach(IEntity parent)
         {
             // No-op
         }
@@ -49,7 +49,7 @@
         /// Called when the component is removed from an entity.
         /// </summary>
         /// <param name="parent">Entity</param>
-        public void OnRemove(Entity parent)
+        public void OnRemove(IEntity parent)
         {
             // No-op
         }

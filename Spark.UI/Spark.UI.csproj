@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FA672379-53BA-4185-8A68-F4AAE99D61C1}</ProjectGuid>
+    <ProjectGuid>{5585BA73-A50F-4F0C-9521-2A8374A86BE6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Spark.Engine</RootNamespace>
-    <AssemblyName>Spark.Engine</AssemblyName>
+    <RootNamespace>Spark.UI</RootNamespace>
+    <AssemblyName>Spark.UI</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -41,30 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\Component.cs" />
-    <Compile Include="Entities\Components\TorusComponent.cs" />
-    <Compile Include="Entities\Components\CylinderComponent.cs" />
-    <Compile Include="Entities\Components\BoxComponent.cs" />
-    <Compile Include="Entities\Components\CameraComponent.cs" />
-    <Compile Include="Entities\Components\GeometryComponent.cs" />
-    <Compile Include="Entities\Components\SceneComponent.cs" />
-    <Compile Include="Entities\Components\ShapeComponent.cs" />
-    <Compile Include="Entities\EntityTypeId.cs" />
-    <Compile Include="Entities\ComponentTypeId.cs" />
-    <Compile Include="Entities\Entity.cs" />
-    <Compile Include="Entities\IBehavior.cs" />
-    <Compile Include="Entities\IComponent.cs" />
-    <Compile Include="Entities\IEntity.cs" />
-    <Compile Include="Entities\NullComponent.cs" />
-    <Compile Include="Entities\Services\IEventDispatcher.cs" />
-    <Compile Include="Entities\Services\IService.cs" />
-    <Compile Include="Entities\Services\EventDispatcher.cs" />
-    <Compile Include="Entities\Services\ServiceBase.cs" />
-    <Compile Include="Entities\World.cs" />
-    <Compile Include="Input\OrbitCameraController.cs" />
-    <Compile Include="Input\Triggers\PanInputTrigger.cs" />
-    <Compile Include="Input\Triggers\RotateInputTrigger.cs" />
-    <Compile Include="Input\Triggers\ZoomInputTrigger.cs" />
+    <Compile Include="Controls\InterfaceHost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -73,6 +50,5 @@
       <Name>Spark</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

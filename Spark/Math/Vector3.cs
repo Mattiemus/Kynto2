@@ -1058,9 +1058,13 @@
         /// <param name="result">Transformed vector</param>
         public static void Transform(ref Vector3 value, ref Matrix4x4 m, out Vector3 result)
         {
-            result.X = (value.X * m.M11) + (value.Y * m.M21) + (value.Z * m.M31) + m.M41;
-            result.Y = (value.X * m.M12) + (value.Y * m.M22) + (value.Z * m.M32) + m.M42;
-            result.Z = (value.X * m.M13) + (value.Y * m.M23) + (value.Z * m.M33) + m.M43;
+            float x = (value.X * m.M11) + (value.Y * m.M21) + (value.Z * m.M31) + m.M41;
+            float y = (value.X * m.M12) + (value.Y * m.M22) + (value.Z * m.M32) + m.M42;
+            float z = (value.X * m.M13) + (value.Y * m.M23) + (value.Z * m.M33) + m.M43;
+
+            result.X = x;
+            result.Y = y;
+            result.Z = z;
         }
 
         /// <summary>

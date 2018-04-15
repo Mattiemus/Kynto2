@@ -11,13 +11,14 @@
     using Spark.Engine;
     using Spark.Direct3D11.Graphics;
     using Spark.Toolkit.Input;
+    using Spark.UI.Controls;
         
     /// <summary>
     /// Main application window
     /// </summary>
     public sealed class KyntoApplication : SparkApplication
     {
-        private OrbitCameraController _orbitCamera;
+        private InterfaceHost _host;
         private ForwardRenderer _forwardRenderer;
         private World _world;
         private Texture2D _pixel;
@@ -74,37 +75,44 @@
             });
             _world.Add(charEntity);
             
+
+
+            
+
+
+
+
+            
             var camEntity = new Entity();
             camEntity.AddComponent(new CameraComponent
             {
-                Translation = new Vector3(0, 0, 1000)
+                Translation = new Vector3(2000, 2000, 2000)
             });
-
-
+            
             RenderSystem.ImmediateContext.Camera = camEntity.GetComponent<CameraComponent>().Camera;
             RenderSystem.ImmediateContext.Camera.Viewport = new Viewport(0, 0, GameWindow.ClientBounds.Width, GameWindow.ClientBounds.Height);
             RenderSystem.ImmediateContext.Camera.SetProjection(45, 1, 10000000);
-
-            RenderSystem.ImmediateContext.Camera.Position = new Vector3(2000, 2000, 2000);
-
+            
             camEntity.AddComponent(new OrbitCameraController(RenderSystem.ImmediateContext.Camera, Vector3.Zero));
             _world.Add(camEntity);
 
+            _host = new InterfaceHost();
 
-                        
             base.LoadContent(content);
         }
 
         protected override void Update(IGameTime time)
         {
+            _host.Update(time);
             _world.Update(time);
         }
 
         protected override void Render(IRenderContext context, IGameTime time)
         {
-            context.Clear(new Color(25, 25, 25));
+            context.Clear(Color.Black);
             _world.ProcessVisibleSet(_forwardRenderer);
             _forwardRenderer.Render();
+            _host.ProcessVisibleSet(context);
         }
 
         private MaterialDefinition CreateMaterial(Color color)

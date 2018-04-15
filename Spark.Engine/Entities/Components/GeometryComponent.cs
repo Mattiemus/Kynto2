@@ -117,7 +117,7 @@
         /// Called when the component is added to the entity.
         /// </summary>
         /// <param name="parent">Entity</param>
-        public override void OnAttach(Entity parent)
+        public override void OnAttach(IEntity parent)
         {
             base.OnAttach(parent);
             parent.Scene.Children.Add(Mesh);
@@ -127,7 +127,7 @@
         /// Called when the component is removed from an entity.
         /// </summary>
         /// <param name="parent">Entity</param>
-        public override void OnRemove(Entity parent)
+        public override void OnRemove(IEntity parent)
         {
             base.OnRemove(parent);
             parent.Scene.Children.Remove(Mesh);

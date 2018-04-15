@@ -7,43 +7,39 @@
     using Graphics;
     using Scene;
 
-    public class World : IReadOnlyDictionary<int, Entity>
+    public class World : IReadOnlyDictionary<int, IEntity>
     {
         private int _currId;
-        private Dictionary<int, Entity> _entities;
+        private Dictionary<int, IEntity> _entities;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="World"/> class.
         /// </summary>
         public World()
         {
-            _entities = new Dictionary<int, Entity>();
+            _entities = new Dictionary<int, IEntity>();
             _currId = 0;
 
             Scene = new Scene("World");
         }
-
-        public event TypedEventHandler<World, EntityEventArgs> AddedEntity;
-
-        public event TypedEventHandler<World, EntityEventArgs> RemovedEntity;
-
+        
         public Scene Scene { get; }
 
-        public Dictionary<int, Entity>.KeyCollection EntityIds => _entities.Keys;
+        public Dictionary<int, IEntity>.KeyCollection EntityIds => _entities.Keys;
 
-        public Dictionary<int, Entity>.ValueCollection Entities => _entities.Values;
+        public Dictionary<int, IEntity>.ValueCollection Entities => _entities.Values;
 
-        IEnumerable<int> IReadOnlyDictionary<int, Entity>.Keys => _entities.Keys;
+        IEnumerable<int> IReadOnlyDictionary<int, IEntity>.Keys => _entities.Keys;
 
-        IEnumerable<Entity> IReadOnlyDictionary<int, Entity>.Values => _entities.Values;
+        IEnumerable<IEntity> IReadOnlyDictionary<int, IEntity>.Values => _entities.Values;
 
         public int Count => _entities.Count;
 
-        public Entity this[int key]
+        public IEntity this[int key]
         {
             get
             {
-                if (_entities.TryGetValue(key, out Entity entity))
+                if (_entities.TryGetValue(key, out IEntity entity))
                 {
                     return entity;
                 }
@@ -52,7 +48,7 @@
             }
         }
         
-        public void Add(Entity entity)
+        public void Add(IEntity entity)
         {
             if (entity == null || entity.World != null)
             {
@@ -70,7 +66,7 @@
             return _entities.ContainsKey(entityId);
         }
 
-        public bool Remove(Entity entity)
+        public bool Remove(IEntity entity)
         {
             if (entity == null || entity.World != this)
             {
@@ -97,7 +93,7 @@
                 return false;
             }
             
-            if (!_entities.TryGetValue(entityId, out Entity entToRemove))
+            if (!_entities.TryGetValue(entityId, out IEntity entToRemove))
             {
                 return false;
             }
@@ -117,7 +113,7 @@
 
         public void Clear()
         {
-            foreach (KeyValuePair<int, Entity> kv in _entities)
+            foreach (var kv in _entities)
             {
                 NotifyEntityRemoved(kv.Value);
                 kv.Value.SetWorldInfo(0, null);
@@ -129,7 +125,7 @@
 
         public void Update(IGameTime time)
         {
-            foreach (KeyValuePair<int, Entity> kv in _entities)
+            foreach (var kv in _entities)
             {
                 kv.Value.Update(time);
             }
@@ -151,15 +147,14 @@
         {
             ResetIds();
 
-            var newEntities = new Dictionary<int, Entity>();
-            foreach (KeyValuePair<int, Entity> kv in _entities)
+            var newEntities = new Dictionary<int, IEntity>();
+            foreach (var kv in _entities)
             {
                 int oldId = kv.Value.Id;
                 kv.Value.SetWorldInfo(GetNewId(), this);
 
-                //EntityIDChangedEvent evt = new EntityIDChangedEvent(kv.Value, oldId);
-                //DispatchToAll<EntityIDChangedEvent>(kv.Value, ref evt);
-
+                NotifyEntityIdChanged(kv.Value, oldId, kv.Value.Id);
+                
                 newEntities.Add(kv.Value.Id, kv.Value);
             }
 
@@ -167,22 +162,22 @@
             _entities = newEntities;
         }
 
-        bool IReadOnlyDictionary<int, Entity>.ContainsKey(int key)
+        bool IReadOnlyDictionary<int, IEntity>.ContainsKey(int key)
         {
             return _entities.ContainsKey(key);
         }
 
-        bool IReadOnlyDictionary<int, Entity>.TryGetValue(int key, out Entity value)
+        bool IReadOnlyDictionary<int, IEntity>.TryGetValue(int key, out IEntity value)
         {
             return _entities.TryGetValue(key, out value);
         }
 
-        public Dictionary<int, Entity>.Enumerator GetEnumerator()
+        public Dictionary<int, IEntity>.Enumerator GetEnumerator()
         {
             return _entities.GetEnumerator();
         }
 
-        IEnumerator<KeyValuePair<int, Entity>> IEnumerable<KeyValuePair<int, Entity>>.GetEnumerator()
+        IEnumerator<KeyValuePair<int, IEntity>> IEnumerable<KeyValuePair<int, IEntity>>.GetEnumerator()
         {
             return _entities.GetEnumerator();
         }
@@ -202,14 +197,19 @@
             Interlocked.Exchange(ref _currId, 0);
         }
 
-        private void NotifyEntityAdded(Entity entity)
+        private void NotifyEntityAdded(IEntity entity)
         {
-            AddedEntity?.Invoke(this, new EntityEventArgs(entity, this));
+            // TODO
         }
 
-        private void NotifyEntityRemoved(Entity entity)
+        private void NotifyEntityRemoved(IEntity entity)
         {
-            RemovedEntity?.Invoke(this, new EntityEventArgs(entity, this));
+            // TODO
+        }
+
+        private void NotifyEntityIdChanged(IEntity entity, int oldId, int newId)
+        {
+            // TODO
         }
     }
 }

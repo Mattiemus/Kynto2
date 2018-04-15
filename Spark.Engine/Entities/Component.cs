@@ -48,7 +48,7 @@
         /// <summary>
         /// Gets the entity that this component is attached to. Each component can only be attached to one parent at a time.
         /// </summary>
-        public Entity Parent { get; private set; }
+        public IEntity Parent { get; private set; }
 
         /// <summary>
         /// Gets the world that the parent entity belongs to.
@@ -59,7 +59,7 @@
         /// Called when the component is added to the entity.
         /// </summary>
         /// <param name="parent">Entity</param>
-        public virtual void OnAttach(Entity parent)
+        public virtual void OnAttach(IEntity parent)
         {
             Parent = parent;
         }
@@ -68,7 +68,7 @@
         /// Called when the component is removed from an entity.
         /// </summary>
         /// <param name="parent">Entity</param>
-        public virtual void OnRemove(Entity parent)
+        public virtual void OnRemove(IEntity parent)
         {
             Parent = null;
         }

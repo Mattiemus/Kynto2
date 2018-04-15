@@ -506,7 +506,6 @@
             ThrowIfDisposed();
 
             bool hasValue = UnderlyingBinaryReader.ReadBoolean();
-
             if (!hasValue)
             {
                 return null;
@@ -538,9 +537,7 @@
         {
             ThrowIfDisposed();
 
-            TypeCode typeCode = Type.GetTypeCode(typeof(T));
-
-            switch (typeCode)
+            switch (Type.GetTypeCode(typeof(T)))
             {
                 case TypeCode.Byte:
                     return (T)((object)UnderlyingBinaryReader.ReadByte());

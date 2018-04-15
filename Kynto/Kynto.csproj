@@ -93,6 +93,10 @@
       <Project>{fa672379-53ba-4185-8a68-f4aae99d61c1}</Project>
       <Name>Spark.Engine</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Spark.UI\Spark.UI.csproj">
+      <Project>{5585ba73-a50f-4f0c-9521-2a8374a86be6}</Project>
+      <Name>Spark.UI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Spark.Windows\Spark.Windows.csproj">
       <Project>{f51647b9-c264-4a39-bbf2-5d8b6a72be76}</Project>
       <Name>Spark.Windows</Name>

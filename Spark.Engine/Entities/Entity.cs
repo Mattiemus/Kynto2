@@ -10,7 +10,7 @@
     /// <summary>
     /// Represents an entity within the world
     /// </summary>
-    public class Entity : INamable, ITransformed, ISavable
+    public class Entity : IEntity
     {
         private readonly Dictionary<ComponentTypeId, List<IComponent>> _components;
         private readonly List<IBehavior> _behaviors;
@@ -31,6 +31,8 @@
         /// <param name="name">Name of the entity</param>
         public Entity(string name)
         {
+            TypeId = EntityTypeId.GetTypeId(GetType());
+
             _components = new Dictionary<ComponentTypeId, List<IComponent>>();
             _behaviors = new List<IBehavior>();
             _sorter = new BehaviorComparer();
@@ -38,6 +40,11 @@
 
             Scene = new Scene(name);
         }
+
+        /// <summary>
+        /// Gets the unique type id that represents this entity.
+        /// </summary>
+        public EntityTypeId TypeId { get; }
 
         /// <summary>
         /// Gets or sets the name of the entity.
@@ -512,6 +519,34 @@
         }
 
         /// <summary>
+        /// Sets the world information
+        /// </summary>
+        /// <param name="id">Entity id</param>
+        /// <param name="world">Parent world</param>
+        public void SetWorldInfo(int id, World world)
+        {
+            World?.Scene.Children.Remove(Scene);
+
+            Id = id;
+            World = world;
+            //m_dispatcher.SetParent((world != null) ? world.EventDispatcher : null);
+
+            SortBehaviors();
+
+            bool isBorn = world != null;
+            if (isBorn)
+            {
+                World.Scene.Children.Add(Scene);
+                OnSpawned();
+            }
+            else
+            {
+                OnDestroyed();
+                World.Scene.Children.Remove(Scene);
+            }
+        }
+
+        /// <summary>
         /// Reads the object data from the input.
         /// </summary>
         /// <param name="input">Savable reader</param>
@@ -547,34 +582,6 @@
             }
 
             output.EndWriteGroup();
-        }
-
-        /// <summary>
-        /// Sets the world information
-        /// </summary>
-        /// <param name="id">Entity id</param>
-        /// <param name="world">Parent world</param>
-        internal void SetWorldInfo(int id, World world)
-        {
-            World?.Scene.Children.Remove(Scene);
-
-            Id = id;
-            World = world;
-            //m_dispatcher.SetParent((world != null) ? world.EventDispatcher : null);
-
-            SortBehaviors();
-
-            bool isBorn = world != null;
-            if (isBorn)
-            {
-                World.Scene.Children.Add(Scene);
-                OnSpawned();
-            }
-            else
-            {
-                OnDestroyed();
-                World.Scene.Children.Remove(Scene);
-            }
         }
         
         /// <summary>

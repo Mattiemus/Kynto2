@@ -57,11 +57,6 @@
         /// </summary>
         public const float RadiansToDegrees = (float)(180.0d / Math.PI);
 
-        internal static bool IsNearlyZero(float attenuation)
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// Represents Pi^2
         /// </summary>
@@ -218,6 +213,18 @@
             }
 
             return Math.Round(value);
+        }
+
+        /// <summary>
+        /// Linearly interpolates between two values.
+        /// </summary>
+        /// <param name="a">Starting value</param>
+        /// <param name="b">Ending value</param>
+        /// <param name="percent">Amount to interpolate</param>
+        /// <returns>Interpolated value</returns>
+        public static float Lerp(float a, float b, float percent)
+        {
+            return a + ((b - a) * percent);
         }
 
         /// <summary>

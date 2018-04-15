@@ -37,7 +37,11 @@
         /// <summary>
         /// Gets or sets the pick ray used in the query.
         /// </summary>
-        public Ray PickRay => _ray;
+        public Ray PickRay
+        {
+            get => _ray;
+            set => _ray = value;
+        }
 
         /// <summary>
         /// Gets or sets picking options.
@@ -133,17 +137,17 @@
                 // do primitive picking, if that succeeds set the result and return true
                 if (Options.HasFlag(PickingOptions.PrimitivePick))
                 {
-                    List<Tuple<LineIntersectionResult, Triangle?>> results = new List<Tuple<LineIntersectionResult, Triangle?>>();
+                    var results = new List<Tuple<LineIntersectionResult, Triangle?>>();
                     if (pickable.IntersectsMesh(ref _ray, results, Options.HasFlag(PickingOptions.IgnoreBackfaces)))
                     {
-                        PickResult result = new PickResult(pickable, bvResult);
+                        var result = new PickResult(pickable, bvResult);
                         _results.Add(result);
                         return true;
                     }
                 }
                 else
                 {
-                    PickResult result = new PickResult(pickable, bvResult);
+                    var result = new PickResult(pickable, bvResult);
                     _results.Add(result);
                     return true;
                 }

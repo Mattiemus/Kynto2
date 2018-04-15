@@ -363,7 +363,7 @@
             }
             catch (Exception e)
             {
-                throw new SparkGraphicsException("Failed to retrieve sub texture from texture array");
+                throw new SparkGraphicsException("Failed to retrieve sub texture from texture array", e);
             }
         }
 
