@@ -7,10 +7,8 @@
         public uint MessageId { get; set; }
 
         public abstract MessageTypes Type { get; }
-
-        public MessageTypes MessageType { get; set; }
-        
-        public MessageFlags Flags { get; set; }
+                
+        public abstract MessageFlags Flags { get; set; }
 
         public virtual int Size => 0;
 

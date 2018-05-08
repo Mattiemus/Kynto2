@@ -6,5 +6,9 @@
         Acknowledge = 0x02,
         KeepAlive = 0x03,
         Throttle = 0x04,
+
+        JoinRequest,
+
+        AttachRequest,
     }
 }
