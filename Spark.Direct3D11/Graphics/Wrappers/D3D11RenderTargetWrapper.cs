@@ -1,5 +1,7 @@
 ﻿namespace Spark.Direct3D11.Graphics
 {
+    using System;
+
     using Spark.Math;
     using Spark.Graphics;
     using Spark.Utilities;
@@ -22,7 +24,10 @@
 
         public D3D11RenderTargetWrapper(D3D11.Device device, int width, int arrayCount, int mipCount, SurfaceFormat format, MSAADescription msaaDesc, DepthFormat depthFormat, bool readableDepth, bool optimizeDepthForSingleSurface, RenderTargetUsage targetUsage)
         {
-            Guard.Against.NullArgument(device, nameof(device));
+            if (device == null)
+            {
+                throw new ArgumentNullException(nameof(device));
+            }
 
             D3DDevice = device;
             _ownsTexture = true;
@@ -43,7 +48,10 @@
 
         public D3D11RenderTargetWrapper(D3D11.Device device, int width, int height, bool isCube, int arrayCount, int mipCount, SurfaceFormat format, MSAADescription msaaDesc, DepthFormat depthFormat, bool readableDepth, bool optimizeDepthForSingleSurface, RenderTargetUsage targetUsage)
         {
-            Guard.Against.NullArgument(device, nameof(device));
+            if (device == null)
+            {
+                throw new ArgumentNullException(nameof(device));
+            }
 
             D3DDevice = device;
             _ownsTexture = true;
@@ -64,7 +72,10 @@
 
         public D3D11RenderTargetWrapper(D3D11.Device device, int width, int height, int depth, int mipCount, SurfaceFormat format, MSAADescription msaaDesc, DepthFormat depthFormat, bool readableDepth, bool optimizeDepthForSingleSurface, RenderTargetUsage targetUsage)
         {
-            Guard.Against.NullArgument(device, nameof(device));
+            if (device == null)
+            {
+                throw new ArgumentNullException(nameof(device));
+            }
 
             D3DDevice = device;
             _ownsTexture = true;
@@ -85,7 +96,10 @@
 
         public D3D11RenderTargetWrapper(SurfaceFormat surfaceFormat, int mipCount, D3D11DepthStencilBufferWrapper depthBuffer)
         {
-            Guard.Against.NullArgument(depthBuffer, nameof(depthBuffer));
+            if (depthBuffer == null)
+            {
+                throw new ArgumentNullException(nameof(depthBuffer));
+            }
 
             if (depthBuffer.Parent != null)
             {

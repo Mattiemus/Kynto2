@@ -22,7 +22,9 @@
         private ForwardRenderer _forwardRenderer;
         private World _world;
         private Texture2D _pixel;
-        
+        private SpriteFont _font;
+        private SpriteBatch _spriteBatch;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="KyntoApplication"/> class.
         /// </summary>
@@ -54,7 +56,10 @@
             content.ResourceImporters.Add(new BitmapTextureImporter());
             content.ResourceImporters.Add(new BitmapFontImporter());
 
+            _spriteBatch = new SpriteBatch(RenderSystem);
+
             _pixel = Content.Load<Texture2D>("Content/pixel.png");
+            _font = Content.Load<SpriteFont>("Content/font.fnt");
 
             _world = new World();
 
@@ -113,6 +118,10 @@
             _world.ProcessVisibleSet(_forwardRenderer);
             _forwardRenderer.Render();
             _host.ProcessVisibleSet(context);
+
+            _spriteBatch.Begin(context);
+            _spriteBatch.DrawString(_font, "Hello, world!", Vector2.Zero, Color.Green);
+            _spriteBatch.End();
         }
 
         private MaterialDefinition CreateMaterial(Color color)

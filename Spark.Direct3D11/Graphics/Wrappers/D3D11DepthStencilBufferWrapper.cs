@@ -23,8 +23,11 @@
 
         public D3D11DepthStencilBufferWrapper(D3D11.Device device, int width, DepthFormat depthFormat, int arrayCount, bool createShaderView, bool optimizeForSingleSurface, MSAADescription msaaDesc, RenderTargetUsage targetUsage)
         {
-            Guard.Against.NullArgument(device, nameof(device));
-            
+            if (device == null)
+            {
+                throw new ArgumentNullException(nameof(device));
+            }
+
             D3DDevice = device;
             _ownsTexture = true;
             IsOptimizedForSingleSurface = optimizeForSingleSurface;
@@ -43,7 +46,10 @@
 
         public D3D11DepthStencilBufferWrapper(D3D11.Device device, int width, int height, bool isCube, DepthFormat depthFormat, int arrayCount, bool createShaderView, bool optimizeForSingleSurface, MSAADescription msaaDesc, RenderTargetUsage targetUsage)
         {
-            Guard.Against.NullArgument(device, nameof(device));
+            if (device == null)
+            {
+                throw new ArgumentNullException(nameof(device));
+            }
 
             D3DDevice = device;
             _ownsTexture = true;
@@ -63,7 +69,10 @@
 
         public D3D11DepthStencilBufferWrapper(D3D11.Device device, int width, int height, int depth, DepthFormat depthFormat, bool createShaderView, bool optimizeForSingleSurface, MSAADescription msaaDesc, RenderTargetUsage targetUsage)
         {
-            Guard.Against.NullArgument(device, nameof(device));
+            if (device == null)
+            {
+                throw new ArgumentNullException(nameof(device));
+            }
 
             D3DDevice = device;
             _ownsTexture = true;

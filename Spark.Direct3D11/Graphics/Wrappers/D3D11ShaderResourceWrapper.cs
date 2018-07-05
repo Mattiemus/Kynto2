@@ -1,5 +1,7 @@
 ﻿namespace Spark.Direct3D11.Graphics
 {
+    using System;
+
     using Spark.Graphics;
     using Spark.Utilities;
 
@@ -29,8 +31,11 @@
         /// <param name="isOwned">True if this holder owns the resource, otherwise false. If true then when dispose is called, it will clean the resource up.</param>
         public D3D11ShaderResourceWrapper(D3D11.ShaderResourceView shaderResourceView, bool isOwned)
         {
-            Guard.Against.NullArgument(shaderResourceView, nameof(shaderResourceView));
-            
+            if (shaderResourceView == null)
+            {
+                throw new ArgumentNullException(nameof(shaderResourceView));
+            }
+
             D3DDevice = shaderResourceView.Device;
             ResourceType = Direct3DHelper.FromD3DShaderResourceViewDimension(shaderResourceView.Description.Dimension);
             _owned = isOwned;

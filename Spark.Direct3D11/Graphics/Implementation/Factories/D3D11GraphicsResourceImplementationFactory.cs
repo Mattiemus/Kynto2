@@ -4,9 +4,7 @@
 
     using Spark.Graphics;
     using Spark.Graphics.Implementation;
-
-    using Utilities;
-
+    
     /// <summary>
     /// Base class for a graphics resource implementation factory
     /// </summary>
@@ -19,8 +17,15 @@
         /// <param name="resourceType">Type of graphics resource this factory constructs</param>
         protected D3D11GraphicsResourceImplementationFactory(D3D11RenderSystem renderSystem, Type resourceType)
         {
-            Guard.Against.NullArgument(renderSystem, nameof(renderSystem));
-            Guard.Against.NullArgument(resourceType, nameof(resourceType));
+            if (renderSystem == null)
+            {
+                throw new ArgumentNullException(nameof(renderSystem));
+            }
+
+            if (resourceType == null)
+            {
+                throw new ArgumentNullException(nameof(resourceType));
+            }
 
             D3DRenderSystem = renderSystem;
             GraphicsResourceType = resourceType;

@@ -4,7 +4,6 @@
 
     using Math;
     using Graphics;
-    using Utilities;
 
     public class CameraComponent : SceneComponent, IBehavior
     {
@@ -36,7 +35,11 @@
             get => _camera;
             set
             {
-                Guard.Against.NullArgument(value, nameof(value));
+                if (value == null)
+                {
+                    throw new ArgumentNullException(nameof(value));
+                }
+
                 _camera = value;
             }
         }

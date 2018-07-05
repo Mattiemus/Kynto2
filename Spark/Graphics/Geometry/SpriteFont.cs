@@ -719,7 +719,8 @@
                 {
                     return _string[index];
                 }
-                else if (_stringBuilder != null)
+
+                if (_stringBuilder != null)
                 {
                     return _stringBuilder[index];
                 }
@@ -739,7 +740,8 @@
                 {
                     return _string.Length;
                 }
-                else if (_stringBuilder != null)
+
+                if (_stringBuilder != null)
                 {
                     return _stringBuilder.Length;
                 }

@@ -1,9 +1,8 @@
 ﻿namespace Spark.Graphics
 {
+    using System;
     using System.Collections;
     using System.Collections.Generic;
-
-    using Spark.Utilities;
 
     /// <summary>
     /// Composite enumerator to enumerate constant buffer effect parameter collections and a non-constant buffer parameter collection.
@@ -23,8 +22,15 @@
         /// <param name="resourceVariables">The resource variable collection.</param>
         public CompositeEffectParameterEnumerator(IReadOnlyList<IEffectConstantBuffer> constantBuffers, IReadOnlyList<IEffectParameter> resourceVariables)
         {
-            Guard.Against.NullArgument(constantBuffers, nameof(constantBuffers));
-            Guard.Against.NullArgument(resourceVariables, nameof(resourceVariables));
+            if (constantBuffers == null)
+            {
+                throw new ArgumentNullException(nameof(constantBuffers));
+            }
+
+            if (resourceVariables == null)
+            {
+                throw new ArgumentNullException(nameof(resourceVariables));
+            }
 
             _constantBuffers = constantBuffers;
             _resourceVariables = resourceVariables;

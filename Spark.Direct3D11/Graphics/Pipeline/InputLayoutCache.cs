@@ -147,8 +147,11 @@
 
         public D3D11.InputLayout GetOrCreate(InputLayoutManager globalCache, VertexBufferBinding vertexBuffer)
         {
-            Guard.Against.NullArgument(vertexBuffer.VertexBuffer, nameof(vertexBuffer));
-            
+            if (vertexBuffer == null)
+            {
+                throw new ArgumentNullException(nameof(vertexBuffer));
+            }
+
             VertexLayout vertexDecl = vertexBuffer.VertexBuffer.VertexLayout;
             int instanceFrequency = vertexBuffer.InstanceFrequency;
             int key = vertexDecl.GetHashCode();

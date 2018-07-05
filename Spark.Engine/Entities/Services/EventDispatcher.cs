@@ -41,9 +41,16 @@
             ThrowIfDisposed();
             ThrowIfNotInitialized();
 
-            Guard.Against.NullArgument(recipient, nameof(recipient));
-            Guard.Against.NullArgument(action, nameof(action));
+            if (recipient == null)
+            {
+                throw new ArgumentNullException(nameof(recipient));
+            }
 
+            if (action == null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+            
             var messageType = typeof(TMessage);
             var recipients = receiveDerivedMessagesToo ? _recipientsOfSubclassesAction : _recipientsStrictAction;
 
@@ -65,7 +72,10 @@
             ThrowIfDisposed();
             ThrowIfNotInitialized();
 
-            Guard.Against.NullArgument(recipient, nameof(recipient));
+            if (recipient == null)
+            {
+                throw new ArgumentNullException(nameof(recipient));
+            }
 
             UnregisterFromLists(recipient, _recipientsOfSubclassesAction);
             UnregisterFromLists(recipient, _recipientsStrictAction);
@@ -90,8 +100,11 @@
         {
             ThrowIfDisposed();
             ThrowIfNotInitialized();
-
-            Guard.Against.NullArgument(recipient, nameof(recipient));
+            
+            if (recipient == null)
+            {
+                throw new ArgumentNullException(nameof(recipient));
+            }
 
             UnregisterFromLists(recipient, token, action, _recipientsStrictAction);
             UnregisterFromLists(recipient, token, action, _recipientsOfSubclassesAction);
@@ -103,7 +116,10 @@
             ThrowIfDisposed();
             ThrowIfNotInitialized();
 
-            Guard.Against.NullArgument(message, nameof(message));
+            if (message == null)
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
 
             SendToTargetOrType(message, null, token);
         }
