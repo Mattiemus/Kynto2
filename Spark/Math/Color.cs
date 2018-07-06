@@ -377,7 +377,7 @@
             result.B = r;
             result.A = a;
         }
-
+        
         /// <summary>
         /// Adjusts the contrast of the color. If the contrast is 0, the color is 50% gray
         /// and if its 1 the original color is returned.

@@ -86,8 +86,12 @@
     <Compile Include="Graphics\Implementation\Factories\D3D11GraphicsResourceImplementationFactory.cs" />
     <Compile Include="Graphics\Implementation\Factories\D3D11IndexBufferImplementationFactory.cs" />
     <Compile Include="Graphics\Implementation\Factories\D3D11RasterizerStateImplementationFactory.cs" />
+    <Compile Include="Graphics\Implementation\Factories\D3D11RenderTarget2DArrayImplementationFactory.cs" />
+    <Compile Include="Graphics\Implementation\Factories\D3D11RenderTarget2DImplementationFactory.cs" />
+    <Compile Include="Graphics\Implementation\Factories\D3D11RenderTargetCubeImplementationFactory.cs" />
     <Compile Include="Graphics\Implementation\Factories\D3D11SamplerStateImplementationFactory.cs" />
     <Compile Include="Graphics\Implementation\Factories\D3D11SwapChainImplementationFactory.cs" />
+    <Compile Include="Graphics\Implementation\Factories\D3D11Texture1DImplementationFactory.cs" />
     <Compile Include="Graphics\Implementation\Factories\D3D11Texture2DImplementationFactory.cs" />
     <Compile Include="Graphics\Implementation\Factories\D3D11VertexBufferImplementationFactory.cs" />
     <Compile Include="Graphics\Pipeline\D3D11ShaderStage.cs" />

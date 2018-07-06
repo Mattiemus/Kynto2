@@ -11,7 +11,7 @@
     using Spark.Engine;
     using Spark.Direct3D11.Graphics;
     using Spark.Toolkit.Input;
-    using Spark.UI.Controls;
+    using Spark.UI;
         
     /// <summary>
     /// Main application window
@@ -23,7 +23,6 @@
         private World _world;
         private Texture2D _pixel;
         private SpriteFont _font;
-        private SpriteBatch _spriteBatch;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="KyntoApplication"/> class.
@@ -55,9 +54,7 @@
             content.ResourceImporters.Add(new Effects11ResourceImporter());
             content.ResourceImporters.Add(new BitmapTextureImporter());
             content.ResourceImporters.Add(new BitmapFontImporter());
-
-            _spriteBatch = new SpriteBatch(RenderSystem);
-
+                        
             _pixel = Content.Load<Texture2D>("Content/pixel.png");
             _font = Content.Load<SpriteFont>("Content/font.fnt");
 
@@ -101,14 +98,13 @@
             camEntity.AddComponent(new OrbitCameraController(RenderSystem.ImmediateContext.Camera, Vector3.Zero));
             _world.Add(camEntity);
 
-            _host = new InterfaceHost();
+            _host = new InterfaceHost(RenderSystem, new Rectangle(0, 0, GameWindow.ClientBounds.Width, GameWindow.ClientBounds.Height), _font);
 
             base.LoadContent(content);
         }
 
         protected override void Update(IGameTime time)
         {
-            _host.Update(time);
             _world.Update(time);
         }
 
@@ -118,10 +114,6 @@
             _world.ProcessVisibleSet(_forwardRenderer);
             _forwardRenderer.Render();
             _host.ProcessVisibleSet(context);
-
-            _spriteBatch.Begin(context);
-            _spriteBatch.DrawString(_font, "Hello, world!", Vector2.Zero, Color.Green);
-            _spriteBatch.End();
         }
 
         private MaterialDefinition CreateMaterial(Color color)

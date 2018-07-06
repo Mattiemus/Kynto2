@@ -461,6 +461,16 @@
     <Compile Include="Scene\SceneHints.cs" />
     <Compile Include="Scene\Spatial.cs" />
     <Compile Include="Scene\Visual.cs" />
+    <Compile Include="UI\Brushes\Brush.cs" />
+    <Compile Include="UI\Brushes\GradientBrush.cs" />
+    <Compile Include="UI\Brushes\GradientStop.cs" />
+    <Compile Include="UI\Brushes\GradientStopCollection.cs" />
+    <Compile Include="UI\InterfaceHost.cs" />
+    <Compile Include="UI\Brushes\LinearGradientBrush.cs" />
+    <Compile Include="UI\Brushes\RadialGradientBrush.cs" />
+    <Compile Include="UI\Brushes\SolidColorBrush.cs" />
+    <Compile Include="Utilities\ArrayExtensions.cs" />
+    <Compile Include="Utilities\ArrayHelper.cs" />
     <Compile Include="Utilities\Disposable.cs" />
     <Compile Include="Utilities\CyclicReferenceDetector.cs" />
     <Compile Include="Utilities\IExecuteWithObject.cs" />

@@ -99,7 +99,7 @@
         /// <summary>
         /// Gets the name of the service.
         /// </summary>
-        string IEngineService.Name => "Direct3D11_RenderSystem";
+        public string Name => "Direct3D11_RenderSystem";
 
         /// <summary>
         /// Gets the identifier that describes the render system platform.
@@ -288,16 +288,16 @@
             AddImplementationFactory<IVertexBufferImplementationFactory>(new D3D11VertexBufferImplementationFactory(this));
             //new D3D11StreamOutputImplFactory().Initialize(this);
 
-            //new D3D11Texture1DImplFactory().Initialize(this);
-            //new D3D11Texture1DArrayImplFactory().Initialize(this);
+            AddImplementationFactory<ITexture1DImplementationFactory>(new D3D11Texture1DImplementationFactory(this));
+            // TODO: Texutre1DArray
             AddImplementationFactory<ITexture2DImplementationFactory>(new D3D11Texture2DImplementationFactory(this));
-            //new D3D11Texture2DArrayImplFactory().Initialize(this);
-            //new D3D11Texture3DImplFactory().Initialize(this);
-            //new D3D11TextureCubeImplFactory().Initialize(this);
+            // TODO: Texutre2DArray
+            // TODO: Texture3D
+            // TODO: TextureCube
 
-            //new D3D11RenderTarget2DImplFactory().Initialize(this);
-            //new D3D11RenderTarget2DArrayImplFactory().Initialize(this);
-            //new D3D11RenderTargetCubeImplFactory().Initialize(this);
+            AddImplementationFactory<IRenderTarget2DImplementationFactory>(new D3D11RenderTarget2DImplementationFactory(this));
+            AddImplementationFactory<IRenderTarget2DArrayImplementationFactory>(new D3D11RenderTarget2DArrayImplementationFactory(this));
+            AddImplementationFactory<IRenderTargetCubeImplementationFactory>(new D3D11RenderTargetCubeImplementationFactory(this));
 
             //new D3D11OcclusionQueryImplFactory().Initialize(this);
             AddImplementationFactory<ISwapChainImplementationFactory>(new D3D11SwapChainImplementationFactory(this));
