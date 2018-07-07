@@ -1,7 +1,5 @@
 ﻿namespace Spark.UI.Shapes
 {
-    using System;
-
     using Math;
 
     public class RectangleShape : Shape
@@ -32,19 +30,21 @@
 
         public override void Draw(DrawingContext drawingContext)
         {
-            Pen pen = null;
-            if (Stroke != null && !MathHelper.IsApproxZero(StrokeThickness))
-            {
-                pen = new Pen(Stroke, StrokeThickness);
-            }
-
             if (MathHelper.IsApproxZero(RadiusX) && MathHelper.IsApproxZero(RadiusY))
             {
-                drawingContext.DrawRectangle(Fill, pen, Bounds);
+                drawingContext.DrawRectangle(
+                    Fill, 
+                    new Pen(Stroke, StrokeThickness), 
+                    Bounds);
             }
             else
             {
-                drawingContext.DrawRoundedRectangle(Fill, pen, Bounds, RadiusX, RadiusY);
+                drawingContext.DrawRoundedRectangle(
+                    Fill, 
+                    new Pen(Stroke, StrokeThickness), 
+                    Bounds, 
+                    RadiusX,
+                    RadiusY);
             }
         }
     }

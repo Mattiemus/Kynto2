@@ -101,30 +101,20 @@
             _world.Add(camEntity);
 
             _host = new InterfaceHost(RenderSystem, new Rectangle(0, 0, GameWindow.ClientBounds.Width, GameWindow.ClientBounds.Height));
-
-            StackPanel panel = new StackPanel
+            
+            _host.Content = new ContentControl
             {
-                Background = new SolidColorBrush(Color.Blue),
-                BorderBrush = new SolidColorBrush(Color.Yellow),
-                BorderThickness = new Thickness(3)
-            };
-
-            for (int i = 0; i < 5; i++)
-            {
-                panel.Children.Add(new RectangleShape
+                HorizontalContentAlignment = HorizontalAlignment.Stretch,
+                Content = new RectangleShape
                 {
-                    Width = 10,
-                    Height = 10,
-                    Fill = new SolidColorBrush(Color.Purple),
-                    Margin = new Thickness(1)
-                });
-            }
-
-            _host.Content = panel;
+                    Height = 100,
+                    Fill = new SolidColorBrush(Color.Purple)
+                }
+            };
 
             base.LoadContent(content);
         }
-
+        
         protected override void Update(IGameTime time)
         {
             _world.Update(time);

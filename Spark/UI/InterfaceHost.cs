@@ -77,6 +77,9 @@
                 return;
             }
 
+            _uiElement.Width = Bounds.Width;
+            _uiElement.Height = Bounds.Height;
+
             _uiElement.UpdateLayout();
             _uiElement.Measure(new Size(Bounds.Width, Bounds.Height));
             _uiElement.Arrange(new RectangleF(Bounds.X, Bounds.Y, Bounds.Width, Bounds.Height));

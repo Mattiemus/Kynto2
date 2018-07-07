@@ -83,11 +83,7 @@
         private float? _actualWidth;
         private float? _actualHeight;
         private Size _desiredSize;
-
-        public UIElement()
-        {
-        }
-
+        
         public event DependencyPropertyChangedEventHandler IsVisibleChanged;
 
         public UIElement Parent

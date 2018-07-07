@@ -115,7 +115,7 @@
                     Color.White);
             }
 
-            if (pen != null)
+            if (pen != null && pen.Brush != null && !MathHelper.IsApproxZero(pen.Thickness))
             {
                 _spriteBatch.Draw(
                     pen.Brush.GetTexture(_renderSystem),
