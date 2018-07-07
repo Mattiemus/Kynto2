@@ -44,7 +44,7 @@
             }
             else
             {
-                throw new NotImplementedException();
+                drawingContext.DrawRoundedRectangle(Fill, pen, Bounds, RadiusX, RadiusY);
             }
         }
     }

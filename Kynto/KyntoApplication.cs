@@ -12,6 +12,7 @@
     using Spark.Direct3D11.Graphics;
     using Spark.Toolkit.Input;
     using Spark.UI;
+    using Spark.UI.Controls;
     using Spark.UI.Shapes;
 
     /// <summary>
@@ -100,15 +101,26 @@
             _world.Add(camEntity);
 
             _host = new InterfaceHost(RenderSystem, new Rectangle(0, 0, GameWindow.ClientBounds.Width, GameWindow.ClientBounds.Height));
-            _host.Content = new RectangleShape
+
+            StackPanel panel = new StackPanel
             {
-                Width = 100,
-                Height = 100,
-                Margin = new Thickness(10),
-                Fill = new SolidColorBrush(Color.Blue),
-                Stroke = new SolidColorBrush(Color.Yellow),
-                StrokeThickness = 3
+                Background = new SolidColorBrush(Color.Blue),
+                BorderBrush = new SolidColorBrush(Color.Yellow),
+                BorderThickness = new Thickness(3)
             };
+
+            for (int i = 0; i < 5; i++)
+            {
+                panel.Children.Add(new RectangleShape
+                {
+                    Width = 10,
+                    Height = 10,
+                    Fill = new SolidColorBrush(Color.Purple),
+                    Margin = new Thickness(1)
+                });
+            }
+
+            _host.Content = panel;
 
             base.LoadContent(content);
         }

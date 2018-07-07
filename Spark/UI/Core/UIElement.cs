@@ -16,7 +16,7 @@
                  nameof(IsVisible),
                  typeof(bool),
                  typeof(UIElement),
-                 new PropertyMetadata(new PropertyChangedCallback(OnIsVisibleChanged)));
+                 new PropertyMetadata(true, new PropertyChangedCallback(OnIsVisibleChanged)));
 
         public static readonly DependencyProperty VisibilityProperty 
             = DependencyProperty.Register(

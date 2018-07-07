@@ -154,6 +154,11 @@
                     Color.White);
             }
         }
+
+        public void DrawRoundedRectangle(Brush brush, Pen pen, RectangleF rectangle, float radiusX, float radiusY)
+        {
+            throw new NotImplementedException();
+        }
         
         protected override void Dispose(bool isDisposing)
         {

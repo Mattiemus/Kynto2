@@ -465,6 +465,11 @@
     <Compile Include="UI\Brushes\GradientBrush.cs" />
     <Compile Include="UI\Brushes\GradientStop.cs" />
     <Compile Include="UI\Brushes\GradientStopCollection.cs" />
+    <Compile Include="UI\Controls\Control.cs" />
+    <Compile Include="UI\Controls\Panel.cs" />
+    <Compile Include="UI\Controls\StackPanel.cs" />
+    <Compile Include="UI\Core\Orientation.cs" />
+    <Compile Include="UI\Core\UIElementCollection.cs" />
     <Compile Include="UI\Drawing\DrawingContext.cs" />
     <Compile Include="UI\Core\FrameworkElement.cs" />
     <Compile Include="UI\Core\UIElement.cs" />
