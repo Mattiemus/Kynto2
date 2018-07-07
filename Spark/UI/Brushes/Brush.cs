@@ -3,10 +3,14 @@
     using System;
 
     using Graphics;
-    using Math;
+    using Utilities;
 
-    public abstract class Brush
+    public abstract class Brush : Disposable
     {
+        private readonly IRenderSystem _renderSystem;
+        private float _opacity;
+        private Texture2D _brushTexture;
+
         protected Brush()
             : this(SparkEngine.Instance.Services.GetService<IRenderSystem>())
         {
@@ -19,15 +23,55 @@
                 throw new ArgumentNullException(nameof(renderSystem), "Render system cannot be null");
             }
 
-            RenderSystem = renderSystem;
+            _renderSystem = renderSystem;
 
-            Opacity = 1.0f;
+            _opacity = 1.0f;
         }
 
-        public float Opacity { get; set; }
+        public float Opacity
+        {
+            get => _opacity;
+            set
+            {
+                _opacity = value;
+                InvalidateTexture();
+            }
+        }
 
-        protected IRenderSystem RenderSystem { get; }
+        internal Texture2D BrushTexture
+        {
+            get
+            {
+                if (_brushTexture == null)
+                {
+                    _brushTexture = CreateTexture(_renderSystem);
+                }
 
-        public abstract void Draw(IRenderContext context, SpriteBatch batch, Rectangle bounds, Matrix4x4 transform, float alpha);
+                return _brushTexture;
+            }
+        }
+        
+        protected abstract Texture2D CreateTexture(IRenderSystem renderSystem);
+
+        protected void InvalidateTexture()
+        {
+            _brushTexture?.Dispose();
+            _brushTexture = null;
+        }
+
+        protected override void Dispose(bool isDisposing)
+        {
+            if (IsDisposed)
+            {
+                return;
+            }
+
+            if (isDisposing && _brushTexture != null)
+            {
+                _brushTexture.Dispose();
+            }
+
+            base.Dispose(isDisposing);
+        }
     }
 }

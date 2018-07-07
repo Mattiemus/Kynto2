@@ -2,14 +2,18 @@
 {
     using Graphics;
     using Math;
-    using Utilities;
 
     public sealed class SolidColorBrush : Brush
     {
-        private Texture2D _brushTexture;
+        private Color _color;
 
         public SolidColorBrush()
         {
+        }
+
+        public SolidColorBrush(Color color)
+        {
+            _color = color;
         }
 
         public SolidColorBrush(IRenderSystem renderSystem)
@@ -20,58 +24,24 @@
         public SolidColorBrush(IRenderSystem renderSystem, Color color)
             : base(renderSystem)
         {
-            Color = color;
+            _color = color;
         }
 
-        public SolidColorBrush(Color color)
+        public Color Color
         {
-            Color = color;
-        }
-
-        public Color Color { get; set; }
-
-        public override int GetHashCode()
-        {
-            return Color.GetHashCode();
-        }
-
-        public override bool Equals(object obj)
-        {
-            SolidColorBrush solidColorBrush = obj as SolidColorBrush;
-            if (solidColorBrush != null)
+            get => _color;
+            set
             {
-                return solidColorBrush.Color == Color;
+                _color = value;
+                InvalidateTexture();
             }
-
-            return false;
         }
 
-        public override void Draw(IRenderContext context, SpriteBatch batch, Rectangle bounds, Matrix4x4 transform, float alpha)
-        {
-            if (_brushTexture == null)
-            {
-                _brushTexture = CreateTexture();
-            }
-
-            batch.Begin(
-                context,
-                SpriteSortMode.Texture,
-                BlendState.AlphaBlendNonPremultiplied,
-                RasterizerState.CullNone,
-                SamplerState.LinearClamp,
-                DepthStencilState.None,
-                transform);
-
-            batch.Draw(_brushTexture, bounds, Color.White * alpha);
-
-            batch.End();
-        }
-
-        private Texture2D CreateTexture()
+        protected override Texture2D CreateTexture(IRenderSystem renderSystem)
         {
             using (DataBuffer<Color> colorBuffer = new DataBuffer<Color>(Color))
             {
-                return new Texture2D(RenderSystem, 1, 1, SurfaceFormat.Color, colorBuffer);
+                return new Texture2D(renderSystem, 1, 1, SurfaceFormat.Color, colorBuffer);
             }
         }
     }

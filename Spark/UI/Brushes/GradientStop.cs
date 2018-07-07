@@ -21,7 +21,7 @@
         {
             GradientStop gs = obj as GradientStop;
             return gs != null && 
-                   gs.Offset == Offset && 
+                   MathHelper.IsApproxEquals(gs.Offset, Offset) &&
                    gs.Color == Color;
         }
 

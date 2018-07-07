@@ -29,6 +29,7 @@
             _gradientBrush.GradientStops.Add(new GradientStop(0.0f, Color.Blue));
             _gradientBrush.GradientStops.Add(new GradientStop(1.0f, Color.Red));
             _radGradientBrush = new RadialGradientBrush(renderSystem);
+            _radGradientBrush.Radius = 0.5f;
             _radGradientBrush.GradientStops.Add(new GradientStop(0.0f, Color.Blue));
             _radGradientBrush.GradientStops.Add(new GradientStop(1.0f, Color.Red));
 
@@ -59,7 +60,15 @@
 
             _spriteBatch.Begin(context);
             _spriteBatch.DrawString(_font, "Hello, world!", Vector2.Zero, Color.Green);
+
+            _spriteBatch.Draw(_solidBrush.BrushTexture, new Rectangle(30, 300, 250, 250), Color.White);
+            _spriteBatch.Draw(_gradientBrush.BrushTexture, new Rectangle(300, 300, 250, 250), Color.White);
+            _spriteBatch.Draw(_radGradientBrush.BrushTexture, new Rectangle(570, 300, 250, 250), Color.White);
+
             _spriteBatch.End();
+
+
+
 
 
             context.SetRenderTarget(null);
@@ -67,10 +76,6 @@
             _spriteBatch.Begin(context);
             _spriteBatch.Draw(_uiRenderTarget, _bounds, Color.White);
             _spriteBatch.End();
-
-            _solidBrush.Draw(context, _spriteBatch, new Rectangle(30, 300, 250, 250), Matrix4x4.Identity, 1.0f);
-            _gradientBrush.Draw(context, _spriteBatch, new Rectangle(300, 300, 250, 250), Matrix4x4.Identity, 1.0f);
-            _radGradientBrush.Draw(context, _spriteBatch, new Rectangle(570, 300, 250, 250), Matrix4x4.Identity, 1.0f);
         }
 
         private void BoundsUpdated()

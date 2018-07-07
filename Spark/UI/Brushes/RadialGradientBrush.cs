@@ -7,39 +7,67 @@
 
     public sealed class RadialGradientBrush : GradientBrush
     {
+        private float _radius;
+        private Vector2 _center;
+        private Vector2 _gradientOrigin;
+
         public RadialGradientBrush()
         {
-            Radius = 1.0f;
-            Center = new Vector2(0.5f, 0.5f);
-            GradientOrigin = new Vector2(0.5f, 0.5f);
+            _radius = 0.5f;
+            _center = new Vector2(0.5f, 0.5f);
+            _gradientOrigin = new Vector2(0.5f, 0.5f);
         }
 
         public RadialGradientBrush(IRenderSystem renderSystem)
             : base(renderSystem)
         {
-            Radius = 1.0f;
-            Center = new Vector2(0.5f, 0.5f);
-            GradientOrigin = new Vector2(0.5f, 0.5f);
+            _radius = 0.5f;
+            _center = new Vector2(0.5f, 0.5f);
+            _gradientOrigin = new Vector2(0.5f, 0.5f);
         }
 
-        public float Radius { get; set; }
-
-        public Vector2 Center { get; set; }
-
-        public Vector2 GradientOrigin { get; set; }
-
-        protected override Texture2D CreateTexture()
+        public float Radius
         {
-            int width = 128;
-            int height = 128;
-
-            using (DataBuffer<Color> colorBuffer = new DataBuffer<Color>(GetTextureData(width, height)))
+            get => _radius;
+            set
             {
-                return new Texture2D(RenderSystem, width, height, SurfaceFormat.Color, colorBuffer);
+                _radius = value;
+                InvalidateTexture();
             }
         }
 
-        private Color GetPixel(int x, int y)
+        public Vector2 Center
+        {
+            get => _center;
+            set
+            {
+                _center = value;
+                InvalidateTexture();
+            }
+        }
+
+
+        public Vector2 GradientOrigin
+        {
+            get => _gradientOrigin;
+            set
+            {
+                _gradientOrigin = value;
+                InvalidateTexture();
+            }
+        }
+
+        protected override Texture2D CreateTexture(IRenderSystem renderSystem)
+        {
+            int side = 128;
+
+            using (DataBuffer<Color> colorBuffer = new DataBuffer<Color>(GetTextureData(side)))
+            {
+                return new Texture2D(renderSystem, side, side, SurfaceFormat.Color, colorBuffer);
+            }
+        }
+
+        private Color GetPixel(int x, int y, int side)
         {
             float fx = GradientOrigin.X - Center.X;
             float fy = GradientOrigin.Y - Center.Y;
@@ -48,8 +76,8 @@
 
             float denom = 1.0f / (radius2 - ((fx * fx) + (fy * fy)));
 
-            float dx = x - (GradientOrigin.X * 128.0f);
-            float dy = y - (GradientOrigin.Y * 128.0f);
+            float dx = x - (GradientOrigin.X * side);
+            float dy = y - (GradientOrigin.Y * side);
 
             float dx2 = dx * dx;
             float dy2 = dy * dy;
@@ -58,18 +86,18 @@
             grad = ((dx * fx + dy * fy) + (float)Math.Sqrt(grad));
             grad *= denom;
 
-            return GetGradientColor(grad / 128.0f);
+            return GetGradientColor(grad / side);
         }
 
-        private Color[] GetTextureData(int width, int height)
+        private Color[] GetTextureData(int side)
         {
-            Color[] data = new Color[width * height];
+            Color[] data = new Color[side * side];
 
-            for (int y = 0; y < height; y++)
+            for (int y = 0; y < side; y++)
             {
-                for (int x = 0; x < width; x++)
+                for (int x = 0; x < side; x++)
                 {
-                    data[y * width + x] = GetPixel(x, y);
+                    data[y * side + x] = GetPixel(x, y, side);
                 }
             }
 

@@ -17,18 +17,17 @@
         {
         }
 
-        protected override Texture2D CreateTexture()
+        protected override Texture2D CreateTexture(IRenderSystem renderSystem)
         {
-            int width = 128;
-            int height = 128;
+            int side = 128;
 
-            using (DataBuffer<Color> colorBuffer = new DataBuffer<Color>(GetTextureData(width, height)))
+            using (DataBuffer<Color> colorBuffer = new DataBuffer<Color>(GetTextureData(side)))
             {
-                return new Texture2D(RenderSystem, width, height, SurfaceFormat.Color, colorBuffer);
+                return new Texture2D(renderSystem, side, side, SurfaceFormat.Color, colorBuffer);
             }
         }
 
-        private Color GetPixel(int x, int y)
+        private Color GetPixel(int x, int y, int side)
         {
             float deltaX = EndPoint.X - StartPoint.X;
             float deltaY = EndPoint.Y - StartPoint.Y;
@@ -36,21 +35,21 @@
             float denom = 1.0f / ((deltaX * deltaX) + (deltaY * deltaY));
             float t = (deltaX * (x - StartPoint.X) + deltaY * (y - StartPoint.Y)) * denom;
 
-            return GetGradientColor(t / 128.0f);
+            return GetGradientColor(t / side);
         }
 
-        private Color[] GetTextureData(int width, int height)
+        private Color[] GetTextureData(int side)
         {
-            Color[] pixels = new Color[width * height];
+            Color[] pixels = new Color[side * side];
             bool copyHorizontal = false;
             bool copyVertical = false;
 
-            if (StartPoint.X == EndPoint.X)
+            if (MathHelper.IsApproxEquals(EndPoint.X, StartPoint.X))
             {
                 copyVertical = true;
             }
 
-            if (EndPoint.Y == StartPoint.Y)
+            if (MathHelper.IsApproxEquals(EndPoint.Y, StartPoint.Y))
             {
                 copyHorizontal = true;
             }
@@ -60,41 +59,41 @@
                 Color lastValue = Color.Black;
                 Color[] srcLine = null;
 
-                for (var y = 0; y < height; y++)
+                for (var y = 0; y < side; y++)
                 {
-                    Color value = GetPixel(0, y);
+                    Color value = GetPixel(0, y, side);
                     if (srcLine == null || (lastValue != value))
                     {
                         if (srcLine == null)
                         {
-                            srcLine = new Color[width];
+                            srcLine = new Color[side];
                         }
 
                         srcLine.Fill(value);
                         lastValue = value;
                     }
 
-                    Array.Copy(srcLine, 0, pixels, y * width, width);
+                    Array.Copy(srcLine, 0, pixels, y * side, side);
                 }
             }
             else if (copyHorizontal)
             {
-                for (int x = 0; x < width; x++)
+                for (int x = 0; x < side; x++)
                 {
-                    Color value = GetPixel(x, 0);
-                    for (var y = 0; y < height; y++)
+                    Color value = GetPixel(x, 0, side);
+                    for (var y = 0; y < side; y++)
                     {
-                        pixels[y * width + x] = value;
+                        pixels[y * side + x] = value;
                     }
                 }
             }
             else
             {
-                for (int y = 0; y < height; y++)
+                for (int y = 0; y < side; y++)
                 {
-                    for (int x = 0; x < width; x++)
+                    for (int x = 0; x < side; x++)
                     {
-                        pixels[y * width + x] = GetPixel(x, y);
+                        pixels[y * side + x] = GetPixel(x, y, side);
                     }
                 }
             }

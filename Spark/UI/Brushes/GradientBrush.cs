@@ -5,75 +5,48 @@
 
     public abstract class GradientBrush : Brush
     {
-        private Texture2D _brushTexture;
-        private BlendState _blendState;
+        private Vector2 _startPoint;
+        private Vector2 _endPoint;
 
         protected GradientBrush()
         {
             GradientStops = new GradientStopCollection();
-            StartPoint = new Vector2(0, 0);
-            EndPoint = new Vector2(1, 1);
+            GradientStops.BrushInvalidate = InvalidateTexture;
+
+            _startPoint = new Vector2(0, 0);
+            _endPoint = new Vector2(1, 1);
         }
 
         protected GradientBrush(IRenderSystem renderSystem)
             : base(renderSystem)
         {
             GradientStops = new GradientStopCollection();
-            StartPoint = new Vector2(0, 0);
-            EndPoint = new Vector2(1, 1);
+            GradientStops.BrushInvalidate = InvalidateTexture;
+
+            _startPoint = new Vector2(0, 0);
+            _endPoint = new Vector2(1, 1);
         }
 
         public GradientStopCollection GradientStops { get; }
 
-        public Vector2 StartPoint { get; set; }
-
-        public Vector2 EndPoint { get; set; }
-
-        public override void Draw(IRenderContext context, SpriteBatch batch, Rectangle bounds, Matrix4x4 transform, float alpha)
+        public Vector2 StartPoint
         {
-            if (_brushTexture == null)
+            get => _startPoint;
+            set
             {
-                _brushTexture = CreateTexture();
+                _startPoint = value;
+                InvalidateTexture();
             }
-
-            if (_blendState == null)
-            {
-                _blendState = ContainsAlpha() ? BlendState.AlphaBlendNonPremultiplied : BlendState.Opaque;
-            }
-
-            var state = _blendState;
-            if (state == BlendState.Opaque && alpha < 1.0f)
-            {
-                state = BlendState.AlphaBlendNonPremultiplied;
-            }
-
-            batch.Begin(
-                context,
-                SpriteSortMode.Texture,
-                state,
-                RasterizerState.CullNone,
-                SamplerState.LinearClamp,
-                DepthStencilState.None,
-                transform);
-
-            batch.Draw(_brushTexture, bounds, Color.White * alpha);
-
-            batch.End();
         }
-
-        protected abstract Texture2D CreateTexture();
-
-        protected bool ContainsAlpha()
+        
+        public Vector2 EndPoint
         {
-            foreach (GradientStop s in GradientStops)
+            get => _endPoint;
+            set
             {
-                if (s.Color.A < 255)
-                {
-                    return true;
-                }
+                _endPoint = value;
+                InvalidateTexture();
             }
-
-            return false;
         }
 
         protected Color GetGradientColor(float offset)
