@@ -1,5 +1,7 @@
 ﻿namespace Spark.UI
 {
+    using System;
+
     using Graphics;
     using Math;
 
@@ -9,24 +11,14 @@
 
         public SolidColorBrush()
         {
+            _color = Color.TransparentBlack;
         }
 
         public SolidColorBrush(Color color)
         {
             _color = color;
         }
-
-        public SolidColorBrush(IRenderSystem renderSystem)
-            : base(renderSystem)
-        {
-        }
-
-        public SolidColorBrush(IRenderSystem renderSystem, Color color)
-            : base(renderSystem)
-        {
-            _color = color;
-        }
-
+        
         public Color Color
         {
             get => _color;
@@ -35,6 +27,41 @@
                 _color = value;
                 InvalidateTexture();
             }
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 13;
+                hash = (hash * 7) + Color.GetHashCode();
+                hash = (hash * 7) + base.GetHashCode();
+
+                return hash;
+            }
+        }
+
+        public override bool Equals(object obj)
+        {
+            SolidColorBrush solidBrush = obj as SolidColorBrush;
+            if (solidBrush != null)
+            {
+                return Equals(solidBrush);
+            }
+
+            return false;
+        }
+
+        public override bool Equals(Brush other)
+        {
+            SolidColorBrush solidBrush = other as SolidColorBrush;
+            if (solidBrush != null)
+            {
+                return Color == solidBrush.Color &&
+                       base.Equals(other);
+            }
+
+            return false;
         }
 
         protected override Texture2D CreateTexture(IRenderSystem renderSystem)

@@ -34,6 +34,12 @@
                 typeof(Thickness),
                 typeof(UIElement));
 
+        public static readonly DependencyProperty PaddingProperty
+            = DependencyProperty.Register(
+                nameof(Padding),
+                typeof(Thickness),
+                typeof(UIElement));
+
         public static readonly DependencyProperty HorizontalAlignmentProperty 
             = DependencyProperty.Register(
                 nameof(HorizontalAlignment),
@@ -110,6 +116,12 @@
             set { SetValue(MarginProperty, value); }
         }
 
+        public Thickness Padding
+        {
+            get { return (Thickness)GetValue(PaddingProperty); }
+            set { SetValue(PaddingProperty, value); }
+        }
+
         public HorizontalAlignment HorizontalAlignment
         {
             get { return (HorizontalAlignment)GetValue(HorizontalAlignmentProperty); }
@@ -150,7 +162,14 @@
             get { return (float?)GetValue(HeightProperty); }
             set { SetValue(HeightProperty, value); }
         }
-        
+
+        public RectangleF Bounds 
+            => new RectangleF(
+                GetAbsoluteLeft(),
+                GetAbsoluteTop(),
+                ActualWidth,
+                ActualHeight);
+
         public float ActualWidth
         {
             get
@@ -262,6 +281,86 @@
         public void Arrange(RectangleF finalRect)
         {
             IsArrangeValid = true;
+        }
+
+        public virtual void Draw(DrawingContext drawingContext)
+        {
+        }
+
+        public virtual float GetAbsoluteLeft()
+        {
+            if (Parent != null)
+            {
+                return Parent.GetAbsoluteLeft(this);
+            }
+
+            return Margin.Left;
+        }
+
+        public virtual float GetAbsoluteTop()
+        {
+            if (Parent != null)
+            {
+                return Parent.GetAbsoluteTop(this);
+            }
+
+            return Margin.Top;
+        }
+
+        protected virtual float GetAbsoluteLeft(UIElement child)
+        {
+            var result = 0.0f;
+
+            if (child.HorizontalAlignment == HorizontalAlignment.Left || child.HorizontalAlignment == HorizontalAlignment.Stretch)
+            {
+                result = child.Margin.Left;
+                if (child.Parent != null)
+                {
+                    result += child.Parent.GetAbsoluteLeft();
+                }
+            }
+            else if (child.HorizontalAlignment == HorizontalAlignment.Right)
+            {
+                result = child.Parent.ActualWidth - child.Margin.Right - child.ActualWidth + child.Parent.GetAbsoluteLeft();
+            }
+            else if (child.HorizontalAlignment == HorizontalAlignment.Center)
+            {
+                result = (child.Parent.ActualWidth / 2.0f) - (child.ActualWidth / 2.0f) + child.Margin.Left - child.Margin.Right;
+                if (child.Parent != null)
+                {
+                    result += child.Parent.GetAbsoluteLeft();
+                }
+            }
+
+            return result;
+        }
+
+        protected virtual float GetAbsoluteTop(UIElement child)
+        {
+            var result = 0.0f;
+
+            if (child.VerticalAlignment == VerticalAlignment.Top || child.VerticalAlignment == VerticalAlignment.Stretch)
+            {
+                result = child.Margin.Top;
+                if (child.Parent != null)
+                {
+                    result += child.Parent.GetAbsoluteTop();
+                }
+            }
+            else if (child.VerticalAlignment == VerticalAlignment.Bottom)
+            {
+                result = child.Parent.ActualHeight - child.Margin.Bottom - child.ActualHeight + child.Parent.GetAbsoluteTop();
+            }
+            else if (child.VerticalAlignment == VerticalAlignment.Center)
+            {
+                result = (child.Parent.ActualHeight / 2.0f) - (child.ActualHeight / 2.0f) + child.Margin.Top - child.Margin.Bottom;
+                if (child.Parent != null)
+                {
+                    result += child.Parent.GetAbsoluteTop();
+                }
+            }
+
+            return result;
         }
 
         protected virtual float MeasureWidth(float availableWidth)

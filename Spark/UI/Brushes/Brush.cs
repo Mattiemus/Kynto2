@@ -3,28 +3,16 @@
     using System;
 
     using Graphics;
+    using Math;
     using Utilities;
 
-    public abstract class Brush : Disposable
+    public abstract class Brush : Disposable, IEquatable<Brush>
     {
-        private readonly IRenderSystem _renderSystem;
         private float _opacity;
         private Texture2D _brushTexture;
 
         protected Brush()
-            : this(SparkEngine.Instance.Services.GetService<IRenderSystem>())
         {
-        }
-
-        protected Brush(IRenderSystem renderSystem)
-        {
-            if (renderSystem == null)
-            {
-                throw new ArgumentNullException(nameof(renderSystem), "Render system cannot be null");
-            }
-
-            _renderSystem = renderSystem;
-
             _opacity = 1.0f;
         }
 
@@ -38,17 +26,42 @@
             }
         }
 
-        internal Texture2D BrushTexture
+        public override int GetHashCode()
         {
-            get
+            unchecked
             {
-                if (_brushTexture == null)
-                {
-                    _brushTexture = CreateTexture(_renderSystem);
-                }
+                int hash = 13;
+                hash = (hash * 7) + Opacity.GetHashCode();
 
-                return _brushTexture;
+                return hash;
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            Brush other = obj as Brush;
+            if (other != null)
+            {
+                return Equals(other);
+            }
+
+            return false;
+        }
+
+        public virtual bool Equals(Brush other)
+        {
+            return other != null &&
+                   MathHelper.IsApproxEquals(other.Opacity, Opacity);
+        }
+
+        internal Texture2D GetTexture(IRenderSystem renderSystem)
+        {
+            if (_brushTexture == null)
+            {
+                _brushTexture = CreateTexture(renderSystem);
+            }
+
+            return _brushTexture;
         }
         
         protected abstract Texture2D CreateTexture(IRenderSystem renderSystem);

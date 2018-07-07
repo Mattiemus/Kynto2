@@ -1,6 +1,7 @@
 ﻿namespace Spark.UI
 {
-    using Graphics;
+    using System.Linq;
+
     using Math;
 
     public abstract class GradientBrush : Brush
@@ -10,18 +11,10 @@
 
         protected GradientBrush()
         {
-            GradientStops = new GradientStopCollection();
-            GradientStops.BrushInvalidate = InvalidateTexture;
-
-            _startPoint = new Vector2(0, 0);
-            _endPoint = new Vector2(1, 1);
-        }
-
-        protected GradientBrush(IRenderSystem renderSystem)
-            : base(renderSystem)
-        {
-            GradientStops = new GradientStopCollection();
-            GradientStops.BrushInvalidate = InvalidateTexture;
+            GradientStops = new GradientStopCollection
+            {
+                BrushInvalidate = InvalidateTexture
+            };
 
             _startPoint = new Vector2(0, 0);
             _endPoint = new Vector2(1, 1);
@@ -47,6 +40,65 @@
                 _endPoint = value;
                 InvalidateTexture();
             }
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 13;
+
+                foreach (GradientStop gs in GradientStops.OrderBy(g => g.Offset))
+                {
+                    hash += gs.GetHashCode();
+                }
+
+                hash = (hash * 7) + StartPoint.GetHashCode();
+                hash = (hash * 7) + EndPoint.GetHashCode();
+                hash = (hash * 7) + base.GetHashCode();
+
+                return hash;
+            }
+        }
+
+        public override bool Equals(object obj)
+        {
+            GradientBrush gradBrush = obj as GradientBrush;
+            if (gradBrush != null)
+            {
+                return Equals(gradBrush);
+            }
+
+            return false;
+        }
+
+        public override bool Equals(Brush other)
+        {
+            GradientBrush gradBrush = other as GradientBrush;
+            if (gradBrush != null && base.Equals(other) && StartPoint == gradBrush.StartPoint && EndPoint == gradBrush.EndPoint)
+            {
+                GradientStop[] stops 
+                    = GradientStops
+                        .OrderBy(g => g.Offset)
+                        .ToArray();
+
+                GradientStop[] brushStops 
+                    = gradBrush.GradientStops
+                        .OrderBy(g => g.Offset)
+                        .ToArray();
+
+                for (int i = 0; i < brushStops.Length; i++)
+                {
+                    if (!brushStops[i].Equals(stops[i]))
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            return false;
         }
 
         protected Color GetGradientColor(float offset)

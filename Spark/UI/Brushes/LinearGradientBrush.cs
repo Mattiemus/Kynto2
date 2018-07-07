@@ -8,13 +8,37 @@
 
     public sealed class LinearGradientBrush : GradientBrush
     {
-        public LinearGradientBrush()
+        public override int GetHashCode()
         {
+            unchecked
+            {
+                int hash = 13;
+                hash = (hash * 7) + base.GetHashCode();
+
+                return hash;
+            }
         }
 
-        public LinearGradientBrush(IRenderSystem renderSystem)
-            : base(renderSystem)
+        public override bool Equals(object obj)
         {
+            LinearGradientBrush linGradBrush = obj as LinearGradientBrush;
+            if (linGradBrush != null)
+            {
+                return Equals(linGradBrush);
+            }
+
+            return false;
+        }
+
+        public override bool Equals(Brush other)
+        {
+            LinearGradientBrush linGradBrush = other as LinearGradientBrush;
+            if (linGradBrush != null)
+            {
+                return base.Equals(other);
+            }
+
+            return false;
         }
 
         protected override Texture2D CreateTexture(IRenderSystem renderSystem)

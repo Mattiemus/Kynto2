@@ -18,14 +18,6 @@
             _gradientOrigin = new Vector2(0.5f, 0.5f);
         }
 
-        public RadialGradientBrush(IRenderSystem renderSystem)
-            : base(renderSystem)
-        {
-            _radius = 0.5f;
-            _center = new Vector2(0.5f, 0.5f);
-            _gradientOrigin = new Vector2(0.5f, 0.5f);
-        }
-
         public float Radius
         {
             get => _radius;
@@ -46,7 +38,6 @@
             }
         }
 
-
         public Vector2 GradientOrigin
         {
             get => _gradientOrigin;
@@ -55,6 +46,45 @@
                 _gradientOrigin = value;
                 InvalidateTexture();
             }
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 13;
+                hash = (hash * 7) + Radius.GetHashCode();
+                hash = (hash * 7) + Center.GetHashCode();
+                hash = (hash * 7) + GradientOrigin.GetHashCode();                
+                hash = (hash * 7) + base.GetHashCode();
+
+                return hash;
+            }
+        }
+
+        public override bool Equals(object obj)
+        {
+            RadialGradientBrush radGradBrush = obj as RadialGradientBrush;
+            if (radGradBrush != null)
+            {
+                return Equals(radGradBrush);
+            }
+
+            return false;
+        }
+
+        public override bool Equals(Brush other)
+        {
+            RadialGradientBrush radGradBrush = other as RadialGradientBrush;
+            if (radGradBrush != null)
+            {
+                return MathHelper.IsApproxEquals(Radius, radGradBrush.Radius) &&
+                       Center == radGradBrush.Center &&
+                       GradientOrigin == radGradBrush.GradientOrigin &&
+                       base.Equals(other);
+            }
+
+            return false;
         }
 
         protected override Texture2D CreateTexture(IRenderSystem renderSystem)

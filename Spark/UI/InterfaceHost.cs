@@ -9,79 +9,77 @@
     public class InterfaceHost : Disposable
     {
         private readonly IRenderSystem _renderSystem;
-        private RenderTarget2D _uiRenderTarget;
-        private Rectangle _bounds;
+        private readonly SpriteBatch _spriteBatch;
+        private readonly DrawingContext _drawingContext;
+        private UIElement _uiElement;
 
-        private SpriteBatch _spriteBatch;
-        private SpriteFont _font;
-        private SolidColorBrush _solidBrush;
-        private LinearGradientBrush _gradientBrush;
-        private RadialGradientBrush _radGradientBrush;
-
-        public InterfaceHost(IRenderSystem renderSystem, Rectangle bounds, SpriteFont font)
+        public InterfaceHost(IRenderSystem renderSystem, Rectangle bounds)
         {
-            _spriteBatch = new SpriteBatch(renderSystem);
-            _font = font;
-            _solidBrush = new SolidColorBrush(renderSystem, Color.Blue);
-            _gradientBrush = new LinearGradientBrush(renderSystem);
-            _gradientBrush.StartPoint = Vector2.Zero;
-            _gradientBrush.EndPoint = Vector2.UnitX;
-            _gradientBrush.GradientStops.Add(new GradientStop(0.0f, Color.Blue));
-            _gradientBrush.GradientStops.Add(new GradientStop(1.0f, Color.Red));
-            _radGradientBrush = new RadialGradientBrush(renderSystem);
-            _radGradientBrush.Radius = 0.5f;
-            _radGradientBrush.GradientStops.Add(new GradientStop(0.0f, Color.Blue));
-            _radGradientBrush.GradientStops.Add(new GradientStop(1.0f, Color.Red));
-
             if (renderSystem == null)
             {
                 throw new ArgumentNullException(nameof(renderSystem), "Render system cannot be null");
             }
 
             _renderSystem = renderSystem;
-            _bounds = bounds;
-
-            _uiRenderTarget = new RenderTarget2D(renderSystem, _bounds.Width, _bounds.Height);
+            _spriteBatch = new SpriteBatch(renderSystem);
+            _drawingContext = new DrawingContext(renderSystem, bounds);
         }
         
         public Rectangle Bounds
         {
-            get => _bounds;
+            get
+            {
+
+                ThrowIfDisposed();
+
+                return _drawingContext.Bounds;
+            }
             set
             {
-                _bounds = value;
-                BoundsUpdated();
+                ThrowIfDisposed();
+
+                _drawingContext.Bounds = value;
+                RemeasureContent();
+            }
+        }
+
+        public UIElement Content
+        {
+            get => _uiElement;
+            set
+            {
+
+                ThrowIfDisposed();
+
+                _uiElement = value;
+                RemeasureContent();
             }
         }
         
-        public void ProcessVisibleSet(IRenderContext context)
+        public void Render(IRenderContext context)
         {
-            context.SetRenderTarget(_uiRenderTarget);
+            ThrowIfDisposed();
 
-            _spriteBatch.Begin(context);
-            _spriteBatch.DrawString(_font, "Hello, world!", Vector2.Zero, Color.Green);
+            if (_uiElement == null)
+            {
+                return;
+            }
 
-            _spriteBatch.Draw(_solidBrush.BrushTexture, new Rectangle(30, 300, 250, 250), Color.White);
-            _spriteBatch.Draw(_gradientBrush.BrushTexture, new Rectangle(300, 300, 250, 250), Color.White);
-            _spriteBatch.Draw(_radGradientBrush.BrushTexture, new Rectangle(570, 300, 250, 250), Color.White);
-
-            _spriteBatch.End();
-
-
-
-
-
-            context.SetRenderTarget(null);
-
-            _spriteBatch.Begin(context);
-            _spriteBatch.Draw(_uiRenderTarget, _bounds, Color.White);
-            _spriteBatch.End();
+            _drawingContext.Begin(context);
+            _uiElement.Draw(_drawingContext);
+            _drawingContext.End();
         }
-
-        private void BoundsUpdated()
+        
+        private void RemeasureContent()
         {
-            _uiRenderTarget.Dispose();
-            _uiRenderTarget = new RenderTarget2D(_renderSystem, Bounds.Width, Bounds.Height);
+            if (_uiElement == null)
+            {
+                return;
+            }
+
+            _uiElement.UpdateLayout();
+            _uiElement.Measure(new Size(Bounds.Width, Bounds.Height));
+            _uiElement.Arrange(new RectangleF(Bounds.X, Bounds.Y, Bounds.Width, Bounds.Height));
         }
 
         protected override void Dispose(bool isDisposing)
@@ -93,7 +91,7 @@
 
             if (isDisposing)
             {
-                _uiRenderTarget.Dispose();
+                _drawingContext.Dispose();
             }
 
             base.Dispose(isDisposing);

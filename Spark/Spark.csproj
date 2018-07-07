@@ -465,6 +465,7 @@
     <Compile Include="UI\Brushes\GradientBrush.cs" />
     <Compile Include="UI\Brushes\GradientStop.cs" />
     <Compile Include="UI\Brushes\GradientStopCollection.cs" />
+    <Compile Include="UI\Drawing\DrawingContext.cs" />
     <Compile Include="UI\Core\FrameworkElement.cs" />
     <Compile Include="UI\Core\UIElement.cs" />
     <Compile Include="UI\DependencyProperties\DependencyObject.cs" />
@@ -483,6 +484,9 @@
     <Compile Include="UI\DependencyProperties\UpdateSourceTrigger.cs" />
     <Compile Include="UI\Core\VerticalAlignment.cs" />
     <Compile Include="UI\Core\Visibility.cs" />
+    <Compile Include="UI\Pens\Pen.cs" />
+    <Compile Include="UI\Shapes\RectangleShape.cs" />
+    <Compile Include="UI\Shapes\Shape.cs" />
     <Compile Include="Utilities\ArrayExtensions.cs" />
     <Compile Include="Utilities\ArrayHelper.cs" />
     <Compile Include="Utilities\Disposable.cs" />

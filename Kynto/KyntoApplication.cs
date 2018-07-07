@@ -12,7 +12,8 @@
     using Spark.Direct3D11.Graphics;
     using Spark.Toolkit.Input;
     using Spark.UI;
-        
+    using Spark.UI.Shapes;
+
     /// <summary>
     /// Main application window
     /// </summary>
@@ -98,7 +99,16 @@
             camEntity.AddComponent(new OrbitCameraController(RenderSystem.ImmediateContext.Camera, Vector3.Zero));
             _world.Add(camEntity);
 
-            _host = new InterfaceHost(RenderSystem, new Rectangle(0, 0, GameWindow.ClientBounds.Width, GameWindow.ClientBounds.Height), _font);
+            _host = new InterfaceHost(RenderSystem, new Rectangle(0, 0, GameWindow.ClientBounds.Width, GameWindow.ClientBounds.Height));
+            _host.Content = new RectangleShape
+            {
+                Width = 100,
+                Height = 100,
+                Margin = new Thickness(10),
+                Fill = new SolidColorBrush(Color.Blue),
+                Stroke = new SolidColorBrush(Color.Yellow),
+                StrokeThickness = 3
+            };
 
             base.LoadContent(content);
         }
@@ -113,7 +123,7 @@
             context.Clear(Color.Black);
             _world.ProcessVisibleSet(_forwardRenderer);
             _forwardRenderer.Render();
-            _host.ProcessVisibleSet(context);
+            _host.Render(context);
         }
 
         private MaterialDefinition CreateMaterial(Color color)
