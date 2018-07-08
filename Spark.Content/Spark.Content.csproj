@@ -49,7 +49,9 @@
     <Compile Include="Importers\Textures\BitmapTextureImporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Spark\Spark.csproj">
       <Project>{9059028c-0b79-48ef-8e76-bdb59aa424d7}</Project>

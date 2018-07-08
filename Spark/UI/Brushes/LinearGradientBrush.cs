@@ -21,8 +21,7 @@
 
         public override bool Equals(object obj)
         {
-            LinearGradientBrush linGradBrush = obj as LinearGradientBrush;
-            if (linGradBrush != null)
+            if (obj is LinearGradientBrush linGradBrush)
             {
                 return Equals(linGradBrush);
             }
@@ -32,8 +31,7 @@
 
         public override bool Equals(Brush other)
         {
-            LinearGradientBrush linGradBrush = other as LinearGradientBrush;
-            if (linGradBrush != null)
+            if (other is LinearGradientBrush linGradBrush)
             {
                 return base.Equals(other);
             }

@@ -112,10 +112,7 @@
 
         private void InvalidateParentBrush()
         {
-            if (BrushInvalidate != null)
-            {
-                BrushInvalidate();
-            }
+            BrushInvalidate?.Invoke();
         }
     }
 }

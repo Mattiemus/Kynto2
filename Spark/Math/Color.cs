@@ -3,6 +3,8 @@
     using System;
     using System.Globalization;
     using System.Runtime.InteropServices;
+    using System.Collections.Generic;
+    using System.Reflection;
 
     using Content;
 
@@ -13,6 +15,8 @@
     [StructLayout(LayoutKind.Sequential, Size = 4)]
     public struct Color : IEquatable<Color>, IFormattable, IPrimitiveValue
     {
+        private static Dictionary<string, Color> NamedColors;
+
         /// <summary>
         /// Red component.
         /// </summary>
@@ -138,6 +142,25 @@
             G = (byte)MathHelper.ClampAndRound(rgba.Y * 255.0f, 0.0f, 255.0f);
             B = (byte)MathHelper.ClampAndRound(rgba.Z * 255.0f, 0.0f, 255.0f);
             A = (byte)MathHelper.ClampAndRound(rgba.W * 255.0f, 0.0f, 255.0f);
+        }
+
+        /// <summary>
+        /// Static constructor for the <see cref="Color"/> struct.
+        /// </summary>
+        static Color()
+        {
+            NamedColors = new Dictionary<string, Color>();
+
+            PropertyInfo[] props = typeof(Color).GetProperties(BindingFlags.Public | BindingFlags.Static);
+            foreach (PropertyInfo p in props)
+            {
+                if (p.PropertyType == typeof(Color))
+                {
+                    NamedColors.Add(
+                        p.Name.ToLower(),
+                        (Color)p.GetValue(null, null));
+                }
+            }
         }
 
         /// <summary>
@@ -733,6 +756,100 @@
             result.G = (byte)MathHelper.ClampToByte(a.G + (int)((b.G - a.G) * amt));
             result.B = (byte)MathHelper.ClampToByte(a.B + (int)((b.B - a.B) * amt));
             result.A = (byte)MathHelper.ClampToByte(a.A + (int)((b.A - a.A) * amt));
+        }
+
+        /// <summary>
+        /// Gets a color by its name
+        /// </summary>
+        /// <param name="name">Color name</param>
+        /// <returns>Color that goes by the given name</returns>
+        public static Color GetNamedColor(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+
+            if (NamedColors.TryGetValue(name.ToLower(), out Color color))
+            {
+                return color;
+            }
+
+            throw new SparkException($"Unknown named color '{name}'");
+        }
+
+        /// <summary>
+        /// Parses a hexadecimal color
+        /// </summary>
+        /// <param name="hexValue">Hex color value</param>
+        /// <returns>Color defined by the hex value</returns>
+        public static Color ParseHexColor(string hexValue)
+        {
+            int a = 255;
+            int r;
+            int g;
+            int b;
+
+            Func<char, int> ParseHexChar = c =>
+            {
+                const int zeroChar = '0';
+                const int aLower = 'a';
+                const int aUpper = 'A';
+                
+                int intChar = c;
+                if ((intChar >= zeroChar) && (intChar <= (zeroChar + 9)))
+                {
+                    return (intChar - zeroChar);
+                }
+
+                if ((intChar >= aLower) && (intChar <= (aLower + 5)))
+                {
+                    return (intChar - aLower + 10);
+                }
+
+                if ((intChar >= aUpper) && (intChar <= (aUpper + 5)))
+                {
+                    return (intChar - aUpper + 10);
+                }
+
+                throw new ArgumentException("Character is not a valid hexadecimal value", nameof(c));
+            };
+
+            if (hexValue.Length > 7)
+            {
+                a = ParseHexChar(hexValue[1]) * 16 + ParseHexChar(hexValue[2]);
+                r = ParseHexChar(hexValue[3]) * 16 + ParseHexChar(hexValue[4]);
+                g = ParseHexChar(hexValue[5]) * 16 + ParseHexChar(hexValue[6]);
+                b = ParseHexChar(hexValue[7]) * 16 + ParseHexChar(hexValue[8]);
+            }
+            else if (hexValue.Length > 5)
+            {
+                r = ParseHexChar(hexValue[1]) * 16 + ParseHexChar(hexValue[2]);
+                g = ParseHexChar(hexValue[3]) * 16 + ParseHexChar(hexValue[4]);
+                b = ParseHexChar(hexValue[5]) * 16 + ParseHexChar(hexValue[6]);
+            }
+            else if (hexValue.Length > 4)
+            {
+                a = ParseHexChar(hexValue[1]);
+                a = a + a * 16;
+                r = ParseHexChar(hexValue[2]);
+                r = r + r * 16;
+                g = ParseHexChar(hexValue[3]);
+                g = g + g * 16;
+                b = ParseHexChar(hexValue[4]);
+                b = b + b * 16;
+            }
+            else
+            {
+                r = ParseHexChar(hexValue[1]);
+                r = r + r * 16;
+                g = ParseHexChar(hexValue[2]);
+                g = g + g * 16;
+                b = ParseHexChar(hexValue[3]);
+                b = b + b * 16;
+            }
+
+            return new Color(r, g, b, a);
         }
 
         /// <summary>

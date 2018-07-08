@@ -34,12 +34,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -461,7 +463,12 @@
     <Compile Include="Scene\SceneHints.cs" />
     <Compile Include="Scene\Spatial.cs" />
     <Compile Include="Scene\Visual.cs" />
+    <Compile Include="UI\Bindings\Binding.cs" />
+    <Compile Include="UI\Bindings\BindingMode.cs" />
+    <Compile Include="UI\Bindings\PropertyPath.cs" />
     <Compile Include="UI\Brushes\Brush.cs" />
+    <Compile Include="UI\Brushes\BrushConveter.cs" />
+    <Compile Include="UI\Brushes\Brushes.cs" />
     <Compile Include="UI\Brushes\GradientBrush.cs" />
     <Compile Include="UI\Brushes\GradientStop.cs" />
     <Compile Include="UI\Brushes\GradientStopCollection.cs" />
@@ -469,25 +476,30 @@
     <Compile Include="UI\Controls\Control.cs" />
     <Compile Include="UI\Controls\Panel.cs" />
     <Compile Include="UI\Controls\StackPanel.cs" />
+    <Compile Include="UI\Core\Style.cs" />
     <Compile Include="UI\Core\Orientation.cs" />
+    <Compile Include="UI\Core\Setter.cs" />
+    <Compile Include="UI\Core\SetterCollection.cs" />
+    <Compile Include="UI\Core\Trigger.cs" />
+    <Compile Include="UI\Core\TriggerCollection.cs" />
     <Compile Include="UI\Core\UIElementCollection.cs" />
     <Compile Include="UI\Drawing\DrawingContext.cs" />
     <Compile Include="UI\Core\FrameworkElement.cs" />
     <Compile Include="UI\Core\UIElement.cs" />
-    <Compile Include="UI\DependencyProperties\DependencyObject.cs" />
-    <Compile Include="UI\DependencyProperties\DependencyProperty.cs" />
-    <Compile Include="UI\DependencyProperties\DependencyPropertyChangedEventArgs.cs" />
-    <Compile Include="UI\DependencyProperties\FrameworkPropertyMetadata.cs" />
-    <Compile Include="UI\DependencyProperties\FrameworkPropertyMetadataOptions.cs" />
+    <Compile Include="UI\Bindings\DependencyObject.cs" />
+    <Compile Include="UI\Bindings\DependencyProperty.cs" />
+    <Compile Include="UI\Bindings\DependencyPropertyChangedEventArgs.cs" />
+    <Compile Include="UI\Bindings\FrameworkPropertyMetadata.cs" />
+    <Compile Include="UI\Bindings\FrameworkPropertyMetadataOptions.cs" />
     <Compile Include="UI\Core\HorizontalAlignment.cs" />
     <Compile Include="UI\InterfaceHost.cs" />
     <Compile Include="UI\Brushes\LinearGradientBrush.cs" />
     <Compile Include="UI\Brushes\RadialGradientBrush.cs" />
     <Compile Include="UI\Brushes\SolidColorBrush.cs" />
-    <Compile Include="UI\DependencyProperties\PropertyChangedCallback.cs" />
-    <Compile Include="UI\DependencyProperties\PropertyMetadata.cs" />
+    <Compile Include="UI\Bindings\PropertyChangedCallback.cs" />
+    <Compile Include="UI\Bindings\PropertyMetadata.cs" />
     <Compile Include="UI\Core\Thickness.cs" />
-    <Compile Include="UI\DependencyProperties\UpdateSourceTrigger.cs" />
+    <Compile Include="UI\Bindings\UpdateSourceTrigger.cs" />
     <Compile Include="UI\Core\VerticalAlignment.cs" />
     <Compile Include="UI\Core\Visibility.cs" />
     <Compile Include="UI\Pens\Pen.cs" />
@@ -504,6 +516,8 @@
     <Compile Include="Utilities\VisitLock.cs" />
     <Compile Include="Utilities\WeakAction.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

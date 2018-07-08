@@ -43,8 +43,7 @@
 
         public override bool Equals(object obj)
         {
-            SolidColorBrush solidBrush = obj as SolidColorBrush;
-            if (solidBrush != null)
+            if (obj is SolidColorBrush solidBrush)
             {
                 return Equals(solidBrush);
             }
@@ -54,8 +53,7 @@
 
         public override bool Equals(Brush other)
         {
-            SolidColorBrush solidBrush = other as SolidColorBrush;
-            if (solidBrush != null)
+            if (other is SolidColorBrush solidBrush)
             {
                 return Color == solidBrush.Color &&
                        base.Equals(other);

@@ -48,6 +48,8 @@
             RenderSystem.ImmediateContext.Camera.Viewport = new Viewport(0, 0, GameWindow.ClientBounds.Width, GameWindow.ClientBounds.Height);
             RenderSystem.ImmediateContext.Camera.SetProjection(45, 1, 1000000);
 
+            _host.Bounds = new Rectangle(0, 0, GameWindow.ClientBounds.Width, GameWindow.ClientBounds.Height);
+
             base.OnViewportResized(gameWindow);
         }
 
@@ -103,12 +105,14 @@
             _host = new InterfaceHost(RenderSystem, new Rectangle(0, 0, GameWindow.ClientBounds.Width, GameWindow.ClientBounds.Height));
             
             _host.Content = new ContentControl
-            {
-                HorizontalContentAlignment = HorizontalAlignment.Stretch,
+            { 
                 Content = new RectangleShape
                 {
+                    Width = 100,
                     Height = 100,
-                    Fill = new SolidColorBrush(Color.Purple)
+                    Fill = new SolidColorBrush(Color.Purple),
+                    Stroke = new SolidColorBrush(Color.Yellow),
+                    StrokeThickness = 1
                 }
             };
 

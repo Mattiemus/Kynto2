@@ -1,11 +1,13 @@
 ﻿namespace Spark.UI
 {
     using System;
+    using System.ComponentModel;
 
     using Graphics;
     using Math;
     using Utilities;
 
+    [TypeConverter(typeof(BrushConverter))]
     public abstract class Brush : Disposable, IEquatable<Brush>
     {
         private float _opacity;
@@ -39,8 +41,7 @@
 
         public override bool Equals(object obj)
         {
-            Brush other = obj as Brush;
-            if (other != null)
+            if (obj is Brush other)
             {
                 return Equals(other);
             }

@@ -63,8 +63,7 @@
 
         public override bool Equals(object obj)
         {
-            GradientBrush gradBrush = obj as GradientBrush;
-            if (gradBrush != null)
+            if (obj is GradientBrush gradBrush)
             {
                 return Equals(gradBrush);
             }
@@ -74,15 +73,17 @@
 
         public override bool Equals(Brush other)
         {
-            GradientBrush gradBrush = other as GradientBrush;
-            if (gradBrush != null && base.Equals(other) && StartPoint == gradBrush.StartPoint && EndPoint == gradBrush.EndPoint)
+            if (other is GradientBrush gradBrush && 
+                base.Equals(other) && 
+                StartPoint == gradBrush.StartPoint && 
+                EndPoint == gradBrush.EndPoint)
             {
-                GradientStop[] stops 
+                GradientStop[] stops
                     = GradientStops
                         .OrderBy(g => g.Offset)
                         .ToArray();
 
-                GradientStop[] brushStops 
+                GradientStop[] brushStops
                     = gradBrush.GradientStops
                         .OrderBy(g => g.Offset)
                         .ToArray();

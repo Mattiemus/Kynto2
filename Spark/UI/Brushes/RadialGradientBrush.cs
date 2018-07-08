@@ -64,8 +64,7 @@
 
         public override bool Equals(object obj)
         {
-            RadialGradientBrush radGradBrush = obj as RadialGradientBrush;
-            if (radGradBrush != null)
+            if (obj is RadialGradientBrush radGradBrush)
             {
                 return Equals(radGradBrush);
             }
@@ -75,8 +74,7 @@
 
         public override bool Equals(Brush other)
         {
-            RadialGradientBrush radGradBrush = other as RadialGradientBrush;
-            if (radGradBrush != null)
+            if (other is RadialGradientBrush radGradBrush)
             {
                 return MathHelper.IsApproxEquals(Radius, radGradBrush.Radius) &&
                        Center == radGradBrush.Center &&
