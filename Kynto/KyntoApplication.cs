@@ -11,20 +11,17 @@
     using Spark.Engine;
     using Spark.Direct3D11.Graphics;
     using Spark.Toolkit.Input;
-    using Spark.UI;
+    using Spark.UI.Media;
     using Spark.UI.Controls;
-    using Spark.UI.Shapes;
 
     /// <summary>
     /// Main application window
     /// </summary>
     public sealed class KyntoApplication : SparkApplication
     {
-        private InterfaceHost _host;
         private ForwardRenderer _forwardRenderer;
         private World _world;
         private Texture2D _pixel;
-        private SpriteFont _font;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="KyntoApplication"/> class.
@@ -48,8 +45,6 @@
             RenderSystem.ImmediateContext.Camera.Viewport = new Viewport(0, 0, GameWindow.ClientBounds.Width, GameWindow.ClientBounds.Height);
             RenderSystem.ImmediateContext.Camera.SetProjection(45, 1, 1000000);
 
-            _host.Bounds = new Rectangle(0, 0, GameWindow.ClientBounds.Width, GameWindow.ClientBounds.Height);
-
             base.OnViewportResized(gameWindow);
         }
 
@@ -60,7 +55,6 @@
             content.ResourceImporters.Add(new BitmapFontImporter());
                         
             _pixel = Content.Load<Texture2D>("Content/pixel.png");
-            _font = Content.Load<SpriteFont>("Content/font.fnt");
 
             _world = new World();
 
@@ -102,19 +96,14 @@
             camEntity.AddComponent(new OrbitCameraController(RenderSystem.ImmediateContext.Camera, Vector3.Zero));
             _world.Add(camEntity);
 
-            _host = new InterfaceHost(RenderSystem, new Rectangle(0, 0, GameWindow.ClientBounds.Width, GameWindow.ClientBounds.Height));
-            
-            _host.Content = new ContentControl
-            { 
-                Content = new RectangleShape
-                {
-                    Width = 100,
-                    Height = 100,
-                    Fill = new SolidColorBrush(Color.Purple),
-                    Stroke = new SolidColorBrush(Color.Yellow),
-                    StrokeThickness = 1
-                }
+            InterfaceHost.Content = new Border
+            {
+                Background = new SolidColorBrush(Color.Purple),
+                BorderBrush = new SolidColorBrush(Color.Yellow),
+                BorderThickness = new Thickness(1.0f)
             };
+
+            InterfaceHost.DoLayoutPass();
 
             base.LoadContent(content);
         }
@@ -129,7 +118,6 @@
             context.Clear(Color.Black);
             _world.ProcessVisibleSet(_forwardRenderer);
             _forwardRenderer.Render();
-            _host.Render(context);
         }
 
         private MaterialDefinition CreateMaterial(Color color)

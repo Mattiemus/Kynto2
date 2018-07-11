@@ -1,38 +1,58 @@
 ﻿namespace Spark.UI.Controls
 {
-    public abstract class Panel : Control
+    using System.Collections;
+    using System.ComponentModel;
+    using System.Windows.Markup;
+
+    using Media;
+
+    [ContentProperty("Children")]
+    public abstract class Panel : FrameworkElement
     {
+        public static readonly DependencyProperty BackgroundProperty =
+            DependencyProperty.Register(
+                "Background",
+                typeof(Brush),
+                typeof(Panel),
+                new FrameworkPropertyMetadata(
+                    null,
+                    FrameworkPropertyMetadataOptions.AffectsRender));
+
+        public static readonly DependencyProperty IsItemsHostProperty =
+            DependencyProperty.Register(
+                "IsItemsHost",
+                typeof(bool),
+                typeof(Panel));
+
         protected Panel()
         {
-            Children = new UIElementCollection(this);
+            InternalChildren = new UIElementCollection(this, this);
         }
 
-        public UIElementCollection Children { get; }
-
-        public override void Initialize()
+        public Brush Background
         {
-            foreach (UIElement child in Children)
-            {
-                if (child != null)
-                {
-                    child.Initialize();
-                }
-            }
-
-            base.Initialize();
+            get => (Brush)GetValue(BackgroundProperty);
+            set => SetValue(BackgroundProperty, value);
         }
 
-        public override void Draw(DrawingContext drawingContext)
-        {
-            base.Draw(drawingContext);
+        public UIElementCollection Children => IsItemsHost ? null : InternalChildren;
 
-            if (IsVisible)
-            {
-                foreach (UIElement child in Children)
-                {
-                    child.Draw(drawingContext);
-                }
-            }
+        [Bindable(false)]
+        public bool IsItemsHost
+        {
+            get => (bool)GetValue(IsItemsHostProperty);
+            set => SetValue(IsItemsHostProperty, value);
+        }
+
+        protected internal override IEnumerator LogicalChildren => InternalChildren.GetEnumerator();
+
+        protected internal UIElementCollection InternalChildren { get; }
+
+        protected internal override int VisualChildrenCount => InternalChildren.Count;
+
+        protected internal override Visual GetVisualChild(int index)
+        {
+            return InternalChildren[index];
         }
     }
 }

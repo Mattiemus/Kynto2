@@ -1,149 +1,86 @@
 ﻿namespace Spark.UI.Controls
 {
+    using System.Windows.Markup;
+
+    using Math;
+
+    [ContentProperty(nameof(Content))]
     public class ContentControl : Control
     {
-        public static readonly DependencyProperty ContentProperty 
-            = DependencyProperty.Register(
+        public static readonly DependencyProperty ContentProperty =
+            DependencyProperty.Register(
                 nameof(Content),
                 typeof(object),
                 typeof(ContentControl),
-                new PropertyMetadata(
-                    (s, e) => 
-                    {
-                        ContentControl cc = s as ContentControl;
-                        if (cc == null)
-                        {
-                            return;
-                        }
+                new FrameworkPropertyMetadata(
+                    null,
+                    FrameworkPropertyMetadataOptions.AffectsMeasure,
+                    ContentPropertyChanged));
 
-                        UIElement newValue = e.NewValue as UIElement;
-                        if (newValue != null)
-                        {
-                            newValue.Parent = cc;
-                        }
-
-                        FrameworkElement ctrl = e.NewValue as FrameworkElement;
-                        if (ctrl != null)
-                        {
-                            cc._contentControl = ctrl;
-                        }
-                        else
-                        {
-                            cc._contentControl = null;
-                        } 
-                        
-                        cc.OnContentChanged(e.OldValue, e.NewValue);
-                    }));
-
-        public static readonly DependencyProperty HorizontalContentAlignmentProperty 
-            = DependencyProperty.Register(
-                nameof(HorizontalContentAlignment),
-                typeof(HorizontalAlignment),
+        public static readonly DependencyProperty ContentTemplateProperty =
+            DependencyProperty.Register(
+                nameof(ContentTemplate),
+                typeof(DataTemplate),
                 typeof(ContentControl),
-                new PropertyMetadata(HorizontalAlignment.Center));
+                new FrameworkPropertyMetadata(
+                    null,
+                    FrameworkPropertyMetadataOptions.AffectsMeasure));
 
-        public static readonly DependencyProperty VerticalContentAlignmentProperty 
-            = DependencyProperty.Register(
-                nameof(VerticalContentAlignment),
-                typeof(VerticalAlignment),
+        static ContentControl()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(
                 typeof(ContentControl),
-                new PropertyMetadata(VerticalAlignment.Center));
-        
-        private FrameworkElement _contentControl;
+                new FrameworkPropertyMetadata(typeof(ContentControl)));
+        }
 
         public object Content
         {
-            get { return GetValue(ContentProperty); }
-            set { SetValue(ContentProperty, value); }
+            get => GetValue(ContentProperty);
+            set => SetValue(ContentProperty, value);
         }
 
-        public bool HasContent
+        public DataTemplate ContentTemplate
         {
-            get
+            get => (DataTemplate)GetValue(ContentTemplateProperty);
+            set => SetValue(ContentTemplateProperty, value);
+        }
+
+        protected override Size MeasureOverride(Size constraint)
+        {
+            if (VisualChildrenCount > 0)
             {
-                return Content != null;
-            }
-        }
+                UIElement ui = GetVisualChild(0) as UIElement;
 
-        public HorizontalAlignment HorizontalContentAlignment
-        {
-            get { return (HorizontalAlignment)GetValue(HorizontalContentAlignmentProperty); }
-            set { SetValue(HorizontalContentAlignmentProperty, value); }
-        }
-
-        public VerticalAlignment VerticalContentAlignment
-        {
-            get { return (VerticalAlignment)GetValue(VerticalContentAlignmentProperty); }
-            set { SetValue(VerticalContentAlignmentProperty, value); }
-        }
-
-        public override void Initialize()
-        {
-            if (_contentControl != null && !_contentControl.IsInitialized)
-            {
-                _contentControl.Initialize();
-            }
-
-            base.Initialize();
-        }
-
-        protected virtual void OnContentChanged(object oldContent, object newContent)
-        {
-        }
-
-        protected override float GetAbsoluteLeft(UIElement child)
-        {
-            if (child == Content)
-            {
-                float absLeft = GetAbsoluteLeft();
-                switch (HorizontalContentAlignment)
+                if (ui != null)
                 {
-                    case HorizontalAlignment.Left:
-                        return absLeft + Padding.Left - Padding.Right;
-                    case HorizontalAlignment.Center:
-                        return absLeft + ActualWidth / 2.0f - child.ActualWidth / 2.0f;
-                    case HorizontalAlignment.Right:
-                        return absLeft + ActualWidth - child.ActualWidth - Padding.Right + Padding.Left;
+                    ui.Measure(constraint);
+                    return ui.DesiredSize;
                 }
             }
 
-            return base.GetAbsoluteLeft(child);
+            return base.MeasureOverride(constraint);
         }
 
-        protected override float GetAbsoluteTop(UIElement child)
+        protected override Size ArrangeOverride(Size finalSize)
         {
-            if (child == Content)
+            if (VisualChildrenCount > 0)
             {
-                float absTop = GetAbsoluteTop();
-                switch (VerticalContentAlignment)
+                UIElement ui = GetVisualChild(0) as UIElement;
+                FrameworkElement fe = ui as FrameworkElement;
+
+                if (ui != null)
                 {
-                    case VerticalAlignment.Top:
-                        return absTop + Padding.Top - Padding.Bottom;
-                    case VerticalAlignment.Center:
-                        return absTop + ActualHeight / 2.0f - child.ActualHeight / 2.0f;
-                    case VerticalAlignment.Bottom:
-                        return absTop + ActualHeight - child.ActualHeight + Padding.Top - Padding.Bottom;
+                    ui.Arrange(new RectangleF(Vector2.Zero, finalSize));
+                    return finalSize;
                 }
             }
 
-            return base.GetAbsoluteTop(child);
+            return base.ArrangeOverride(finalSize);
         }
 
-        public override void Draw(DrawingContext drawingContext)
+        private static void ContentPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            base.Draw(drawingContext);
-
-            if (Content == null || !IsVisible)
-            {
-                return;
-            }
-
-            if (_contentControl != null)
-            {
-                _contentControl.Draw(drawingContext);
-            }
-
-            // TODO: Draw content as string as fallback
+            ((ContentControl)d).IsInitialized = true;
         }
     }
 }

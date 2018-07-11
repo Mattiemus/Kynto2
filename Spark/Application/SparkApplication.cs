@@ -7,6 +7,10 @@
     using Content;
     using Graphics;
     using Input;
+    using UI.Controls;
+
+    using UIMouse = UI.Input.Mouse;
+    using UIKeyboard = UI.Input.Keyboard;
 
     public abstract class SparkApplication
     {
@@ -74,6 +78,8 @@
         public ApplicationHost GameHost { get; private set; }
 
         public ContentManager Content { get; private set; }
+
+        public InterfaceHost InterfaceHost { get; private set; }
 
         public IRenderSystem RenderSystem { get; private set; }
 
@@ -179,6 +185,11 @@
 
         protected abstract void Render(IRenderContext context, IGameTime time);
 
+        protected virtual void RenderUI(IRenderContext context, IGameTime time)
+        {
+            InterfaceHost.Render(context);
+        }
+
         private void Initialize(PresentationParameters presentParams, IResourceRepository resourceRepo, IPlatformInitializer platformInitializer, ApplicationMode mode)
         {
             Engine = SparkEngine.Initialize(platformInitializer);
@@ -205,6 +216,8 @@
                 GameWindow.SuspendRendering += SuspendRendering;
                 GameWindow.ClientSizeChanged += ClientSizeChanged;
                 _swapChain = GameWindow.SwapChain;
+
+                InterfaceHost = new InterfaceHost(RenderSystem, new Size(GameWindow.ClientBounds.Width, GameWindow.ClientBounds.Height));
             }
 
             ClearColor = Color.CornflowerBlue;
@@ -378,6 +391,8 @@
             MaterialBinding.GameTime = gameTime;
 
             Engine.UpdateServices();
+            UIMouse.PrimaryDevice.Update();
+            UIKeyboard.PrimaryDevice.Update();
             Update(gameTime);
         }
 
@@ -392,6 +407,7 @@
                 _swapChain.SetActiveAndClear(_renderContext, ClearOptions.All, ClearColor, 1.0f, 0);
 
                 Render(_renderContext, gameTime);
+                RenderUI(_renderContext, gameTime);
 
                 _swapChain.Present();
             }
@@ -399,6 +415,7 @@
             else if (RenderSystem != null)
             {
                 Render(_renderContext, gameTime);
+                RenderUI(_renderContext, gameTime);
             }
         }
 
@@ -447,6 +464,12 @@
             if (!IsRunning)
             {
                 return;
+            }
+
+            if (InterfaceHost != null)
+            {
+                InterfaceHost.Width = GameWindow.ClientBounds.Width;
+                InterfaceHost.Height = GameWindow.ClientBounds.Height;
             }
 
             OnViewportResized(GameWindow);
