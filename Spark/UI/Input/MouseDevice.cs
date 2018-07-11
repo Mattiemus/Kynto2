@@ -81,7 +81,7 @@ namespace Spark.UI.Input
 
             if (newState.LeftButton == ButtonState.Pressed && oldState.LeftButton == ButtonState.Released)
             {
-                InputManager.Current.ProcessInput(new MouseEventArgs(this)
+                InputManager.Current.ProcessInput(new MouseButtonEventArgs(this)
                 {
                     RoutedEvent = UIElement.MouseLeftButtonDownEvent
                 });
@@ -89,7 +89,7 @@ namespace Spark.UI.Input
 
             if (newState.LeftButton == ButtonState.Released && oldState.LeftButton == ButtonState.Pressed)
             {
-                InputManager.Current.ProcessInput(new MouseEventArgs(this)
+                InputManager.Current.ProcessInput(new MouseButtonEventArgs(this)
                 {
                     RoutedEvent = UIElement.MouseLeftButtonUpEvent
                 });

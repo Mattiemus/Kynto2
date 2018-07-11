@@ -469,6 +469,7 @@
     <Compile Include="Scene\Visual.cs" />
     <Compile Include="UI\Animation\Animatable.cs" />
     <Compile Include="UI\Controls\Border.cs" />
+    <Compile Include="UI\Controls\Button.cs" />
     <Compile Include="UI\Controls\ContentControl.cs" />
     <Compile Include="UI\Controls\ContentPresenter.cs" />
     <Compile Include="UI\Controls\Control.cs" />
@@ -476,6 +477,7 @@
     <Compile Include="UI\Controls\Decorator.cs" />
     <Compile Include="UI\Controls\InterfaceHost.cs" />
     <Compile Include="UI\Controls\Panel.cs" />
+    <Compile Include="UI\Controls\Primitives\ButtonBase.cs" />
     <Compile Include="UI\Controls\TemplateContent.cs" />
     <Compile Include="UI\Controls\UIElementCollection.cs" />
     <Compile Include="UI\CornerRadius.cs" />

@@ -96,16 +96,26 @@
             camEntity.AddComponent(new OrbitCameraController(RenderSystem.ImmediateContext.Camera, Vector3.Zero));
             _world.Add(camEntity);
 
-            InterfaceHost.Content = new Border
+            InterfaceHost.Content = new Button
             {
-                Background = new SolidColorBrush(Color.Purple),
-                BorderBrush = new SolidColorBrush(Color.Yellow),
-                BorderThickness = new Thickness(1.0f)
+                Width = 100,
+                Height = 100,
+                Content = new FixedSizedComponent(),
+                HorizontalAlignment = Spark.UI.HorizontalAlignment.Center,
+                VerticalAlignment = Spark.UI.VerticalAlignment.Center
             };
 
             InterfaceHost.DoLayoutPass();
 
             base.LoadContent(content);
+        }
+
+        public class FixedSizedComponent : Spark.UI.FrameworkElement
+        {
+            protected override Size MeasureOverride(Size constraint)
+            {
+                return new Size(100, 100);
+            }
         }
         
         protected override void Update(IGameTime time)
