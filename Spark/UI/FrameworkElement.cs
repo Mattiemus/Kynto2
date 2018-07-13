@@ -385,12 +385,12 @@
             availableSize = new Size(
                 Math.Max(0, availableSize.Width - Margin.Left - Margin.Right),
                 Math.Max(0, availableSize.Height - Margin.Top - Margin.Bottom));
-
+            
             Size size = MeasureOverride(availableSize);
 
             size = new Size(
-                Math.Min(availableSize.Width, size.Width + Margin.Left + Margin.Right),
-                Math.Min(availableSize.Height, size.Height + Margin.Top + Margin.Bottom));
+                Math.Min(availableSize.Width, float.IsNaN(Width) ? size.Width + Margin.Left + Margin.Right : Width),
+                Math.Min(availableSize.Height, float.IsNaN(Height) ? size.Height + Margin.Top + Margin.Bottom : Height));
 
             return size;
         }
@@ -407,8 +407,8 @@
                 finalRect.Top + Margin.Top);
 
             Size size = new Size(
-                Math.Max(0, finalRect.Width - Margin.Left - Margin.Right),
-                Math.Max(0, finalRect.Height - Margin.Top - Margin.Bottom));
+                Math.Max(0, (float.IsNaN(Width) ? finalRect.Width : Width) - Margin.Left - Margin.Right),
+                Math.Max(0, (float.IsNaN(Width) ? finalRect.Height : Height) - Margin.Top - Margin.Bottom));
 
             if (HorizontalAlignment != HorizontalAlignment.Stretch)
             {
@@ -421,7 +421,7 @@
             }
 
             Size taken = ArrangeOverride(size);
-
+            
             size = new Size(
                 Math.Min(taken.Width, size.Width),
                 Math.Min(taken.Height, size.Height));
@@ -451,7 +451,9 @@
 
         protected virtual Size ArrangeOverride(Size finalSize)
         {
-            return finalSize;
+            return new Size(
+                float.IsNaN(Width) ? finalSize.Width : Width,
+                float.IsNaN(Height) ? finalSize.Height : Height);
         }
 
         protected virtual void OnInitialized(EventArgs e)

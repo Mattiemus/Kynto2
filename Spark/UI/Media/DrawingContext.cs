@@ -1,6 +1,7 @@
 ﻿namespace Spark.UI.Media
 {
     using System;
+    using System.Collections.Generic;
 
     using Graphics;
     using Math;
@@ -9,12 +10,14 @@
     public class DrawingContext : Disposable
     {
         private readonly IRenderSystem _renderSystem;
+        private readonly Stack<Matrix4x4> _transformStack;
         private IRenderContext _renderContext;
         private readonly SpriteBatch _spriteBatch;
         private RenderTarget2D _uiRenderTarget;
         private Rectangle _bounds;
+        private Matrix4x4 _currentTransform;
         private bool _inBeginEnd;
-
+        
         public DrawingContext(IRenderSystem renderSystem, Rectangle bounds)
         {
             if (renderSystem == null)
@@ -23,9 +26,11 @@
             }
 
             _renderSystem = renderSystem;
+            _transformStack = new Stack<Matrix4x4>();
             _spriteBatch = new SpriteBatch(renderSystem);
             _uiRenderTarget = new RenderTarget2D(renderSystem, bounds.Width, bounds.Height);
             _bounds = bounds;
+            _currentTransform = Matrix4x4.Identity;
         }
 
         internal Rectangle Bounds
@@ -117,11 +122,11 @@
             {
                 _spriteBatch.Draw(
                     brush.GetTexture(_renderSystem),
-                    new Rectangle(
-                        (int)rectangle.X,
-                        (int)rectangle.Y,
-                        (int)rectangle.Width,
-                        (int)rectangle.Height),
+                    new RectangleF(
+                        rectangle.X + _currentTransform.Translation.X,
+                        rectangle.Y + _currentTransform.Translation.Y,
+                        rectangle.Width,
+                        rectangle.Height),
                     Color.White);
             }
 
@@ -129,38 +134,38 @@
             {
                 _spriteBatch.Draw(
                     pen.Brush.GetTexture(_renderSystem),
-                    new Rectangle(
-                        (int)(rectangle.X + pen.Thickness),
-                        (int)rectangle.Y,
-                        (int)(rectangle.Width - pen.Thickness - pen.Thickness),
-                        (int)pen.Thickness),
+                    new RectangleF(
+                        rectangle.X + pen.Thickness + _currentTransform.Translation.X,
+                        rectangle.Y + _currentTransform.Translation.Y,
+                        rectangle.Width - pen.Thickness - pen.Thickness,
+                        pen.Thickness),
                     Color.White);
 
                 _spriteBatch.Draw(
                     pen.Brush.GetTexture(_renderSystem),
-                    new Rectangle(
-                        (int)(rectangle.X + pen.Thickness),
-                        (int)(rectangle.Y + rectangle.Height - pen.Thickness),
-                        (int)(rectangle.Width - pen.Thickness - pen.Thickness),
-                        (int)pen.Thickness),
+                    new RectangleF(
+                        rectangle.X + pen.Thickness + _currentTransform.Translation.X,
+                        rectangle.Y + rectangle.Height - pen.Thickness + _currentTransform.Translation.Y,
+                        rectangle.Width - pen.Thickness - pen.Thickness,
+                        pen.Thickness),
                     Color.White);
 
                 _spriteBatch.Draw(
                     pen.Brush.GetTexture(_renderSystem),
-                    new Rectangle(
-                        (int)(rectangle.X),
-                        (int)(rectangle.Y),
-                        (int)(pen.Thickness),
-                        (int)(rectangle.Height)),
+                    new RectangleF(
+                        rectangle.X + _currentTransform.Translation.X,
+                        rectangle.Y + _currentTransform.Translation.Y,
+                        pen.Thickness,
+                        rectangle.Height),
                     Color.White);
 
                 _spriteBatch.Draw(
                     pen.Brush.GetTexture(_renderSystem),
-                    new Rectangle(
-                        (int)(rectangle.X + rectangle.Width - pen.Thickness),
-                        (int)(rectangle.Y),
-                        (int)(pen.Thickness),
-                        (int)(rectangle.Height)),
+                    new RectangleF(
+                        rectangle.X + rectangle.Width - pen.Thickness + _currentTransform.Translation.X,
+                        rectangle.Y + _currentTransform.Translation.Y,
+                        pen.Thickness,
+                        rectangle.Height),
                     Color.White);
             }
         }
@@ -176,15 +181,21 @@
         {
 
         }
-
-        public void PushTransform(Transform transform)
+        
+        public void PushTranslation(Vector2 translation)
         {
-
+            _transformStack.Push(_currentTransform);
+            _currentTransform *= Matrix4x4.FromTranslation(translation.X, translation.Y, 0.0f);
         }
 
         public void Pop()
         {
+            if (_transformStack.Count == 0)
+            {
+                return;
+            }
 
+            _currentTransform = _transformStack.Pop();
         }
 
         protected override void Dispose(bool isDisposing)

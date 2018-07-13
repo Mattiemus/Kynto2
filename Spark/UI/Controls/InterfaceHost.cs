@@ -88,9 +88,7 @@
 
             if (uiElement != null)
             {
-                // TODO:
-                //TranslateTransform translate = new TranslateTransform(uiElement.VisualOffset);
-                //drawingContext.PushTransform(translate);
+                drawingContext.PushTranslation(uiElement.VisualOffset);
                 ++popCount;
 
                 if (uiElement.Opacity != 1)

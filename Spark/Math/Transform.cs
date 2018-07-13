@@ -126,8 +126,7 @@
         {
             return new Transform(this);
         }
-
-
+        
         /// <summary>
         /// Sets the transform with the store from the supplied transform.
         /// </summary>

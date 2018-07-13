@@ -86,7 +86,25 @@
         /// Gets the bottom-most Y coordinate (Top + Height).
         /// </summary>
         public float Bottom => Y + Height;
-        
+
+        /// <summary>
+        /// Gets if the current rectangle is the empty rectangle, where the top left coordinate and width/height are all zero, and thus
+        /// define a rectangle that has no area.
+        /// </summary>
+        public bool IsEmpty => MathHelper.IsApproxZero(X) && MathHelper.IsApproxZero(Y) && MathHelper.IsApproxZero(Width) && MathHelper.IsApproxZero(Height);
+
+        /// <summary>
+        /// Gets whether any of the components of the rectangle are NaN (Not A Number).
+        /// </summary>
+        public bool IsNaN => float.IsNaN(X) || float.IsNaN(Y) || float.IsNaN(Width) || float.IsNaN(Height);
+
+        /// <summary>
+        /// Gets whether any of the components of the rectangle are positive or negative infinity.
+        /// </summary>
+        public bool IsInfinity => float.IsNegativeInfinity(X) || float.IsPositiveInfinity(X) || float.IsNegativeInfinity(Y) || float.IsPositiveInfinity(Y) ||
+                                  float.IsNegativeInfinity(Width) || float.IsPositiveInfinity(Width) || float.IsNegativeInfinity(Height) || float.IsNegativeInfinity(Height);
+
+
         public static RectangleF Inflate(RectangleF rect, float width, float height)
         {
             if (width < rect.Width * -2)

@@ -476,8 +476,10 @@
     <Compile Include="UI\Controls\ControlTemplate.cs" />
     <Compile Include="UI\Controls\Decorator.cs" />
     <Compile Include="UI\Controls\InterfaceHost.cs" />
+    <Compile Include="UI\Controls\Orientation.cs" />
     <Compile Include="UI\Controls\Panel.cs" />
     <Compile Include="UI\Controls\Primitives\ButtonBase.cs" />
+    <Compile Include="UI\Controls\StackPanel.cs" />
     <Compile Include="UI\Controls\TemplateContent.cs" />
     <Compile Include="UI\Controls\UIElementCollection.cs" />
     <Compile Include="UI\CornerRadius.cs" />

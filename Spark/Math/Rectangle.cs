@@ -118,7 +118,7 @@
         public int Bottom => Y + Height;
 
         /// <summary>
-        /// Gets if t he current rectangle is the empty rectangle, where the top left coordinate and width/height are all zero, and thus
+        /// Gets if the current rectangle is the empty rectangle, where the top left coordinate and width/height are all zero, and thus
         /// define a rectangle that has no area.
         /// </summary>
         public bool IsEmpty => X == 0 && Y == 0 && Width == 0 && Height == 0;
@@ -126,13 +126,12 @@
         /// <summary>
         /// Gets whether any of the components of the rectangle are NaN (Not A Number).
         /// </summary>
-        public bool IsNaN => float.IsNaN(X) || float.IsNaN(Y) || float.IsNaN(Width) || float.IsNaN(Height);
+        public bool IsNaN => false;
 
         /// <summary>
         /// Gets whether any of the components of the rectangle are positive or negative infinity.
         /// </summary>
-        public bool IsInfinity => float.IsNegativeInfinity(X) || float.IsPositiveInfinity(X) || float.IsNegativeInfinity(Y) || float.IsPositiveInfinity(Y) ||
-                                  float.IsNegativeInfinity(Width) || float.IsPositiveInfinity(Width) || float.IsNegativeInfinity(Height) || float.IsNegativeInfinity(Height);
+        public bool IsInfinity => false;
 
         /// <summary>
         /// Creates a rectangle that represents the intersection (overlap) of two rectangles. This may return an empty triangle.

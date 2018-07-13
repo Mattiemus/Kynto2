@@ -6,12 +6,12 @@
 
     using Media;
 
-    [ContentProperty("Children")]
+    [ContentProperty(nameof(Children))]
     public abstract class Panel : FrameworkElement
     {
         public static readonly DependencyProperty BackgroundProperty =
             DependencyProperty.Register(
-                "Background",
+                nameof(Background),
                 typeof(Brush),
                 typeof(Panel),
                 new FrameworkPropertyMetadata(
@@ -20,7 +20,7 @@
 
         public static readonly DependencyProperty IsItemsHostProperty =
             DependencyProperty.Register(
-                "IsItemsHost",
+                nameof(IsItemsHost),
                 typeof(bool),
                 typeof(Panel));
 

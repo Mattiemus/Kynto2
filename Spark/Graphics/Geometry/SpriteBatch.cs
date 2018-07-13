@@ -483,6 +483,20 @@
         /// <param name="destinationRectangle">Rectangle that specifies (in screen coordinates) the destination, position and size, for drawing the sprite. If this rectangle is not the same size as the source,
         /// the sprite will be scaled to fit.</param>
         /// <param name="tintColor">Color to tint the sprite. Use <see cref="Color.White"/> for no tinting.</param>
+        public void Draw(Texture2D texture, RectangleF destinationRectangle, Color tintColor)
+        {
+            Vector4 dstRect = new Vector4(destinationRectangle.X, destinationRectangle.Y, destinationRectangle.Width, destinationRectangle.Height);
+            DrawInternal(texture, dstRect, null, false, tintColor, Angle.Zero, Vector2.Zero, SpriteFlipEffect.None, 0);
+        }
+
+        /// <summary>
+        /// Adds a sprite to the batch for rendering using the specified parameters. Depending on the sort mode
+        /// this may be an immediate draw operation or one queued for later processing.
+        /// </summary>
+        /// <param name="texture">Sprite texture</param>
+        /// <param name="destinationRectangle">Rectangle that specifies (in screen coordinates) the destination, position and size, for drawing the sprite. If this rectangle is not the same size as the source,
+        /// the sprite will be scaled to fit.</param>
+        /// <param name="tintColor">Color to tint the sprite. Use <see cref="Color.White"/> for no tinting.</param>
         /// <param name="angle">Rotation angle to rotate the sprite about its origin.</param>
         public void Draw(Texture2D texture, Rectangle destinationRectangle, Color tintColor, Angle angle)
         {
