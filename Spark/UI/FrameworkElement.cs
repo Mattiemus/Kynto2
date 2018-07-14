@@ -383,9 +383,9 @@
             ApplyTemplate();
 
             availableSize = new Size(
-                Math.Max(0, availableSize.Width - Margin.Left - Margin.Right),
-                Math.Max(0, availableSize.Height - Margin.Top - Margin.Bottom));
-            
+                Math.Max(0, float.IsNaN(Width) ? availableSize.Width : Width),
+                Math.Max(0, float.IsNaN(Height) ? availableSize.Height : Height));
+
             Size size = MeasureOverride(availableSize);
 
             size = new Size(
@@ -429,23 +429,23 @@
             switch (HorizontalAlignment)
             {
                 case HorizontalAlignment.Center:
-                    origin.X += (finalRect.Width - size.Width) / 2;
+                    origin.X += ((finalRect.Width - size.Width) / 2.0f) - Margin.Left;
                     break;
                 case HorizontalAlignment.Right:
-                    origin.X += finalRect.Width - size.Width;
+                    origin.X += (finalRect.Width - size.Width) - Margin.Left;
                     break;
             }
 
             switch (VerticalAlignment)
             {
                 case VerticalAlignment.Center:
-                    origin.Y += (finalRect.Height - size.Height) / 2;
+                    origin.Y += ((finalRect.Height - size.Height) / 2.0f) - Margin.Top;
                     break;
                 case VerticalAlignment.Bottom:
-                    origin.Y += finalRect.Height - size.Height;
+                    origin.Y += (finalRect.Height - size.Height) - Margin.Top;
                     break;
             }
-
+            
             base.ArrangeCore(new RectangleF(origin, size));
         }
 

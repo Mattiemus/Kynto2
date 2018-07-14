@@ -14,7 +14,7 @@
     /// use the minimum number of draw calls needed to render all the requested sprites
     /// to the screen.
     /// </summary>
-    public class SpriteBatch : Disposable
+    public sealed class SpriteBatch : Disposable
     {
         private const int MaxBatchSize = 2048;
 

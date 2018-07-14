@@ -26,7 +26,7 @@
             Mouse.PrimaryDevice.ActiveSource = PresentationSource;
             Keyboard.PrimaryDevice.ActiveSource = PresentationSource;
             
-            _drawingContext = new DrawingContext(renderSystem, new Rectangle(0, 0, (int)Math.Ceiling(initialSize.Width), (int)Math.Ceiling(initialSize.Height)));
+            _drawingContext = new DrawingContext(renderSystem);
 
             Background = new SolidColorBrush(Color.TransparentBlack);
             Width = initialSize.Width;

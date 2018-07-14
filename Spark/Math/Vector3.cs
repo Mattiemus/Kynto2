@@ -425,9 +425,13 @@
         /// <param name="result">Resulting vector</param>
         public static void Multiply(ref Matrix4x4 m, ref Vector3 value, out Vector3 result)
         {
-            result.X = (m.M11 * value.X) + (m.M12 * value.Y) + (m.M13 * value.Z);
-            result.Y = (m.M21 * value.X) + (m.M22 * value.Y) + (m.M23 * value.Z);
-            result.Z = (m.M31 * value.X) + (m.M32 * value.Y) + (m.M33 * value.Z);
+            float x = (m.M11 * value.X) + (m.M12 * value.Y) + (m.M13 * value.Z);
+            float y = (m.M21 * value.X) + (m.M22 * value.Y) + (m.M23 * value.Z);
+            float z = (m.M31 * value.X) + (m.M32 * value.Y) + (m.M33 * value.Z);
+
+            result.X = x;
+            result.Y = y;
+            result.Z = z;
         }
 
         /// <summary>

@@ -57,7 +57,7 @@
 
         public static readonly DependencyProperty VerticalContentAlignmentProperty =
             DependencyProperty.Register(
-                "VerticalContentAlignment",
+                nameof(VerticalContentAlignment),
                 typeof(VerticalAlignment),
                 typeof(Control),
                 new FrameworkPropertyMetadata(VerticalAlignment.Top));

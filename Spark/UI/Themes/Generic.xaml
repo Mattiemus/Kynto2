@@ -25,7 +25,7 @@
         <Setter Property="Background" Value="#FFDDDDDD" />
         <Setter Property="BorderBrush" Value="#FF707070" />
         <!--<Setter Property="Foreground" Value="Black" />-->
-        <Setter Property="BorderThickness" Value="5" />
+        <Setter Property="BorderThickness" Value="1" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Padding" Value="1" />

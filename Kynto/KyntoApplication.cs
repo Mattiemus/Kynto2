@@ -1,5 +1,6 @@
 ﻿namespace Kynto
 {
+    using System;
     using System.Linq;
 
     using Spark;
@@ -13,6 +14,7 @@
     using Spark.Toolkit.Input;
     using Spark.UI.Media;
     using Spark.UI.Controls;
+    using Spark.UI.Shapes;
 
     /// <summary>
     /// Main application window
@@ -96,27 +98,88 @@
             camEntity.AddComponent(new OrbitCameraController(RenderSystem.ImmediateContext.Camera, Vector3.Zero));
             _world.Add(camEntity);
 
-            var test = new StackPanel
+            var stack = new StackPanel();
+            stack.Children.Add(new Button
             {
-                //HorizontalAlignment = Spark.UI.HorizontalAlignment.Stretch,
-                VerticalAlignment = Spark.UI.VerticalAlignment.Bottom
-            };
-
-            test.Children.Add(new Button
+                Width = 128,
+                Height = 128,
+                Opacity = 1.0f,
+                Margin = new Thickness(1),
+                Content = new Path
+                {
+                    Stretch = Stretch.Fill,
+                    Data = Geometry.Parse("M 0 5 L 5 5 L 5 0 L 10 0 L 10 5 L 15 5 L 15 10 L 10 10 L 10 15 L 5 15 L 5 10 L 0 10 Z"),
+                    Fill = new SolidColorBrush(Color.Blue)
+                }
+            });
+            stack.Children.Add(new Button
             {
-                Width = 256,
-                Height = 32,
-                Margin = new Thickness(3)
+                Width = 128,
+                Height = 128,
+                Opacity = 0.7f,
+                Margin = new Thickness(1),
+                Content = new Path
+                {
+                    Stretch = Stretch.Fill,
+                    Data = Geometry.Parse("M 0 5 L 5 5 L 5 0 L 10 0 L 10 5 L 15 5 L 15 10 L 10 10 L 10 15 L 5 15 L 5 10 L 0 10 Z"),
+                    Fill = new SolidColorBrush(Color.Blue)
+                }
+            });
+            stack.Children.Add(new Button
+            {
+                Width = 128,
+                Height = 128,
+                Opacity = 0.6f,
+                Margin = new Thickness(1),
+                Content = new Path
+                {
+                    Stretch = Stretch.Fill,
+                    Data = Geometry.Parse("M 0 5 L 5 5 L 5 0 L 10 0 L 10 5 L 15 5 L 15 10 L 10 10 L 10 15 L 5 15 L 5 10 L 0 10 Z"),
+                    Fill = new SolidColorBrush(Color.Blue)
+                }
             });
 
-            test.Children.Add(new Button
+
+
+            StreamGeometry sg = new StreamGeometry();
+            using (var ctx = sg.Open())
             {
-                Width = 512,
-                Height = 64,
-                Margin = new Thickness(3)
+                Vector2 center = new Vector2(0.5f, 0.5f);
+
+                float rU = 0.5f;
+                float z = (float)Math.PI / 10.0f;
+
+                float pt1X = center.X + rU;
+                float pt1Y = center.Y;
+
+                ctx.BeginFigure(new Vector2(pt1X, pt1Y), true, false);
+
+                int j = 0;
+                for (double i = z; i <= Math.PI * 2.0; i += z)
+                {
+                    float ptX = (float)(((pt1X - center.X) * Math.Cos(i)) + ((pt1Y - center.Y) * -Math.Sin(i)) + center.X);
+                    float ptY = (float)(((pt1X - center.X) * Math.Sin(i)) + ((pt1Y - center.Y) * Math.Cos(i)) + center.Y);
+
+                    ctx.LineTo(new Vector2(ptX, ptY), true, false);
+
+                    j += 1;
+                }
+            }
+
+            stack.Children.Add(new Button
+            {
+                Width = 128,
+                Height = 128,
+                Margin = new Thickness(1),
+                Content = new Path
+                {
+                    Stretch = Stretch.Fill,
+                    Data = sg,
+                    Fill = new SolidColorBrush(Color.Blue)
+                }
             });
 
-            InterfaceHost.Content = test;
+            InterfaceHost.Content = stack;
 
             InterfaceHost.DoLayoutPass();
 

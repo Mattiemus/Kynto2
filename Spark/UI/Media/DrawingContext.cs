@@ -10,15 +10,15 @@
     public class DrawingContext : Disposable
     {
         private readonly IRenderSystem _renderSystem;
-        private readonly Stack<Matrix4x4> _transformStack;
-        private IRenderContext _renderContext;
-        private readonly SpriteBatch _spriteBatch;
-        private RenderTarget2D _uiRenderTarget;
-        private Rectangle _bounds;
+        private readonly Polygon2DBatch _polygonBatch;
+
+        private readonly Stack<DrawState> _drawStateStack;
+        private float _currentOpacity;
         private Matrix4x4 _currentTransform;
+        
         private bool _inBeginEnd;
         
-        public DrawingContext(IRenderSystem renderSystem, Rectangle bounds)
+        public DrawingContext(IRenderSystem renderSystem)
         {
             if (renderSystem == null)
             {
@@ -26,28 +26,11 @@
             }
 
             _renderSystem = renderSystem;
-            _transformStack = new Stack<Matrix4x4>();
-            _spriteBatch = new SpriteBatch(renderSystem);
-            _uiRenderTarget = new RenderTarget2D(renderSystem, bounds.Width, bounds.Height);
-            _bounds = bounds;
+            _polygonBatch = new Polygon2DBatch(renderSystem);
+
+            _drawStateStack = new Stack<DrawState>();
+            _currentOpacity = 1.0f;
             _currentTransform = Matrix4x4.Identity;
-        }
-
-        internal Rectangle Bounds
-        {
-            get
-            {
-                ThrowIfDisposed();
-
-                return _bounds;
-            }
-            set
-            {
-                ThrowIfDisposed();
-
-                _bounds = value;
-                BoundsUpdated();
-            }
         }
 
         internal void Begin(IRenderContext renderContext)
@@ -64,12 +47,9 @@
                 throw new ArgumentNullException(nameof(renderContext), "Render context cannot be null");
             }
 
-            _renderContext = renderContext;
             _inBeginEnd = true;
 
-            renderContext.SetRenderTarget(_uiRenderTarget);
-
-            _spriteBatch.Begin(_renderContext);
+            _polygonBatch.Begin(renderContext);
         }
 
         internal void End()
@@ -81,28 +61,48 @@
                 throw new InvalidOperationException("End called before begin");
             }
 
-            _spriteBatch.End();
-
-            _renderContext.SetRenderTarget(null);
-
-            _spriteBatch.Begin(_renderContext);
-            _spriteBatch.Draw(_uiRenderTarget, _bounds, Color.White);
-            _spriteBatch.End();
-
-            _renderContext = null;
+            _polygonBatch.End();
+            
             _inBeginEnd = false;
         }
 
-        //public abstract void DrawGeometry(Brush brush, Pen pen, Geometry geometry);
+        public void DrawGeometry(Brush brush, Pen pen, Geometry geometry, Matrix4x4 matrix)
+        {
+            ThrowIfDisposed();
+
+            if (!_inBeginEnd)
+            {
+                throw new InvalidOperationException("DrawRectangle called before begin");
+            }
+
+            if (brush == null && pen == null)
+            {
+                return;
+            }
+
+            if (brush != null)
+            {
+                Color fillBrushColor = GetBrushColor(brush);
+                fillBrushColor.A = (byte)(fillBrushColor.A * _currentOpacity);
+
+                Matrix4x4 translationMatrix = matrix * _currentTransform;
+                
+                DataBuffer<VertexPositionColor> vertexData = (DataBuffer<VertexPositionColor>)geometry.VertexData.Clone();
+                for (int i = 0; i < vertexData.Length; i++)
+                {
+                    VertexPositionColor current = vertexData[i];
+                    vertexData[i] = new VertexPositionColor(Vector3.Transform(current.Position, translationMatrix), fillBrushColor);
+                }
+
+                _polygonBatch.DrawRaw(vertexData, geometry.IndexData);
+            }
+        }
 
         //public abstract void DrawImage(ImageSource imageSource, RectangleF rectangle);
 
         //public abstract void DrawImage(ImageSource imageSource, float opacity, RectangleF sourceRectangle, RectangleF destinationRectangle);
 
-        public void DrawLine(Pen pen, Vector2 point0, Vector2 point1)
-        {
-
-        }
+        //public void DrawLine(Pen pen, Vector2 point0, Vector2 point1);
 
         public void DrawRectangle(Brush brush, Pen pen, RectangleF rectangle)
         {
@@ -120,82 +120,81 @@
 
             if (brush != null)
             {
-                _spriteBatch.Draw(
-                    brush.GetTexture(_renderSystem),
+                Color fillBrushColor = GetBrushColor(brush);
+                fillBrushColor.A = (byte)(fillBrushColor.A * _currentOpacity);
+
+                _polygonBatch.DrawRectangle(
                     new RectangleF(
                         rectangle.X + _currentTransform.Translation.X,
                         rectangle.Y + _currentTransform.Translation.Y,
                         rectangle.Width,
                         rectangle.Height),
-                    Color.White);
+                    fillBrushColor);
             }
 
             if (pen != null && pen.Brush != null && !MathHelper.IsApproxZero(pen.Thickness))
             {
-                _spriteBatch.Draw(
-                    pen.Brush.GetTexture(_renderSystem),
+                Color penBrushColor = GetBrushColor(pen.Brush);
+                penBrushColor.A = (byte)(penBrushColor.A * _currentOpacity);
+
+                _polygonBatch.DrawRectangle(
                     new RectangleF(
                         rectangle.X + pen.Thickness + _currentTransform.Translation.X,
                         rectangle.Y + _currentTransform.Translation.Y,
                         rectangle.Width - pen.Thickness - pen.Thickness,
                         pen.Thickness),
-                    Color.White);
+                    penBrushColor);
 
-                _spriteBatch.Draw(
-                    pen.Brush.GetTexture(_renderSystem),
+                _polygonBatch.DrawRectangle(
                     new RectangleF(
                         rectangle.X + pen.Thickness + _currentTransform.Translation.X,
                         rectangle.Y + rectangle.Height - pen.Thickness + _currentTransform.Translation.Y,
                         rectangle.Width - pen.Thickness - pen.Thickness,
                         pen.Thickness),
-                    Color.White);
+                    penBrushColor);
 
-                _spriteBatch.Draw(
-                    pen.Brush.GetTexture(_renderSystem),
+                _polygonBatch.DrawRectangle(
                     new RectangleF(
                         rectangle.X + _currentTransform.Translation.X,
                         rectangle.Y + _currentTransform.Translation.Y,
                         pen.Thickness,
                         rectangle.Height),
-                    Color.White);
+                    penBrushColor);
 
-                _spriteBatch.Draw(
-                    pen.Brush.GetTexture(_renderSystem),
+                _polygonBatch.DrawRectangle(
                     new RectangleF(
                         rectangle.X + rectangle.Width - pen.Thickness + _currentTransform.Translation.X,
                         rectangle.Y + _currentTransform.Translation.Y,
                         pen.Thickness,
                         rectangle.Height),
-                    Color.White);
+                    penBrushColor);
             }
         }
 
         public void DrawRoundedRectangle(Brush brush, Pen pen, RectangleF rectangle, float radiusX, float radiusY)
         {
-
+            // TODO
         }
 
         //public abstract void DrawText(FormattedText formattedText, Vector2 origin);
 
         public void PushOpacity(float opacity)
         {
-
+            _drawStateStack.Push(new DrawState { Transform = _currentTransform, Opacity = _currentOpacity });
+            _currentOpacity *= opacity;
         }
         
         public void PushTranslation(Vector2 translation)
         {
-            _transformStack.Push(_currentTransform);
+            _drawStateStack.Push(new DrawState { Transform = _currentTransform, Opacity = _currentOpacity });
             _currentTransform *= Matrix4x4.FromTranslation(translation.X, translation.Y, 0.0f);
         }
 
         public void Pop()
         {
-            if (_transformStack.Count == 0)
-            {
-                return;
-            }
-
-            _currentTransform = _transformStack.Pop();
+            DrawState newDrawState = _drawStateStack.Pop();
+            _currentOpacity = newDrawState.Opacity;
+            _currentTransform = newDrawState.Transform;
         }
 
         protected override void Dispose(bool isDisposing)
@@ -207,17 +206,26 @@
 
             if (isDisposing)
             {
-                _uiRenderTarget.Dispose();
-                _spriteBatch.Dispose();
+                _polygonBatch.Dispose();
             }
 
             base.Dispose(isDisposing);
         }
 
-        private void BoundsUpdated()
+        private Color GetBrushColor(Brush brush)
         {
-            _uiRenderTarget.Dispose();
-            _uiRenderTarget = new RenderTarget2D(_renderSystem, Bounds.Width, Bounds.Height);
+            if (brush is SolidColorBrush solidColorBrush)
+            {
+                return solidColorBrush.Color;
+            }
+
+            throw new NotSupportedException("Only solid color brushes are currently supported");
+        }
+
+        private struct DrawState
+        {
+            public Matrix4x4 Transform;
+            public float Opacity;
         }
     }
 }
