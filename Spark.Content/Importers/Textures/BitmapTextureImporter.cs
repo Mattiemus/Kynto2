@@ -57,7 +57,7 @@
         /// <param name="parameters">Optional loading parameters.</param>
         /// <param name="texName">Name of the texture being loaded</param>
         /// <returns>The loaded texture or null if it could not be loaded</returns>
-        private Texture2D LoadInternal(Stream input, ContentManager contentManager, ImporterParameters parameters, String texName)
+        private Texture2D LoadInternal(Stream input, ContentManager contentManager, ImporterParameters parameters, string texName)
         {
             using (var bitmap = new SD.Bitmap(input))
             {

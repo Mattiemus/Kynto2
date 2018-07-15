@@ -12,9 +12,16 @@
     using Spark.Engine;
     using Spark.Direct3D11.Graphics;
     using Spark.Toolkit.Input;
+    using Spark.UI;
     using Spark.UI.Media;
     using Spark.UI.Controls;
     using Spark.UI.Shapes;
+    using Spark.UI.Content;
+
+    public class MainUI : StackPanel
+    {
+
+    }
 
     /// <summary>
     /// Main application window
@@ -55,7 +62,9 @@
             content.ResourceImporters.Add(new Effects11ResourceImporter());
             content.ResourceImporters.Add(new BitmapTextureImporter());
             content.ResourceImporters.Add(new BitmapFontImporter());
-                        
+            content.ResourceImporters.Add(new XamlResourceDictionaryResourceImporter());
+            content.ResourceImporters.Add(new XamUIElementResourceImporter());
+
             _pixel = Content.Load<Texture2D>("Content/pixel.png");
 
             _world = new World();
@@ -80,11 +89,6 @@
 
 
             
-
-
-
-
-            
             var camEntity = new Entity();
             camEntity.AddComponent(new CameraComponent
             {
@@ -97,90 +101,11 @@
             
             camEntity.AddComponent(new OrbitCameraController(RenderSystem.ImmediateContext.Camera, Vector3.Zero));
             _world.Add(camEntity);
-
-            var stack = new StackPanel();
-            stack.Children.Add(new Button
-            {
-                Width = 128,
-                Height = 128,
-                Opacity = 1.0f,
-                Margin = new Thickness(1),
-                Content = new Path
-                {
-                    Stretch = Stretch.Fill,
-                    Data = Geometry.Parse("M 0 5 L 5 5 L 5 0 L 10 0 L 10 5 L 15 5 L 15 10 L 10 10 L 10 15 L 5 15 L 5 10 L 0 10 Z"),
-                    Fill = new SolidColorBrush(Color.Blue)
-                }
-            });
-            stack.Children.Add(new Button
-            {
-                Width = 128,
-                Height = 128,
-                Opacity = 0.7f,
-                Margin = new Thickness(1),
-                Content = new Path
-                {
-                    Stretch = Stretch.Fill,
-                    Data = Geometry.Parse("M 0 5 L 5 5 L 5 0 L 10 0 L 10 5 L 15 5 L 15 10 L 10 10 L 10 15 L 5 15 L 5 10 L 0 10 Z"),
-                    Fill = new SolidColorBrush(Color.Blue)
-                }
-            });
-            stack.Children.Add(new Button
-            {
-                Width = 128,
-                Height = 128,
-                Opacity = 0.6f,
-                Margin = new Thickness(1),
-                Content = new Path
-                {
-                    Stretch = Stretch.Fill,
-                    Data = Geometry.Parse("M 0 5 L 5 5 L 5 0 L 10 0 L 10 5 L 15 5 L 15 10 L 10 10 L 10 15 L 5 15 L 5 10 L 0 10 Z"),
-                    Fill = new SolidColorBrush(Color.Blue)
-                }
-            });
+            
 
 
 
-            StreamGeometry sg = new StreamGeometry();
-            using (var ctx = sg.Open())
-            {
-                Vector2 center = new Vector2(0.5f, 0.5f);
-
-                float rU = 0.5f;
-                float z = (float)Math.PI / 10.0f;
-
-                float pt1X = center.X + rU;
-                float pt1Y = center.Y;
-
-                ctx.BeginFigure(new Vector2(pt1X, pt1Y), true, false);
-
-                int j = 0;
-                for (double i = z; i <= Math.PI * 2.0; i += z)
-                {
-                    float ptX = (float)(((pt1X - center.X) * Math.Cos(i)) + ((pt1Y - center.Y) * -Math.Sin(i)) + center.X);
-                    float ptY = (float)(((pt1X - center.X) * Math.Sin(i)) + ((pt1Y - center.Y) * Math.Cos(i)) + center.Y);
-
-                    ctx.LineTo(new Vector2(ptX, ptY), true, false);
-
-                    j += 1;
-                }
-            }
-
-            stack.Children.Add(new Button
-            {
-                Width = 128,
-                Height = 128,
-                Margin = new Thickness(1),
-                Content = new Path
-                {
-                    Stretch = Stretch.Fill,
-                    Data = sg,
-                    Fill = new SolidColorBrush(Color.Blue)
-                }
-            });
-
-            InterfaceHost.Content = stack;
-
+            InterfaceHost.Content = Content.Load<UIElement>("Content\\MainUI.xaml");
             InterfaceHost.DoLayoutPass();
 
             base.LoadContent(content);

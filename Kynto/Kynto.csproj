@@ -78,9 +78,9 @@
     <Content Include="Content\BasicEffect.fx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Content\font.fnt">
+    <Content Include="Content\font.fnt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Spark.Content\Spark.Content.csproj">
@@ -107,6 +107,13 @@
       <Project>{9059028c-0b79-48ef-8e76-bdb59aa424d7}</Project>
       <Name>Spark</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\MainUI.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
