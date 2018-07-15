@@ -149,7 +149,6 @@
     <Compile Include="Graphics\Effects\EffectHeader.cs" />
     <Compile Include="Graphics\Effects\ShaderCompileFlags.cs" />
     <Compile Include="Graphics\Geometry\CylinderGenerator.cs" />
-    <Compile Include="Graphics\Geometry\Polygon2DBatch.cs" />
     <Compile Include="Graphics\Geometry\PrimitiveBatch.cs" />
     <Compile Include="Graphics\Geometry\PrimitiveBatchTopology.cs" />
     <Compile Include="Graphics\Geometry\SphereGenerator.cs" />

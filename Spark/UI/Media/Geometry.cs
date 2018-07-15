@@ -45,7 +45,7 @@
             VertexData = vertexData;
 
             IndexData = indices;
-            
+                        
             Bounds = new RectangleF(
                 vertexData.Min(v => v.Position.X),
                 vertexData.Min(v => v.Position.Y),

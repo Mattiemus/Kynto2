@@ -10,7 +10,18 @@
     public class DrawingContext : Disposable
     {
         private readonly IRenderSystem _renderSystem;
-        private readonly Polygon2DBatch _polygonBatch;
+        private PrimitiveBatch<VertexPositionColor> _primitiveBatch;
+
+        private bool _applyCameraViewProjection;
+        private Matrix4x4 _worldMatrix;
+        private Effect _spriteEffect;
+        private IEffectParameter _matrixParam;
+        private IEffectParameter _samplerParam;
+        private readonly IEffectShaderGroup _pass;
+
+        private IRenderContext _renderContext;
+        private IShaderStage _pixelStage;
+        private SamplerState _ss;
 
         private readonly Stack<DrawState> _drawStateStack;
         private float _currentOpacity;
@@ -26,7 +37,12 @@
             }
 
             _renderSystem = renderSystem;
-            _polygonBatch = new Polygon2DBatch(renderSystem);
+            _primitiveBatch = new PrimitiveBatch<VertexPositionColor>(renderSystem);
+
+            _spriteEffect = renderSystem.StandardEffects.CreateEffect("Sprite");
+            _matrixParam = _spriteEffect.Parameters["SpriteTransform"];
+            _samplerParam = _spriteEffect.Parameters["SpriteMapSampler"];
+            _pass = _spriteEffect.ShaderGroups["SpriteNoTexture"];
 
             _drawStateStack = new Stack<DrawState>();
             _currentOpacity = 1.0f;
@@ -47,9 +63,21 @@
                 throw new ArgumentNullException(nameof(renderContext), "Render context cannot be null");
             }
 
-            _inBeginEnd = true;
+            _pixelStage = renderContext.GetShaderStage(ShaderStage.PixelShader);
+            _renderContext = renderContext;
+            
+            renderContext.BlendState = BlendState.AlphaBlendNonPremultiplied;
+            renderContext.RasterizerState = RasterizerState.CullBackClockwiseFront;
+            renderContext.DepthStencilState = DepthStencilState.None;
+            _ss = SamplerState.LinearClamp;
 
-            _polygonBatch.Begin(renderContext);
+            _worldMatrix = Matrix4x4.Identity;
+            _inBeginEnd = true;
+            _applyCameraViewProjection = false;
+
+            _primitiveBatch.Begin(renderContext);
+
+            ApplyEffect();
         }
 
         internal void End()
@@ -61,8 +89,14 @@
                 throw new InvalidOperationException("End called before begin");
             }
 
-            _polygonBatch.End();
-            
+            _primitiveBatch.End();
+
+            // Make sure we don't hold onto references...
+            _samplerParam.SetResource((SamplerState)null);
+
+            _renderContext = null;
+            _pixelStage = null;
+            _applyCameraViewProjection = false;
             _inBeginEnd = false;
         }
 
@@ -94,7 +128,7 @@
                     vertexData[i] = new VertexPositionColor(Vector3.Transform(current.Position, translationMatrix), fillBrushColor);
                 }
 
-                _polygonBatch.DrawRaw(vertexData, geometry.IndexData);
+                _primitiveBatch.DrawIndexed(PrimitiveBatchTopology.TriangleList, vertexData, geometry.IndexData);
             }
         }
 
@@ -123,7 +157,7 @@
                 Color fillBrushColor = GetBrushColor(brush);
                 fillBrushColor.A = (byte)(fillBrushColor.A * _currentOpacity);
 
-                _polygonBatch.DrawRectangle(
+                DrawRectangleInternal(
                     new RectangleF(
                         rectangle.X + _currentTransform.Translation.X,
                         rectangle.Y + _currentTransform.Translation.Y,
@@ -137,7 +171,7 @@
                 Color penBrushColor = GetBrushColor(pen.Brush);
                 penBrushColor.A = (byte)(penBrushColor.A * _currentOpacity);
 
-                _polygonBatch.DrawRectangle(
+                DrawRectangleInternal(
                     new RectangleF(
                         rectangle.X + pen.Thickness + _currentTransform.Translation.X,
                         rectangle.Y + _currentTransform.Translation.Y,
@@ -145,7 +179,7 @@
                         pen.Thickness),
                     penBrushColor);
 
-                _polygonBatch.DrawRectangle(
+                DrawRectangleInternal(
                     new RectangleF(
                         rectangle.X + pen.Thickness + _currentTransform.Translation.X,
                         rectangle.Y + rectangle.Height - pen.Thickness + _currentTransform.Translation.Y,
@@ -153,7 +187,7 @@
                         pen.Thickness),
                     penBrushColor);
 
-                _polygonBatch.DrawRectangle(
+                DrawRectangleInternal(
                     new RectangleF(
                         rectangle.X + _currentTransform.Translation.X,
                         rectangle.Y + _currentTransform.Translation.Y,
@@ -161,7 +195,7 @@
                         rectangle.Height),
                     penBrushColor);
 
-                _polygonBatch.DrawRectangle(
+                DrawRectangleInternal(
                     new RectangleF(
                         rectangle.X + rectangle.Width - pen.Thickness + _currentTransform.Translation.X,
                         rectangle.Y + _currentTransform.Translation.Y,
@@ -206,10 +240,56 @@
 
             if (isDisposing)
             {
-                _polygonBatch.Dispose();
+                if (_primitiveBatch != null)
+                {
+                    _primitiveBatch.Dispose();
+                    _primitiveBatch = null;
+                }
+
+                if (_spriteEffect != null)
+                {
+                    _spriteEffect.Dispose();
+                    _spriteEffect = null;
+                    _matrixParam = null;
+                    _samplerParam = null;
+                }
             }
 
             base.Dispose(isDisposing);
+        }
+
+        private void DrawRectangleInternal(RectangleF rect, Color color)
+        {
+            _primitiveBatch.DrawQuad(
+                new VertexPositionColor(new Vector3(rect.TopLeftPoint, 0.0f), color),
+                new VertexPositionColor(new Vector3(rect.TopRightPoint, 0.0f), color),
+                new VertexPositionColor(new Vector3(rect.BottomRightPoint, 0.0f), color),
+                new VertexPositionColor(new Vector3(rect.BottomLeftPoint, 0.0f), color));
+        }
+
+        /// <summary>
+        /// Applies the effect to being used when rendering
+        /// </summary>
+        private void ApplyEffect()
+        {
+            Matrix4x4 matrix = Matrix4x4.Identity;
+
+            if (_applyCameraViewProjection && _renderContext.Camera != null)
+            {
+                matrix = _renderContext.Camera.ViewProjectionMatrix;
+            }
+            else
+            {
+                Viewport viewport = (_renderContext.Camera == null) ? new Viewport(0, 0, 800, 600) : _renderContext.Camera.Viewport;
+
+                SpriteBatch.ComputeSpriteProjection(ref viewport, out matrix);
+            }
+
+            Matrix4x4.Multiply(ref _worldMatrix, ref matrix, out Matrix4x4 spriteTransform);
+            _matrixParam.SetValue(ref spriteTransform);
+            _samplerParam.SetResource(_ss);
+
+            _pass.Apply(_renderContext);
         }
 
         private Color GetBrushColor(Brush brush)
