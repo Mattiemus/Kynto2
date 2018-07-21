@@ -14,7 +14,7 @@
 
         public static readonly DependencyProperty BorderBrushProperty =
             DependencyProperty.Register(
-                "BorderBrush",
+                nameof(BorderBrush),
                 typeof(Brush),
                 typeof(Border),
                 new FrameworkPropertyMetadata(
@@ -23,7 +23,7 @@
 
         public static readonly DependencyProperty BorderThicknessProperty =
             DependencyProperty.Register(
-                "BorderThickness",
+                nameof(BorderThickness),
                 typeof(Thickness),
                 typeof(Border),
                 new FrameworkPropertyMetadata(
@@ -32,7 +32,7 @@
 
         public static readonly DependencyProperty CornerRadiusProperty =
             DependencyProperty.Register(
-                "CornerRadius",
+                nameof(CornerRadius),
                 typeof(CornerRadius),
                 typeof(Border),
                 new FrameworkPropertyMetadata(
@@ -41,7 +41,7 @@
 
         public static readonly DependencyProperty PaddingProperty =
             DependencyProperty.Register(
-                "Padding",
+                nameof(Padding),
                 typeof(Thickness),
                 typeof(Border),
                 new FrameworkPropertyMetadata(
@@ -81,38 +81,24 @@
         protected internal override void OnRender(DrawingContext drawingContext)
         {
             RectangleF brushRect = new RectangleF(Vector2.Zero, new Size(ActualWidth, ActualHeight));
-            RectangleF penRect = brushRect;
             Pen pen = null;
 
             if (BorderBrush != null && !BorderThickness.IsEmpty)
             {
                 pen = new Pen(BorderBrush, BorderThickness.Left);
-
-                float penOffset = -(pen.Thickness / 2);
-                brushRect.Inflate(-pen.Thickness, -pen.Thickness);
-                penRect.Inflate(penOffset, penOffset);
             }
 
-            if (CornerRadius.TopLeft > 0 || CornerRadius.BottomLeft > 0)
+            if (CornerRadius.TopLeft > 0 || CornerRadius.TopRight > 0 || CornerRadius.BottomLeft > 0 || CornerRadius.BottomRight > 0)
             {
                 drawingContext.DrawRoundedRectangle(
                     Background,
                     pen,
                     brushRect,
-                    CornerRadius.TopLeft,
-                    CornerRadius.BottomLeft);
+                    CornerRadius);
             }
             else
             {
-                if (Background != null)
-                {
-                    drawingContext.DrawRectangle(Background, null, brushRect);
-                }
-
-                if (pen != null)
-                {
-                    drawingContext.DrawRectangle(null, pen, penRect);
-                }
+                drawingContext.DrawRectangle(Background, pen, brushRect);
             }
         }
 

@@ -428,6 +428,7 @@
 
             switch (HorizontalAlignment)
             {
+                case HorizontalAlignment.Stretch:
                 case HorizontalAlignment.Center:
                     origin.X += ((finalRect.Width - size.Width) / 2.0f) - Margin.Left;
                     break;
@@ -438,6 +439,7 @@
 
             switch (VerticalAlignment)
             {
+                case VerticalAlignment.Stretch:
                 case VerticalAlignment.Center:
                     origin.Y += ((finalRect.Height - size.Height) / 2.0f) - Margin.Top;
                     break;

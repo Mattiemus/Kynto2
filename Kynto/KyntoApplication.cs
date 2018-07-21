@@ -1,6 +1,5 @@
 ﻿namespace Kynto
 {
-    using System;
     using System.Linq;
 
     using Spark;
@@ -13,15 +12,8 @@
     using Spark.Direct3D11.Graphics;
     using Spark.Toolkit.Input;
     using Spark.UI;
-    using Spark.UI.Media;
     using Spark.UI.Controls;
-    using Spark.UI.Shapes;
     using Spark.UI.Content;
-
-    public class MainUI : StackPanel
-    {
-
-    }
 
     /// <summary>
     /// Main application window
@@ -62,8 +54,7 @@
             content.ResourceImporters.Add(new Effects11ResourceImporter());
             content.ResourceImporters.Add(new BitmapTextureImporter());
             content.ResourceImporters.Add(new BitmapFontImporter());
-            content.ResourceImporters.Add(new XamlResourceDictionaryResourceImporter());
-            content.ResourceImporters.Add(new XamUIElementResourceImporter());
+            content.ResourceImporters.Add(new XamlResourceImporter());
 
             _pixel = Content.Load<Texture2D>("Content/pixel.png");
 
@@ -105,7 +96,7 @@
 
 
 
-            InterfaceHost.Content = Content.Load<UIElement>("Content\\MainUI.xaml");
+            InterfaceHost.Content = (UIElement)Content.Load<object>("Content\\MainUI.xaml");
             InterfaceHost.DoLayoutPass();
 
             base.LoadContent(content);

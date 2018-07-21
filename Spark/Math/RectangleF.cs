@@ -1,9 +1,7 @@
 ﻿namespace Spark.Math
 {
     using System;
-
-    using UI;
-
+    
     public struct RectangleF : IEquatable<RectangleF>
     {
         public float X;

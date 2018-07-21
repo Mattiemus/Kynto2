@@ -121,6 +121,7 @@
     <Compile Include="Core\Collections\IndexableCyclicalLinkedList.cs" />
     <Compile Include="Core\Collections\MultiKey.cs" />
     <Compile Include="Core\Collections\MultiKeyDictionary.cs" />
+    <Compile Include="Core\Collections\NamedList.cs" />
     <Compile Include="Core\Collections\NotifiableCollection.cs" />
     <Compile Include="Core\Collections\RangeCollection.cs" />
     <Compile Include="Core\Collections\ReadOnlyList.cs" />
@@ -145,6 +146,8 @@
     <Compile Include="Core\IGameTimer.cs" />
     <Compile Include="Core\INamable.cs" />
     <Compile Include="Core\INamed.cs" />
+    <Compile Include="Graphics\Materials\MaterialDefinitionScriptCollection.cs" />
+    <Compile Include="Graphics\Materials\MaterialScriptCollection.cs" />
     <Compile Include="UI\Content\XamlResourceImporter.cs" />
     <Compile Include="UI\Controls\VirtualizingPanel.cs" />
     <Compile Include="Graphics\Effects\CompositeEffectParameterCollection.cs" />

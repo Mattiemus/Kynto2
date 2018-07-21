@@ -54,7 +54,7 @@
                 return false;
             }
 
-            String folderPath = ContentHelper.NormalizePath(provider.FolderPath);
+            string folderPath = ContentHelper.NormalizePath(provider.FolderPath);
 
             lock (_sync)
             {
@@ -82,7 +82,7 @@
 
             lock (_sync)
             {
-                foreach (KeyValuePair<String, IEffectByteCodeProvider> kv in _providers)
+                foreach (KeyValuePair<string, IEffectByteCodeProvider> kv in _providers)
                 {
                     if (kv.Value == provider)
                     {
